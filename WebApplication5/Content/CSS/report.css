@@ -1,0 +1,74 @@
+﻿
+body {
+    background-color: rgb(237, 246, 252);
+    /*overflow: auto;*/
+}
+
+
+
+/* 表单样式 */
+.mytable {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-width: 1px;
+    border-style: solid;
+    margin: 10px auto 5px auto;
+    width:100%;
+}
+
+    .mytable caption {
+        border-collapse: collapse;
+        height: 23px;
+        line-height: 23px;
+        font-weight: bold;
+        border-width: 1px;
+        border-style: solid;
+        font-size: 14px;
+    }
+
+    .mytable td, .mytable th {
+        padding: 3px;
+        border-style: solid;
+        border-collapse: collapse;
+        height: 23px;
+        line-height: 15px;
+        border-color: lightgray;
+        border-width: thin;
+    }
+
+    .mytable .title {
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 12px;
+    }
+
+    .mytable th {
+        text-align: right;
+        padding-right: 5px;
+    }
+
+        .mytable th span {
+            color: #8400FF;
+            font-weight: bold;
+        }
+
+    .mytable span.x {
+        color: red;
+        padding: 0px 2px 0px 0px;
+        vertical-align: middle;
+    }
+
+    .mytable input[type=radio], .mytable input[type=checkbox] {
+        vertical-align: middle;
+    }
+
+    .mytable th {
+        width: 120px;
+    }
+
+    .mytable td {
+        width: 238px;
+    }
+     .mytable tr {
+        text-align:center;
+    }

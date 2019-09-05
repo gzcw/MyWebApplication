@@ -1,0 +1,275 @@
+﻿@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 100%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .labelTd {
+        text-align: right;
+        width: 150px;
+    }
+
+    input {
+        width: 140px;
+    }
+</style>
+<form id="SQR_form" method="post">
+    <input type="hidden" name="ID" />
+    <input type="hidden" name="BSID" />
+    <input type="hidden" name="ISDELETE" />
+    <input type="hidden" name="ISSHARE" />
+    <input type="hidden" name="ISVALID" />
+    <input type="hidden" name="ISCONFIG" />
+    <input type="hidden" name="CREATEPERSONID" />
+    <input type="hidden" name="CREATEDATE" />
+    <input type="hidden" name="MODIFYPERSONID" />
+    <input type="hidden" name="MODIFYDATE" />
+    <input type="hidden" name="DATAORIGIN" />
+    <input type="hidden" name="PREVIOUSID" />
+    <table style="width: 100%" class="formtable">
+        <tr>
+            <td class="labelTd"><span class="x">*</span>申请人名称：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="SQRMC" data-options="required:true" />
+            </td>
+            <td class="labelTd"><span class="x">*</span>申请人类型：</td>
+            <td class="fieldTd">
+                <input class="easyui-combobox input" name="SQRLX" data-options="required:true,editable:false,data:[{text:'个人',value:1},{text:'单位',value:2}]" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd"><span class="x">*</span>申请人证件类型：</td>
+            <td class="fieldTd">
+                <input class="easyui-combobox input" name="SQRZJLX" data-options="required:true,editable:false,data:[{value:'组织机构代码',text:'组织机构代码'},{value:'居民身份证',text:'居民身份证'},{value:'护照',text:'护照'},{value:'军官证',text:'军官证'},{value:'其它',text:'其它'}]" />
+            </td>
+            <td class="labelTd"><span class="x">*</span>申请人证件号：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="SQRZJH" data-options="required:true" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">主管部门：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="ZGBM" />
+            </td>
+            <td class="labelTd">主管部门代码：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="ZGBMDM" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">机构代码：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="JGDM" />
+            </td>
+            <td class="labelTd">单位性质：</td>
+            <td class="fieldTd">
+                <input class="easyui-dictionarycombobox input" data-options="editable:false,KEY:'DWXZ'" name="DWXZ" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">法人代表姓名：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="FRDBXM" />
+            </td>
+            <td class="labelTd">法人代表证件类型：</td>
+            <td class="fieldTd">
+                <input class="easyui-combobox input" data-options="data:[{value:'组织机构代码',text:'组织机构代码'},{value:'居民身份证',text:'居民身份证'},{value:'护照',text:'护照'},{value:'军官证',text:'军官证'},{value:'其它',text:'其它'}]" name="FRDBZJLX" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">法人代表证件号：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="FRDBZJH" />
+            </td>
+            <td class="labelTd">法人代表电话号码：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="FRDBDHHM" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">法人职务：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="FRZW" />
+            </td>
+            <td class="labelTd">法人手机号码：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="SJHM" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">联系人：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="LXR" />
+            </td>
+            <td class="labelTd">联系电话：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="LXDH" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">传真号码：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="CZHM" />
+            </td>
+            <td class="labelTd">电子邮件：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="EMAIL" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">通讯地址：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="TXDZ" />
+            </td>
+            <td class="labelTd">邮政编码：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="YZBM" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd"><span class="x">*</span>农业人口标识：</td>
+            <td class="fieldTd">
+                <input class="easyui-combobox input" name="NYHKBS" data-options="required:true,editable:false,value:0,data:[{text:'农业',value:1},{text:'非农',value:0}]" />
+            </td>
+            <td class="labelTd"><span class="x">*</span>注销标识：</td>
+            <td class="fieldTd">
+                <input class="easyui-combobox input" name="ZXBS" data-options="required:true,editable:false,value:1,data:[{text:'正常',value:1},{text:'历史',value:2},{text:'注销',value:-1}]" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">开户银行：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="KHYH" />
+            </td>
+            <td class="labelTd">银行账号：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="YHZH" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">注册资金：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="ZCZJ" />
+            </td>
+            <td class="labelTd">资金来源：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="ZJLY" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">组织机构部门：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="ORGANIZATIONID" />
+            </td>
+            <td class="labelTd">工商执照编号：</td>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="GSZZBH" />
+            </td>
+        </tr>
+        <tr>
+            <td class="labelTd">排序号：</td>
+            <td class="fieldTd">
+                <input class="easyui-numberbox input" name="SORTORDER" />
+            </td>
+            <td></td>
+            <td></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#SQR_form');
+
+    initForm();
+    $(document).ready(function () {
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+    //region个性化代码
+
+    //endregion
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: [{
+                iconCls: 'icon-add',
+                text: '保存',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '取消',
+                handler: cancel
+            }]
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","SQR")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("Save","SQR")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

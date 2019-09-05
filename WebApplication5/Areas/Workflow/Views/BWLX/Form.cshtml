@@ -1,0 +1,226 @@
+﻿@*-------------------------------------------------------------------
+    【BWLX】Grid
+    -------------------------------------------------------------------*@
+@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+        
+    }
+
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+
+    tr {
+        height: 30px;
+    }
+</style>
+<form id="BWLX_form" method="post">
+    <input type="hidden" name="DATAORIGIN" />
+    <input type="hidden" name="ISDELETE" />
+    <input type="hidden" name="ISSHARE" />
+    <input type="hidden" name="ISVALID" />
+    <input type="hidden" name="ISCONFIG" />
+    <input type="hidden" name="SORTORDER" />
+    <input type="hidden" name="ORGANIZATIONID" />
+    <input type="hidden" name="CREATEPERSONID" />
+    <input type="hidden" name="CREATEDATE" />
+    <input type="hidden" name="MODIFYPERSONID" />
+    <input type="hidden" name="MODIFYDATE" />
+    <table cellpadding="0" cellspacing="0" style="width: 700px" class="formtable">
+        <tr>
+            <th style="width:115px;"><span class="x">*</span>办文类型名称：</th>
+            <td style="width:230px">
+                <input class="easyui-textbox input" data-options="required:true" name="BWLXMC" />
+            </td>
+            <th style="width:115px">办文类型说明：</th>
+            <td style="width:230px">
+                <input class="easyui-textbox input" name="BWLXSM" />
+            </td>
+        </tr>
+        <tr>
+            <th>是否收件：</th>
+            <td>
+                <input class="easyui-boolbox input" data-options="editable:false,required:false" value="" name="SFSJ" />
+            </td>
+            <th>是否归档：</th>
+            <td>
+                <input class="easyui-boolbox input" name="SFGD" />
+            </td>
+        </tr>
+        <tr>
+            <th>档案分类：</th>
+            <td>
+                <input class="easyui-textbox input" name="DAFLID" />
+            </td>
+            <th><span class="x">*</span>编号规则：</th>
+            <td>
+                <input id="bhid" class="input" name="BHID" />
+            </td>
+        </tr>
+
+        <tr>
+            <th><span class="x">*</span>流程：</th>
+            <td><input id="LCID" name="LCID" /></td>
+            <th>计划完成天数：</th>
+            <td>
+                <input class="easyui-numberbox input" name="JHWCTS" />
+            </td>
+        </tr>
+        <tr>
+            <th><span class="x">*</span>业务分组：</th>
+            <td colspan="3">
+                <input id="YWFZID" name="YWFZID" style="width:559px;" />
+            </td>
+        </tr>
+        <tr>
+            <th>登记字号规则：</th>
+            <td><input id="djzhid" class="input" name="DJZHID" /></td>
+            <th>排序号：</th>
+            <td><input class="easyui-numberbox input" name="SORTORDER" /></td>
+        </tr>
+        <tr>
+            <th>标识</th>
+            <td colspan="3"><input class="input easyui-textbox" readonly="readonly" name="ID" style="width:560px;" /></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#BWLX_form');
+
+    $(document).ready(function () {
+        initForm();
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+    //region个性化代码
+
+
+    //endregion
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: [{
+                iconCls: 'icon-add',
+                text: '保存',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '取消',
+                handler: cancel
+            }]
+        });
+
+        $('#YWFZID').selectwindow({
+            url: '@Url.Action("GetData","YWFZ")',
+            valueField: 'ID',
+            textField: 'FZMC',
+            required: true,
+            editable: false,
+            windowConfig: {
+                url: '@Url.Action("Index","YWFZ")',
+                title: '选择业务分组'
+            }
+        })
+        $("#bhid").selectwindow({
+            url: '@Url.Action("GetData", "BH")',
+            textField: 'BHMC',
+            required: true,
+            editable: false,
+            windowConfig: {
+                url: '@Url.Action("Index", "BH")',
+                title: '选择编号规则'
+            }
+        });
+        $("#djzhid").selectwindow({
+            url: '@Url.Action("GetData", "BH")',
+            textField: 'BHMC',
+            required: false,
+            editable: false,
+            windowConfig: {
+                url: '@Url.Action("Index", "BH")',
+                title: '选择编号规则'
+            }
+        });
+        $("#LCID").combobox({
+            url: '@Url.Action("GetData", "Flow")',
+            textField: 'Name',
+            valueField: 'ID',
+            required: true,
+            editable: false
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","BWLX")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("Save","BWLX")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.treegrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

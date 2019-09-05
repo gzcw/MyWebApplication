@@ -1,0 +1,180 @@
+﻿@*-------------------------------------------------------------------
+    【TJXX】Grid
+    -------------------------------------------------------------------*@
+@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+
+<div class="toobar panel-header">
+
+</div>
+
+
+<form id="TJXX_form" method="post">
+    <input type="hidden" name="ID" />
+    <input type="hidden" name="BWAID" />
+    <input type="hidden" name="CREATORID" />
+    <table cellpadding="0" cellspacing="0" style="width: 700px" class="formtable">
+        <tr>
+            <th>受理编号：</th>
+            <td>
+                <input class="easyui-validatebox input" name="SLBH" />
+            </td>
+            <th>业务类型：</th>
+            <td>
+                <input class="easyui-validatebox input" name="YWLX" />
+            </td>
+        </tr>
+        <tr id="viewField">
+            <th>退件人：</th>
+            <td>
+                <input class="easyui-validatebox input" name="CREATOR" />
+            </td>
+            <th>退件日期：</th>
+            <td>
+                <input class="easyui-datebox input" name="CREATETIME" />
+            </td>
+        </tr>
+        <tr>
+            <th>业务分组：</th>
+            <td>
+                <input class="easyui-validatebox input" name="YWFZ" />
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
+        <tr>
+            <th>退件原因：</th>
+            <td colspan="3">
+                <textarea class="input" name="TJYY" rows="3" style="width: 555px;height:150px"></textarea>
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#TJXX_form');
+
+    initForm();
+    $(document).ready(function () {
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        if (me.BWAID) {
+            loadFormByBWAID(me.BWAID);
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+
+    //初始化表单
+    function initForm() {
+        var buttons = [{
+            iconCls: 'icon-add',
+            text: '提交',
+            handler: save
+        }, '-', {
+            iconCls: 'icon-edit',
+            text: '重置',
+            handler: reset
+        }, '-', {
+            iconCls: 'icon-remove',
+            text: '取消',
+            handler: cancel
+        }];
+
+        $('input').attr('readonly', 'readonly');
+
+        if (me.privilege != "read") {
+            $("#viewField").hide();
+        }
+        else {
+            $('textarea').attr('readonly', 'readonly');
+            buttons = [{
+                iconCls: 'icon-remove',
+                text: '关闭',
+                handler: cancel
+            }]
+        }
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: buttons
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","TJXX")/' + me.formId);
+    }
+    function loadFormByBWAID(BWAID) {
+        myform.form('load', '@Url.Action("LoadFormByBWAID","TJXX")/' + BWAID);
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("TuiJian", "TJXX")',
+            onSubmit: function (param) {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                $.extend(true, param, me.flowParam);
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    if (me.callback) {
+                        me.callback();
+                    }
+                    window.top.$.messager.alert("提示", "操作成功！");
+                    me.easyWindow.window('close');
+                }
+            }
+        });
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

@@ -1,0 +1,165 @@
+﻿@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 80%;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .labelTd {
+        text-align: right;
+        width: 150px;
+    }
+
+    .fieldTd {
+        width: 70%;
+    }
+
+    input {
+        width: 300px;
+    }
+</style>
+<form id="ApproveOpinion_form" method="post">
+    <table style="width: 100%">
+        <tr>
+            <td>
+                <input type="hidden" name="ID" />
+            </td>
+        </tr>
+		<tr>
+		    <td class="labelTd">审批人：</td>
+            <td class="fieldTd">
+			                    <input class="easyui-validatebox" name="Approver"/>
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">Department：</td>
+            <td class="fieldTd">
+			                    <input class="easyui-validatebox" name="Department"/>
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">Opinion：</td>
+            <td class="fieldTd">
+			                    <input class="easyui-validatebox" name="Opinion"/>
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">流程节点：</td>
+            <td class="fieldTd">
+			    				<input class="easyui-selectwindow" name="Node_id" data-options="valueField: 'ID',textField: 'Name',url:RootDirectory + '/Workflow/Node/GetData'" />
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">Station：</td>
+            <td class="fieldTd">
+			                    <input class="easyui-validatebox" name="Station"/>
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">节点：</td>
+            <td class="fieldTd">
+			                    <input class="easyui-validatebox" name="Nodename"/>
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">Work_id：</td>
+            <td class="fieldTd">
+			    				<input class="easyui-selectwindow" name="Work_id" data-options="valueField: 'ID',textField: 'Name',url:RootDirectory + '/DefaultModule/Work/GetData'" />
+				            </td>
+		</tr>
+				<tr>
+		    <td class="labelTd">Createtime：</td>
+            <td class="fieldTd">
+			                    <input class="easyui-validatebox" name="Createtime"/>
+				            </td>
+		</tr>
+
+		    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#ApproveOpinion_form');
+
+	initForm();
+    $(document).ready(function () {
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+	//region个性化代码
+																																												
+	
+	
+	
+	
+	
+
+	//endregion
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        },
+        buttons: [{
+            iconCls: 'icon-add',
+            text: '保存',
+            handler: save
+        }, '-', {
+            iconCls: 'icon-edit',
+            text: '重置',
+            handler: reset
+        }, '-', {
+            iconCls: 'icon-remove',
+            text: '取消',
+            handler: cancel
+        }]
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', RootDirectory + '/Workflow/ApproveOpinion/LoadForm/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        myform.form('submit', {
+            url: RootDirectory + '/Workflow/ApproveOpinion/Save',
+            success: function (result) {
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+					me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+

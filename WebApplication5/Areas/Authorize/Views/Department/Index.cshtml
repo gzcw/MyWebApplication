@@ -1,0 +1,184 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【Auth_Department】Index
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+
+<table id="Auth_Department_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#Auth_Department_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Authorize/Department/GetTreePaged',
+            border: false,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						treeField: 'Name',
+			checkbox:false,
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'Name', title: "部门名称",width:247 },
+			                { field: 'Responsibility', title: "部门职责",width:260 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:''
+            },
+             loadFilter: function (data, parentId) {
+                if (parentId != undefined && (data.length == 0 || !Array.isArray(data))) {
+                    mygrid.treegrid('update', { id: parentId, row: { state: 'open' } });
+                    return data;
+                }
+                $.each(data.rows || data, function (index, item) {
+                    item.state = item.ISLEAF == 1 || item.isleaf == 1 ? 'open' : 'closed';
+                });
+                return data;
+            }
+	    };
+
+        
+
+		        mygrid.treegrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:''
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'部门名称',value:'Name'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function create() {
+         var url=window.applicationPath+'/Authorize/Department/Form';
+            commonhelper.openWindowInWorkArea(url, {
+                frame: true,
+                title: '新增',
+                callback: function(){
+								  mygrid.treegrid('reload');
+				 				}
+            });
+    }
+    function update() {
+        var url=url||(window.applicationPath+'/Authorize/Department/Form');
+            commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(url+'?id=' + id, {
+                    frame: true,
+                    title: '修改',
+                    parentGrid: mygrid,
+                    callback: function(entity){
+				                            if (entity.ParentID) {
+                            mygrid.treegrid('reload', entity.ParentID);
+                        }
+                        else {
+                            mygrid.treegrid('reload');
+                        }
+				    				    }
+                });
+            });
+    }
+    function del() {
+        commonhelper.RemoveDatagridSelected(mygrid, function (ids, rows) {
+		    $.messager.progress();
+                $.ajax({
+                    url: window.applicationPath+'/Authorize/Department/DeleteEntities',
+                    data: { ids: ids },
+                    traditional: true,
+                    method:'post',
+                    success: function (result) {
+                        $.messager.progress('close');
+                        if (result.success) {
+												    mygrid.treegrid('clearSelections');
+                            $.each(ids, function (index,id) {
+                                mygrid.treegrid('remove',id);
+                            })
+						                        }
+                        else {
+                            $.messager.alert("提示", result.Message);
+                        }
+                    }
+                });
+            });
+    }
+    function refresh() {
+            						    mygrid.treegrid('clearSelections');
+                            mygrid.treegrid('reload');
+						    }
+    function detail() {
+        commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(window.applicationPath+'/Authorize/Department/Form?permission=0&id=' + id, {
+                    frame: true,
+                    title: '查看',
+                    parentGrid: mygrid
+                });
+            });
+    }
+	
+
+    //导出Excel
+    function exportExcel() {
+        var url = '@Url.Action("ExportExcel","Department")';
+        var form = $('<form method="post" action="' + url + '"></form>').appendTo('body');
+        var rows = mygrid.datagrid('getSelections');
+        var opts = mygrid.datagrid('options');
+        
+        if (rows.length == 0) {
+            $.ajax({
+                url: opts.url,
+                async: false,
+                data: $.extend({ page: 1, rows: 10000 }, opts.queryParams),
+                success: function (result) {
+                    rows = result.rows;
+                }
+            });
+        }
+		
+        var columns = mygrid.datagrid('options').columns;
+        var dic = {};
+        $.each(columns[0], function (index, item) {
+            if (item.formatter) {
+                dic[item.field] = item.formatter;
+            }
+        });
+        rows = $.map(rows, function (row) {
+            $.map(row, function (value, pro) {
+                if (dic[pro]) {
+                    row[pro] = dic[pro](value, row);
+                }
+            });
+            return row;
+        });
+        $("<input type='hidden' name='sheetName' />").appendTo(form).val("部门");
+        $("<input type='hidden' name='data' />").appendTo(form).val(JSON.stringify(rows));
+        $("<input type='hidden' name='columns' />").appendTo(form).val(JSON.stringify(opts.columns[0]));
+
+        form.submit().remove();
+    }
+</script>

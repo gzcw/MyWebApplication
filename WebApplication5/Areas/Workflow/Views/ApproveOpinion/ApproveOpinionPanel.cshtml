@@ -1,0 +1,184 @@
+﻿@{
+    ViewBag.Title = "ApprovePanel";
+}
+<script src="~/Areas/Workflow/Application/ApproveOpinion/Grid.js"></script>
+<style>
+    #ApproveOpinion_History .context {
+        min-height: 50px;
+        text-align: left;
+        padding: 10px;
+    }
+
+    #ApproveOpinion_History td {
+        width: 140px;
+        text-align: center;
+    }
+
+    .fieldlabel {
+        background-color: lightgray;
+    }
+
+    #ApproveOpinionPanelForm label {
+        color: #000;
+    }
+</style>
+
+<form id="ApproveOpinionPanelForm" style="width:800px;margin-left:auto;margin-right:auto" method="post">
+    <input type="hidden" name="ID" />
+    <input type="hidden" name="Work_id" />
+    <input type="hidden" name="Node_id" />
+    <input type="hidden" name="Nodename" />
+    <table style="width:100%; margin:5px" border="0" cellpadding="0" cellspacing="0">
+        <tr>
+            <td style="width:140px;text-align:right;">
+                <label>常用词条：</label>
+            </td>
+            <td>
+                <input class="easyui-combobox" id="CYCT" style="width: 560px" />
+            </td>
+            <td style="width: 90px;margin-left:10px"><a href="#" onclick="showCYCT()">自定义词条</a></td>
+        </tr>
+        <tr>
+            <td style="width:140px;text-align:right;" valign="top">
+                <label>审批意见：</label>
+            </td>
+            <td>
+                <input name="Opinion" id="Opinion" style="width: 560px" data-options="" />
+                <input name="Agree" type="hidden" value="1" />
+            </td>
+            <td></td>
+        </tr>
+    </table>
+</form>
+<div style="margin:0 40px 0 40px" class="processDisplay">
+    <label style="font-size:large;font-weight:bold;">审批列表</label>
+    <hr style="margin-top:0;" />
+</div>
+<div class="processDisplay">
+    <table id="ApproveOpinion_History" style="width: 700px; margin-left: auto; margin-right: auto" class="formtable"></table>
+</div>
+<script>
+
+    var me = this;
+    var myct = $("#CYCT");
+    var myform = $('#ApproveOpinionPanelForm');
+    var historyTable = $('#ApproveOpinion_History');
+
+    me.workflowParams = pageCommonJS.getUrlParams();
+
+    $(document).ready(function () {
+        initCYCT();
+        initForm();
+
+        if (me.isApply === true) {
+            $(".processDisplay").css('display', 'none')
+        }
+        else {
+            initHistoryOpinion();
+        }
+        if (me.workflowParams.permission == 0 || me.workflowParams.wfState == 0 || me.workflowParams.wfState == 1) {//只读的时候不显示审批表单
+            myform.hide();
+        }
+    });
+
+    //常用词条
+    function initCYCT() {
+        myct.combobox({
+            url: RootDirectory + '/Workflow/CYCT/GetData',
+            valueField: 'CTNR',
+            textField: 'CTMC',
+            editable: false,
+            onSelect: function (item) {
+                $("#Opinion").textbox('setValue', item.CTNR);
+                myct.combobox('clear');
+            }
+        });
+    }
+
+    function initForm() {
+        $('#Opinion').textbox({
+            required: me.workflowParams.needOpinion == 0 ? false : true,
+            multiline: true,
+            height: 110
+        });
+        $.ajax({
+            url: RootDirectory + '/Workflow/ApproveOpinion/GetOpinionOfNode',
+            data: { Work_id: me.workflowParams.bwaID, Node_id: me.workflowParams.nodeId },
+            success: function (result) {
+                if (result.success) {
+                    myform.form('load', result.data);
+                }
+                else {
+                    myform.form('load', { Work_id: me.workflowParams.bwaID, Node_id: me.workflowParams.nodeId, Nodename: me.workflowParams.nodeName });
+                }
+            }
+        })
+    }
+
+    function initHistoryOpinion() {
+        historyTable.empty();
+
+        var filter = [{ property: 'Work_id', value: me.workflowParams.bwaID, relation: '=' }];
+        $.ajax({
+            url: RootDirectory + '/Workflow/ApproveOpinion/GetOpinion',
+            data: { bwaId: me.workflowParams.bwaID, nodeId: me.workflowParams.nodeId },
+            success: function (data) {
+                $.each(data.entities, function (index, record) {
+                    var classStr = "";
+                    var isHistory = false;
+                    $.each(data.PreviousNodeList, function (index, val) {
+                        if (record.Node_id == val.NodeID) {
+                            isHistory = true;
+                        }
+                    });
+                    if (!isHistory) {
+                        classStr = 'style="background-color:gray !important"'
+                    }
+                    var agree = record.Agree == 1 ? '是' : '否';
+                    var createtimeStr = record.Createtime.split('.')[0];
+                    historyTable.append("<tr " + classStr + "><td rowspan='2' style='text-align:center;width:140px;'>" + record.Nodename + "</td><td colspan='4'><p class='context'>" + record.Opinion + "</p></td></tr><tr " + classStr + "><td " + classStr + " class='fieldlabel'>经办人</td><td>" + record.Approver + "</td><td " + classStr + " class='fieldlabel'>审批日期</td><td>" + createtimeStr + "</td></tr>");
+                })
+            }
+        })
+    }
+
+    function savePage() {
+        if (me.workflowParams.needOpinion == 0 && !$('#Opinion').textbox('getValue')) {
+            return true;
+        }
+        var error = "";
+        $("#ApproveOpinionPanelForm").form('submit', {
+            url: RootDirectory + '/Workflow/ApproveOpinion/SaveOpinion',
+            showMsg: false,
+            async: false,
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                if (!isValid) {
+                    error = "请填写审批意见。";
+                }
+                return isValid;
+            },
+            success: function (result) {
+                if (result.success) {
+                    myform.form('load', result.data);
+                    flag = true;
+                }
+            }
+        });
+        return error == '' ? true : error;
+    }
+
+    //常用词条
+    function showCYCT() {
+        pageCommonJS.openWindowInWorkArea(RootDirectory + '/Workflow/CYCT/Index', {
+            frame: true,
+            title: '自定义常用词条',
+            mycallback: function () {
+                try {
+                    $('#CYCT').combobox('reload');
+                }
+                catch (ex) { }
+            }
+        });
+    }
+</script>

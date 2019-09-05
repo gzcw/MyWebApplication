@@ -1,0 +1,98 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【SYS_SJZD】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh();">刷新</a>
+}
+
+<table id="SYS_SJZD_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#SYS_SJZD_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Sjzd/GetPaged',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'ZDMC', title: "字典名称",width:100 },
+			                { field: 'ZDBM', title: "字典编码",width:100 },
+			                { field: 'NAME', title: "名称",width:100 },
+			                { field: 'SZ', title: "数值",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }
+	    };
+
+        
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'字典名称',value:'ZDMC'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	    if(urlParams.singleSelect){
+            commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+		      if(window.selectCallback){
+			     window.selectCallback([id],[row]);
+			  }
+            });
+		}
+		else{
+		    commonhelper.MultiSelectGrid(mygrid, function (ids, rows) {
+		      if(window.selectCallback){
+			     window.selectCallback(ids,rows);
+			  }
+            });
+		}
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+</script>

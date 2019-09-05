@@ -1,0 +1,43 @@
+-----------------------------------------------------------------------------------------------------
+25日14时29分48秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时31分30秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时32分14秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+-----------------------------------------------------------------------------------------------------
+25日14时33分16秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时33分47秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时33分47秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时33分47秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时34分11秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时34分11秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时35分30秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时37分45秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时37分45秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时37分45秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时38分32秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql=SELECT No, Name FROM  @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时38分33秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql=SELECT No, Name FROM  @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时38分34秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时38分34秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时39分26秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时39分26秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时40分24秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时40分36秒Fatal:System');"@没有[字典表  Sys_SFTable, 类[BP.Sys.SFTable], 物理表[Sys_SFTable] 实例。PK = 
+25日14时40分36秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时40分37秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时41分17秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0
+25日14时41分17秒Fatal:System');"@运行查询在(RunSQLReturnTable_200705_Ora with paras)出错 sql= SELECT No, Name FROM WHERE (1=1) ORDER BY .No @异常信息：ORA-00903: 表名无效
+@Para Num= 0

@@ -1,0 +1,173 @@
+﻿@{
+    Layout = null;
+   ViewBag.width = ViewBag.width == null ? "720px" : ViewBag.width;
+}
+
+<html>
+<head>
+    <title>打印</title>
+    <script src="~/Scripts/jquery-1.11.0.min.js"></script>
+    <script src="~/Scripts/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Scripts/EasyUI/jquery-easyui/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/EasyUI/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+
+    <link href="~/Scripts/EasyUI/jquery-easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Scripts/EasyUI/jquery-easyui/themes/icon.css" rel="stylesheet" />
+    <link href="~/Style/CSS/custom-icon.css" rel="stylesheet" />
+
+    <script src="~/Scripts/PageCommon.js"></script>
+    <script>
+        RootDirectory = "@Request.ApplicationPath";
+    </script>       
+    @RenderSection("Scripts", false)
+</head>
+<body>
+    <div style="width: 100%; text-align: center">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-reload',permission:0" style="margin-left: 5px;" onclick="window.location.reload();">刷新</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 5px;" onclick="print()">打印</a>
+        @RenderSection("Buttons", false)
+    </div>
+    <!--startprint-->
+    <div id="main" style ="margin: 0px auto 0px auto;overflow-x:auto; width: @(ViewBag.width);">
+        <link href="~/Content/CSS/print.css" rel="stylesheet" />
+        @RenderBody()
+    </div>
+    <!--endprint-->
+    <script type="text/javascript">
+        var HKEY_Root, HKEY_Path, HKEY_Key;
+        HKEY_Root = "HKEY_CURRENT_USER";
+        HKEY_Path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+        var head, foot, top, bottom, left, right;
+
+        //取得页面打印设置的原参数数据
+        function PageSetup_temp() {
+            try {
+                var Wsh = new ActiveXObject("WScript.Shell");
+                HKEY_Key = "header";
+                //取得页眉默认值
+                head = Wsh.RegRead(HKEY_Root + HKEY_Path + HKEY_Key);
+                HKEY_Key = "footer";
+                //取得页脚默认值
+                foot = Wsh.RegRead(HKEY_Root + HKEY_Path + HKEY_Key);
+                HKEY_Key = "margin_bottom";
+                //取得下页边距
+                bottom = Wsh.RegRead(HKEY_Root + HKEY_Path + HKEY_Key);
+                HKEY_Key = "margin_left";
+                //取得左页边距
+                left = Wsh.RegRead(HKEY_Root + HKEY_Path + HKEY_Key);
+                HKEY_Key = "margin_right";
+                //取得右页边距
+                right = Wsh.RegRead(HKEY_Root + HKEY_Path + HKEY_Key);
+                HKEY_Key = "margin_top";
+                //取得上页边距
+                top = Wsh.RegRead(HKEY_Root + HKEY_Path + HKEY_Key);
+            }
+            catch (e) {
+                alert("不允许ActiveX控件");
+            }
+        }
+
+        //设置网页打印的页眉页脚和页边距
+        function PageSetup_Null() {
+            try {
+                var Wsh = new ActiveXObject("WScript.Shell");
+                HKEY_Key = "header";
+                //设置页眉（为空）
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "");
+                HKEY_Key = "footer";
+                //设置页脚（为空）
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "");
+                HKEY_Key = "margin_bottom";
+                //设置下页边距（0）
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "0");
+                HKEY_Key = "margin_left";
+                //设置左页边距（0）
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "0");
+                HKEY_Key = "margin_right";
+                //设置右页边距（0）
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "0");
+                HKEY_Key = "margin_top";
+                //设置上页边距（8）
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, "0.5");
+            }
+            catch (e) {
+                alert("不允许ActiveX控件");
+            }
+        }
+        //设置网页打印的页眉页脚和页边距为默认值
+        function PageSetup_Default() {
+            try {
+                var Wsh = new ActiveXObject("WScript.Shell");
+                HKEY_Key = "header";
+                HKEY_Key = "header";
+                //还原页眉
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, head);
+                HKEY_Key = "footer";
+                //还原页脚
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, foot);
+                HKEY_Key = "margin_bottom";
+                //还原下页边距
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, bottom);
+                HKEY_Key = "margin_left";
+                //还原左页边距
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, left);
+                HKEY_Key = "margin_right";
+                //还原右页边距
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, right);
+                HKEY_Key = "margin_top";
+                //还原上页边距
+                Wsh.RegWrite(HKEY_Root + HKEY_Path + HKEY_Key, top);
+            }
+            catch (e) {
+                alert("不允许ActiveX控件");
+            }
+        }
+
+        function printorder() {
+
+            PageSetup_temp();//取得默认值
+            PageSetup_Null();//设置页面
+
+            factory.execwb(6, 6);
+            //newwin.window.close();
+            factory.execwb(6, 6);//打印页面
+            PageSetup_Default();//还原页面设置
+            //factory.execwb(6,6);
+            window.close();
+        }
+
+        function print() {
+            PageSetup_temp();
+            PageSetup_Null();
+
+            try {
+
+                var prnhtml = document.getElementById("main").outerHTML;
+                prnhtml = "<!DOCTYPE html><html><head><title>打印</title></head><body id='printBody' style='width:100%;height:100%;'>" + prnhtml + "<script>if(window.beforePrint){window.beforePrint();}<\/script>" + "</body></html>";
+                var newwin = window.open("about:blank", "newwin", "height=" + window.screen.height + ",width=" + window.screen.width + ",toolbar = no, scrollbars = auto,menubar=no", "");
+                newwin.document.write(prnhtml);
+                newwin.document.location.reload();
+                setTimeout(function () {
+                    newwin.print();
+                }, 0)
+            }
+            catch (ex) {
+                alert(ex);
+            }
+            finally {
+                setTimeout(function () {
+                    PageSetup_Default();
+                    newwin.close();
+                }, 0)
+            }
+            // newwin.window.printorder();
+        }
+
+        function savePage() {
+            window.location.reload();
+            return true;
+        }
+
+    </script>
+</body>
+</html>

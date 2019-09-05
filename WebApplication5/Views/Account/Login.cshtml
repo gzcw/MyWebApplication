@@ -1,0 +1,108 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>@ViewBag.Title</title>
+    @{
+        Layout = null;
+    }
+    <link rel="icon" href="~/Content/images/logo.png" type="image/x-icon" />
+    <link href="~/Content/Login/style.css" rel="stylesheet" />
+    <link href="~/Content/Login/google.css" rel="stylesheet" />
+    <script src="~/Scripts/jquery-1.11.0.min.js"></script>
+    <script src="~/Scripts/jsencrypt.min.js"></script>
+    <style>
+        #footer {
+            color: #93c2ea;
+            margin-left: auto;
+            margin-right: auto;
+            width: 380px;
+            font-size: 16px;
+            margin-top:50px;
+        }
+    </style>
+</head>
+<body onkeydown="enterKey();">
+    <div style="width: 740px; display: block; text-align: center; margin: 50px auto 0px; color: rgb(255, 255, 255); padding: 20px 40px; font-weight: bold; font-size: 35px; text-shadow: rgb(0, 0, 0) 5px 2px 6px;">@ViewBag.Title</div>
+    <div class="lg-container">
+        <h1>用户登录</h1>
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { id = "lg-form", name = "lg-form" }))
+        {
+            @Html.AntiForgeryToken()
+
+            <div>
+                <input type="text" id="username" name="UserName" placeholder="请输入用户名" />
+            </div>
+
+            <div>
+                <input type="password" id="password" name="Password" placeholder="请输入密码" />
+            </div>
+            <div>
+                <input type="hidden" name="IsRememberMe" value="false" />
+            </div>
+            <div>
+                <input style="margin-right:15px;" type="button" id="login" value="登录" />
+                <input style="margin-left:15px;" type="button" id="reset" value="重置" />
+            </div>
+        }
+        <div id="message" style="color:red">@ViewBag.msg</div>
+    </div>
+
+    <div id="footer">
+        版权所有：
+        禅微工作室&nbsp;&nbsp;&nbsp;&nbsp;Copyright &copy; 2019-2019
+    </div>
+
+    <script type="text/javascript">
+        $(document).ready(function () {
+            initForm();
+        });
+
+        //监听回车键事件
+        function enterKey() {
+            if (window.event.keyCode == 13) {
+                document.all('login').click();
+            }
+        }
+
+        //初始化表单
+        function initForm() {
+            var userName = getCookie("UserName");
+            if (userName) {
+                $('#username').val(userName);
+                $('#password').focus();
+            }
+            $("#login").click(function () {
+                if ($('#username').val() == "" || $('#password').val() == "") {
+                    $("#message").html('错误: 用户名称或密码为空。');
+                    return;
+                }
+                $('#lg-form').submit();
+                if (getCookie("UserName") == null || getCookie("UserName") != $('#username').val())
+                    setCookie("UserName=", $('#username').val());
+            });
+
+            $('#reset').click(function () {
+                $(':input', '#lg-form').not(':button,:submit,:reset,:hidden').val('').removeAttr('checked').removeAttr('checked')   //将myform表单中input元素type为button、submit、reset、hidden排除  //将input元素的value设为空值
+            });
+        }
+
+        //设置cookie
+        function setCookie(name, value) {
+            var days = 30;  //保存日期为30天
+            var exp = new Date();
+            exp.setTime(exp.getTime() + days * 24 * 60 * 60 * 1000);
+            document.cookie = name + escape(value) + ";expires=" + exp.toGMTString();
+        }
+
+        //获取cookie
+        function getCookie(name) {
+            var arr, reg = new RegExp("(^| )" + name + "=([^;]*)(;|$)");
+            if (arr = document.cookie.match(reg))
+                return unescape(arr[2]);
+            else {
+                return null;
+            }
+        }
+    </script>
+</body>
+</html>

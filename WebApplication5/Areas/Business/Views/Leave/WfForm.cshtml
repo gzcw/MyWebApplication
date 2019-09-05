@@ -1,0 +1,69 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【Bus_Leave】WfForm
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<form id="Leave_form" class="myform" method="post">
+    <fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th><span class='x'>*</span>用户:</th>	<td><input class="easyui-combobox" name="UserID" data-options="width:230,height:28,textField:'RealName',valueField:'ID',url:applicationPath+'/Authorize/User/GetData'"/></td><th>	<span class='x'>*</span>部门:</th>	<td><input class="easyui-combobox" name="DepartmentID" data-options="width:230,height:28,textField:'Name',valueField:'ID',url:applicationPath+'/Authorize/Department/GetData'"/></td>	</tr>	<tr>	<th><span class='x'>*</span>开始时间:</th>	<td><input class='easyui-datetimebox' name='StartTime' data-options='showSeconds:false'/></td><th>	<span class='x'>*</span>结束时间:</th>	<td><input class='easyui-datetimebox' name='EndTime' data-options='showSeconds:false'/></td>	</tr>	<tr>	<th><span class='x'>*</span>请假总时长:</th>	<td><input class='easyui-numberbox' name='TotalHours' /></td><th>	<span class='x'>*</span>请假类型:</th>	<td><input class="easyui-sjzdcombobox" name="LeaveType" data-options="zdbm:'LEAVETYPE'"/></td>	</tr>	<tr>	<th><span class='x'>*</span>请假原因:</th>	<td colspan='3'><input class='easyui-textbox' name='Reason' data-options='width:604,height:80,multiline:true'/></td>	</tr>	</table>	<input type='hidden' name='ID' />	<input type='hidden' name='WfState' />	<input type='hidden' name='WorkID' />		</fieldset>	
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#Leave_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("GetEntityByWorkID","Leave")?WorkID=' + urlParams.WorkID);
+    }
+
+	
+    //保存
+    function save() {
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Leave")',
+            async: false,
+            iframe: false,
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    error="表单未正确填写，请检查";
+                }
+                return isValid;
+            },
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.success) {
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+				else{
+                   error=result.msg || "保存失败";
+				}
+            }
+        })
+    }
+</script>
+

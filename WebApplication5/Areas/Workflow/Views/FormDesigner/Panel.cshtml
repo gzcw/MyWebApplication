@@ -1,0 +1,422 @@
+﻿@{
+    ViewBag.Title = "Panel";
+}
+<style>
+    html, body {
+        width: 97%;
+        height: 97%;
+    }
+
+    .selected {
+        border: solid thin;
+        border-color: red !important;
+    }
+
+    .deleted {
+        display: none;
+        visibility: hidden;
+    }
+
+    .x {
+        color: red;
+    }
+
+    .required {
+        border: solid thin;
+        border-color: #ffa8a8;
+    }
+</style>
+<script>
+    var me = this;
+    me.formId = pageCommonJS.getUrlParam("formId");
+
+    $(document).ready(function () {
+        $("#test").draggable();
+        $(document.body).children().draggable();
+        $(document.body).children().on("click", clickComponent);
+
+        $(document).on("click", function (event) {
+
+            if (me.createComponentType) {
+                createComponent(event);
+            }
+            else {
+                clearSelection();
+            }
+        });
+
+        initPanel();
+    });
+
+    //初始化面板
+    function initPanel() {
+        $.messager.progress();
+        $.get('@Url.Action("GetZuJianList", "FormDesigner", new { formId=ViewBag.formId})', function (result) {
+            $.messager.progress('close');
+            if (result.success) {
+                $.each(result.data, function (index, item) {
+                    switch (item.ZJLX) {
+                        case "Label": addLabelToPanel(item); break;
+                        case "Input": addInputToPanel(item); break;
+                        case "Number": addNumberToPanel(item); break;
+                        case "Date": addDateToPanel(item); break;
+                        case "TextArea": addTextAreaToPanel(item); break;
+                        case "DropList": addDropListToPanel(item); break;
+                        case "HLine": addHLineToPanel(item); break;
+                        default: break;
+                    }
+                })
+                clearSelection();
+            }
+            else {
+                $.messager.alert('提示', result.msg);
+            }
+        })
+    }
+
+    //保存
+    function Save() {
+        var updateList = [];
+        var deleteList = [];
+        $('.component').each(function (index, item) {
+            if (item.nodeName != "STYLE" && item.nodeName != "SCRIPT") {
+                var displayItem = $("[targetId='" + item.id + "']");
+                var record = {
+                    ID: item.id,
+                    X: displayItem.offset().left,
+                    Y: displayItem.offset().top,
+                    ZJLX: $(item).attr("ZJLX"),
+                    FORMID: $(item).attr("FORMID"),
+                    TEXT: $(item).attr("TEXT"),
+                    COLUMNNAME: $(item).attr("COLUMNNAME") || '',
+                    DISPLAYNAME: $(item).attr("DISPLAYNAME") || '',
+                    HEIGHT: $(item).attr("HEIGHT") || '',
+                    WIDTH: $(item).attr("WIDTH") || '',
+                    SFBT: $(item).attr("SFBT") || 0
+                };
+                if ($(displayItem).hasClass('deleted')) {
+                    deleteList.push(record);
+                }
+                else {
+                    updateList.push(record);
+                }
+            }
+        });
+        $.ajax({
+            url: '@Url.Action("SaveAll", "FormDesigner")',
+            data: { updateList: JSON.stringify(updateList), deleteList: JSON.stringify(deleteList) },
+            traditional: true,
+            type: 'post',
+            success: function (result) {
+                if (result.success) {
+                    $.messager.alert('提示', "保存成功");
+                }
+                else {
+                    $.messager.alert('提示', result.msg || "操作失败", '', function () {
+                        $("[targetId='" + result.id + "']").click();
+                    });
+                }
+            }
+        });
+    }
+
+    //删除
+    function Delete() {
+        var zujian = $('.selected');
+        if (zujian.length > 0) {
+            zujian.addClass('deleted');
+        }
+        else {
+            $.messager.alert('提示', '请选择删除的控件！');
+        }
+    }
+
+    //点击组件
+    function clickComponent(event) {
+        me.parent.$("#saveBtn").focus();
+
+        var targetField = $(event.target);
+        if (event.data && event.data.targetField) {
+            targetField = event.data.targetField;
+        }
+
+        if (me.createComponentType) {
+            createComponent(event);
+        }
+        else {
+            clearSelection();
+
+            $(event.currentTarget).addClass('selected');
+
+            var data = { TEXT: '', COLUMNNAME: '', DISPLAYNAME: '', HEIGHT: '', WIDTH: '', SFBT: 0 };
+
+            $.each(targetField[0].attributes, function (index, item) {
+                data[item.name.toUpperCase()] = item.value;
+            })
+            if (me.parent.LoadDesignForm) {
+                me.parent.LoadDesignForm(data, targetField);
+                me.parent.$("#saveBtn").focus();
+                event.stopPropagation();
+            }
+        }
+    }
+
+    //清空选择组件
+    function clearSelection() {
+        $(".selected").removeClass('selected');
+    }
+
+    //创建组件
+    function createComponent(event) {
+
+        var defaultParam = {
+            ID: pageCommonJS.Guid(),
+            ZJLX: me.createComponentType,
+            TEXT: '',
+            X: event.pageX,
+            Y: event.pageY,
+            WIDTH: 200,
+            HEIGHT: 22,
+            FORMID: me.formId,
+            SFBT: 0,
+            COLUMNNAME: 'COLUMNNAME',
+            DISPLAYNAME: '列名'
+        };
+
+        switch (me.createComponentType) {
+            case "Label": createLabel(event, defaultParam); break;
+            case "Input": createInput(event, defaultParam); break;
+            case "Number": createNumber(event, defaultParam); break;
+            case "Date": createDate(event, defaultParam); break;
+            case "TextArea": createTextArea(event, defaultParam); break;
+            case "DropList": createDropList(event, defaultParam); break;
+            case "HLine": createHLine(event, defaultParam); break;
+            default: createInput(event, defaultParam); break;
+        }
+    }
+
+    //创建标签组件
+    function createLabel(event, defaultParam) {
+
+        $.extend(defaultParam, { COLUMNNAME: '', DISPLAYNAME: '', TEXT: 'Label', WIDTH: 60 });
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        addLabelToPanel(defaultParam);
+    }
+
+    //创建文本框
+    function createInput(event, defaultParam) {
+        $.extend(defaultParam, { HEIGHT: 18 });
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        addInputToPanel(defaultParam);
+    }
+
+    //创建数值文本框
+    function createNumber(event, defaultParam) {
+
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        addNumberToPanel(defaultParam);
+    }
+
+    //创建日期组件
+    function createDate(event, defaultParam) {
+
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        addDateToPanel(defaultParam);
+    }
+
+    //创建多行文本框组件
+    function createTextArea(event, defaultParam) {
+        $.extend(defaultParam, { HEIGHT: 100, WIDTH: 500 });
+
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        addTextAreaToPanel(defaultParam);
+    }
+
+    //创建下拉框
+    function createDropList(event, defaultParam) {
+
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        $.extend(defaultParam, { TEXT: '选项1,选项2' });
+        addDropListToPanel(defaultParam);
+    }
+
+    function createHLine(event, defaultParam) {
+
+        me.createComponentType = undefined;
+        $(document.body).removeClass('crossCur');
+
+        addHLineToPanel(defaultParam);
+    }
+
+    //添加标签到面板
+    function addLabelToPanel(option) {
+
+
+        var component = $("<div id='" + option.ID + "' class='component' style='word-wrap:break-word;'><span class='x'>*</span>" + option.TEXT + "</div>");
+        $.each(option, function (pro, value) {
+            if (pro != 'left' && pro != 'top') {
+                component.attr(pro, value);
+            }
+        })
+        component.attr("targetId", option.ID)
+            .appendTo(document.body)
+            .draggable().css('position', 'absolute')
+                        .css('left', option.X)
+                        .css('top', option.Y)
+                        .css('height', option.HEIGHT)
+                        .css('width', option.WIDTH)
+                        .on('click', clickComponent);
+        if (option.SFBT == 1) {
+            component.children('span').show();
+        }
+        else {
+            component.children('span').hide();
+        }
+        component.click();
+    }
+
+    //添加输入框到面板
+    function addInputToPanel(option) {
+        var component = $("<input class='easyui-validatebox component' />");
+        $.each(option, function (pro, value) {
+            if (pro != 'left' && pro != 'top') {
+                component.attr(pro, value);
+            }
+        })
+        option.SFBT ? component.addClass('required') : component.removeClass('requried');
+
+        component.attr('targetId', option.ID)
+               .appendTo(document.body)
+               .draggable()
+               .css('position', 'absolute')
+               .css('left', option.X)
+               .css('top', option.Y)
+               .css('height', option.HEIGHT)
+               .css('width', option.WIDTH)
+               .on('click', clickComponent);
+
+        $.parser.parse(component);
+        component.click();
+    }
+
+    //添加数值输入框到面板
+    function addNumberToPanel(option) {
+        var component = $("<input class='easyui-numberbox component' />").appendTo(document.body);
+        $.each(option, function (pro, value) {
+            if (pro != 'left' && pro != 'top') {
+                component.attr(pro, value);
+            }
+        })
+
+        component.numberbox({ height: option.HEIGHT, width: option.WIDTH });
+
+        option.SFBT ? component.next().addClass('required') : component.removeClass('requried');
+
+        component.next().attr("targetId", option.ID)
+                .css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y)
+                .draggable()
+                .on('click', { targetField: component }, clickComponent);
+        component.next().click();
+    }
+
+
+    //添加日期输入框到面板
+    function addDateToPanel(option) {
+        var component = $("<input class='easyui-datebox component' />").appendTo(document.body);
+        $.each(option, function (pro, value) {
+            if (pro != 'left' && pro != 'top') {
+                component.attr(pro, value);
+            }
+        })
+        component.css('left', option.X).css('top', option.Y);
+
+        component.datebox({ height: option.HEIGHT, width: option.WIDTH });
+
+        option.SFBT ? component.next().addClass('required') : component.removeClass('requried');
+
+        component.next().attr("targetId", option.ID)
+                .css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y)
+                .draggable()
+                .on('click', { targetField: component }, clickComponent);
+        component.next().click();
+    }
+    //添加多行文本框到面板
+    function addTextAreaToPanel(option) {
+        var component = $("<input class='easyui-textbox component' data-options='multiline:true'/>").appendTo(document.body);
+        $.each(option, function (pro, value) {
+            if (pro != 'left' && pro != 'top') {
+                component.attr(pro, value);
+            }
+        })
+
+        component.textbox({ height: option.HEIGHT || 100, width: option.WIDTH || 500 });
+
+        option.SFBT ? component.next().addClass('required') : component.removeClass('requried');
+
+        component.next().attr("targetId", option.ID)
+                .css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y)
+                .draggable()
+                .on('click', { targetField: component }, clickComponent);
+        component.next().click();
+    }
+
+    //添加下拉框到面板
+    function addDropListToPanel(option) {
+
+        var data = option.TEXT.split(',');
+        data = $.map(data, function (item) {
+            return { text: item, value: item };
+        });
+
+        var component = $("<input class='easyui-combobox component' />").appendTo(document.body);
+        $.each(option, function (pro, value) {
+            if (pro != 'left' && pro != 'top') {
+                component.attr(pro, value);
+            }
+        })
+
+        component.combobox({ data: data, width: option.WIDTH, height: option.HEIGHT });
+
+        option.SFBT ? component.next().addClass('required') : component.removeClass('requried');
+
+        component.next().attr("targetId", option.ID)
+                .css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y)
+                .draggable()
+                .on('click', { targetField: component }, clickComponent);
+        component.next().click();
+    }
+
+    function addHLineToPanel(option) {
+        var component = $("<div><hr class='easyui-combobox component' /></div>").appendTo(document.body);
+        component.css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y)
+                .css('width', 500)
+                .draggable();
+    }
+
+    //设置光标
+    function setCrossCur() {
+        $(document.body).addClass('crossCur');
+    }
+</script>

@@ -1,0 +1,47 @@
+﻿
+label {
+    font-weight: bold;
+}
+
+table {
+    border-left: thin solid black;
+    border-top: thin solid black;
+    font-size: 16px;
+    width: 700px;
+    margin: 0px auto 0px auto;
+    border-spacing: 0px;
+}
+
+    table * {
+        margin: 0px;
+        padding: 0px;
+    }
+
+    table td, table th {
+        border: 0px;
+        border-right: thin solid black;
+        border-bottom: thin solid black;
+        text-align: left;
+        padding: 1px 2px 1px 2px;
+        word-break: break-all;
+    }
+
+    table textarea {
+        overflow-y: visible;
+        height: 150px;
+    }
+
+#main table + table {
+    border-top: none;
+    page-break-before: always;
+}
+
+body {
+    margin-top: 10px;
+}
+
+@media print {
+    #main table + table {
+        border-top: black thin solid;
+    }
+}

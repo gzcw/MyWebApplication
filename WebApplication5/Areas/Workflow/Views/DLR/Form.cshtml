@@ -1,0 +1,145 @@
+﻿@*-------------------------------------------------------------------
+    【DLR】Grid
+    -------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+<form id="DLR_form" method="post">
+    <input type="hidden" name="ID" />
+    <input type="hidden" name="ISDELETE" />
+    <input type="hidden" name="ISSHARE" />
+    <input type="hidden" name="ISVALID" />
+    <input type="hidden" name="ISCONFIG" />
+    <input type="hidden" name="CREATEPERSONID" />
+    <input type="hidden" name="CREATEDATE" />
+    <input type="hidden" name="MODIFYPERSONID" />
+    <input type="hidden" name="MODIFYDATE" />
+    <input type="hidden" name="DATAORIGIN" />
+    <table cellpadding="0" cellspacing="0" style="width: 700px" class="formtable">
+        <tr>
+            <th><span class="x">*</span>代理人名称：</th>
+            <td><input class='easyui-validatebox input' name='DLRMC' data-options="required:true" /></td>
+            <th>代理人证件类型：</th>
+            <td><input class='easyui-dictionarycombobox input' name='DLRZJLX' data-options="required:true,editable:false,KEY:'ZJZL'" /></td>
+        </tr>
+        <tr>
+            <th><span class="x">*</span>代理人证件号：</th>
+            <td><input class='easyui-validatebox input' name='DLRZJH' data-options="required:true" /></td>
+            <th>通信地址：</th>
+            <td><input class='easyui-validatebox input' name='DLRTXDZ' /></td>
+        </tr>
+        <tr>
+            <th>邮政编码：</th>
+            <td><input class='easyui-validatebox input' name='DLRYZBM' /></td>
+            <th>代理人电话号码：</th>
+            <td><input class='easyui-validatebox input' name='DLRDHHM' /></td>
+        </tr>
+        <tr>
+            <th><span class="x">*</span>资格证书号码：</th>
+            <td><input class='easyui-validatebox input' name='ZGZSHM' data-options="required:true" /></td>
+            <th>所属机构：</th>
+            <td><input class='easyui-validatebox input' name='SSJG' /></td>
+        </tr>
+        <tr>
+            <th>机构代码/申请代码：</th>
+            <td><input class='easyui-validatebox input' name='JGDM' /></td>
+            <th>电子邮件：</th>
+            <td><input class='easyui-validatebox input' name='EMAIL' /></td>
+        </tr>
+        <tr><th><span class="x">*</span>顺序号：</th><td><input class='easyui-numberbox input' name='SORTORDER' data-options="required:true" /></td><th></th><td><td></tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#DLR_form');
+
+    initForm();
+    $(document).ready(function () {
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: [{
+                iconCls: 'icon-add',
+                text: '保存',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '取消',
+                handler: cancel
+            }]
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","DLR")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("Save","DLR")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        loadForm();
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

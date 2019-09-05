@@ -1,0 +1,8 @@
+﻿@{
+    Layout = null;
+}
+
+@foreach (dynamic button in ViewBag.buttons)
+{
+    <a class="easyui-linkbutton" id="@button.Method" href="#" data-options="iconCls:'@button.Icon',plain:true" onclick="if(typeof(@button.Method) == 'undefined') { $.messager.alert('提示', '此按钮功能未定义', 'info'); } else { @(button.Method)(); }">@button.Name</a>
+}

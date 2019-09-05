@@ -1,0 +1,58 @@
+﻿@{
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+@section searchform{
+    <form style="padding: 2px">
+        <label>Title：</label>
+        <input />
+        <a class="easyui-linkbutton" href="#" style="margin-top: -5px">搜索</a>
+    </form>
+}
+<table id="veto"></table>
+
+<script>
+    var mygrid = $('#veto');
+    $(document).ready(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+        mygrid.datagrid({
+            url: RootDirectory + '/Workflow/WfMonitor/GetPagedOfVeto',
+            fit: true,
+            border: false,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            singleSelect: true,
+            columns: [[
+                { field: 'ck', checkbox: true },
+                { field: 'FK_Flow', title: 'FK_Flow' },
+                { field: 'Title', title: 'Title' },
+                { field: 'StarterName', title: 'StarterName' },
+                { field: 'FlowName', title: 'FlowName' },
+                { field: 'TodoEmps', title: 'TodoEmps' },
+                { field: 'RDT', title: 'RDT' },
+                { field: 'NodeName', title: 'NodeName' },
+                { field: 'WorkID', title: 'WorkID' },
+                { field: 'FK_Node', title: 'FK_Node' },
+                { field: 'FID', title: 'FID' }
+            ]],
+            toolbar: [{
+                iconCls: 'icon-help',
+                text: '轨迹图',
+                key: 'workflowMap',
+                handler: FlowChart
+            }]
+        });
+    }
+
+    function FlowChart() {
+        var record = mygrid.datagrid('getSelected');
+        WorkflowHelper.ShowWorkflowChart(record.ID);
+    }
+</script>
+
+
+
+

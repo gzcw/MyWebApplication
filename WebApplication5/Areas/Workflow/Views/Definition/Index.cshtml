@@ -1,0 +1,70 @@
+﻿@*-------------------------------------------------------------------
+    【流程定义】页面
+    ---------------------------------------------------------------------*@
+<script src="~/Areas/Workflow/Application/Definition/Grid.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.searchHeight = 72;
+}
+@section HardCodePageButtons{
+    <div id="searchPanel"></div>
+    <div class="toolbar panel-header">
+        <a class="easyui-linkbutton" data-options="iconCls: 'icon-reload',plain:true" onclick="Refresh()">刷新</a>
+    </div>
+}
+<table id="Definition_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#Definition_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initSearchBtn() {
+
+        $("#searchPanel").searchpanel({
+            border: false,
+            items: [{
+                text: '流程名称',
+                value: 'NAME'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        mygridConfig = $.extend(new Definition_GridConfig(mygrid), {
+            url: '@Url.Action("GetPagedFromCCFlow", "FLOW")',
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            border: true,
+            pagination: false,
+            idField: 'ID',
+            parentField: 'FK_FLOWSORT',
+            treeField: 'NAME'
+        });
+        mygrid.mytreegrid(mygridConfig);
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+</script>

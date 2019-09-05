@@ -1,0 +1,161 @@
+body {
+    background-image: url(../images//bg.jpg);
+    font-family: 'Oleo Script', cursive;
+    background-size: cover;
+}
+.lg-h{
+	margin-top: 50px;
+	text-align: center;
+}
+.lg-container{
+	width:320px;
+	margin:50px auto;
+	padding:20px 40px;
+	border:1px solid #f4f4f4;
+	background:rgba(255,255,255,0.5);
+    
+      
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+	
+	-webkit-box-shadow: 0 0 2px #aaa;
+	-moz-box-shadow: 0 0 2px #aaa;
+	box-shadow: 0 0 2px #aaa;
+
+    /*behavior: url(ie-css3.htc);*/ /* 通知IE浏览器调用脚本作用于'lg-container'类 */
+    /*filter:progid:DXImageTransform.Microsoft.gradient(startColorstr=#7f7f7f,endColorstr=#7f7f7f);*/
+    /*filter: progid:DXImageTransform.Microsoft.Gradient(startColorstr=#88000000,endColorstr=#88000000);*/
+    /*filter:alpha(Opacity=20);*/
+    /*background-color:#ffffff;*/
+    /*-moz-opacity:0.5;*/
+    /*opacity: 0.5;*/
+}
+
+.lg-container h1{
+    text-shadow:5px 2px 3px #aaa;
+     background-image:url(../images/Loginimages/logobk.png);
+     background-size:72px;
+   background-position:left;
+   margin-left:20px;
+   background-repeat:no-repeat;
+	font-size:25px;
+	text-align:center;
+    height:76px;
+    line-height:76px;
+}
+#lg-form > div {
+	margin:10px 5px;
+	padding:5px 0;
+}
+#lg-form label{	
+	font-size: 16px;
+	line-height: 25px;
+}
+#username{
+     background:url(../images/user32.png) left center no-repeat !important;
+     background-position:5px 4px !important;
+     
+}
+#password{
+      background:url(../images/password32.png) left center no-repeat !important;
+     background-position:5px 4px !important;
+}
+#lg-form input[type="text"],
+#lg-form input[type="password"] {
+    outline: none;
+    height: 42px;
+    line-height: 42px;
+    border: 1px solid #2575b1;
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    padding: 5px;
+    font-size: 14px;
+    line-height: 30px;
+    width: 100%;
+    text-align: left;
+    text-indent: 3em;
+}
+#lg-form div:nth-child(5) {
+	text-align:center;
+}
+#lg-form button{
+	font-family: 'Oleo Script', cursive;
+	font-size: 18px;
+	border:1px solid #000;
+	padding:5px 10px;
+	border:1px solid rgba(51,51,51,.5);
+	-webkit-border-radius:10px;
+	-moz-border-radius:10px;
+	border-radius:10px;
+	
+	-webkit-box-shadow: 2px 1px 1px #aaa;
+	-moz-box-shadow: 2px 1px 1px #aaa;
+	box-shadow: 2px 1px 1px #aaa;
+	cursor:pointer;
+}
+#lg-form button:active{
+	-webkit-box-shadow: 0px 0px 1px #aaa;
+	-moz-box-shadow: 0px 0px 1px #aaa;
+	box-shadow: 0px 0px 1px #aaa;
+}
+#lg-form button:hover{
+	background:#f4f4f4;
+}
+#lg-form #login {
+    background-color: #418bca;
+    width: 80px;
+    height: 33px;
+    font-family: 'Oleo Script', cursive;
+    font-size: 16px;
+    border: 1px solid #000;
+    /*padding:5px 10px;*/
+    border: 1px solid rgba(51,51,51,.5);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 1px 1px #aaa;
+    -moz-box-shadow: 2px 1px 1px #aaa;
+    box-shadow: 2px 1px 1px #aaa;
+    cursor: pointer;
+}
+#lg-form #login:active{
+	-webkit-box-shadow: 0px 0px 1px #aaa;
+	-moz-box-shadow: 0px 0px 1px #aaa;
+	box-shadow: 0px 0px 1px #aaa;
+}
+#lg-form #login:hover{
+	background:#f4f4f4;
+}
+#lg-form #reset {
+    background-color: #5bc0de;
+    width: 80px;
+    height: 33px;
+    font-family: 'Oleo Script', cursive;
+    font-size: 16px;
+    border: 1px solid #000;
+    border: 1px solid rgba(51,51,51,.5);
+    -webkit-border-radius: 10px;
+    -moz-border-radius: 10px;
+    border-radius: 10px;
+    -webkit-box-shadow: 2px 1px 1px #aaa;
+    -moz-box-shadow: 2px 1px 1px #aaa;
+    box-shadow: 2px 1px 1px #aaa;
+    cursor: pointer;
+}
+#lg-form #reset:active{
+	-webkit-box-shadow: 0px 0px 1px #aaa;
+	-moz-box-shadow: 0px 0px 1px #aaa;
+	box-shadow: 0px 0px 1px #aaa;
+}
+#lg-form #reset:hover{
+	background:#f4f4f4;
+}
+#message{width:100%;text-align:center}
+.success {
+	color: green;
+}
+.error {
+	color: red;
+}

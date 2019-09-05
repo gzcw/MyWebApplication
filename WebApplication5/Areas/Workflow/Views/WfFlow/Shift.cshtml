@@ -1,0 +1,104 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+@section searchform{
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-ok'" plain="true" onclick="UnShift()">取消转发</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'" plain="true">搜索</a>
+</div>
+}
+<table id="shift"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#shift');
+
+    var mygridConfig = {};
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [{
+                text: '接收用户姓名',
+                value: 'FK_EMPNAME'
+            }, {
+                text: '接收用户',
+                value: 'FK_EMP'
+            }, {
+                text: '受理编号',
+                value: 'SLBH'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        mygrid.datagrid({
+            url: '@Url.Action("GetMyPageOfShift", "WfFlow")',
+            fit: true,
+            border: true,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            singleSelect: true,
+            columns: [[
+                { field: 'ck', checkbox: true },
+
+                { field: 'FK_EMP', title: '转发用户', hidden: true },
+                { field: 'FK_EMPNAME', title: '转发用户姓名', hidden: true },
+                { field: 'TOEMP', title: '接收用户', hidden: true },
+                { field: 'TOEMPNAME', title: '接收用户姓名' },
+               { field: 'SLBH', title: '受理编号', hidden: false }
+             , { field: 'SHJHWCRQ', title: '计划完成时间', hidden: false, formatter: pageCommonJS.DateFormatter }
+             , { field: 'BWLXID', title: 'BWLXID', hidden: true }
+             , { field: 'BWLXMC', title: '业务名称', hidden: false }
+             , { field: 'NODENAME', title: '当前节点名称', hidden: false }
+             , { field: 'SQRMC', title: '申请人', hidden: false }
+             , { field: 'TJH', title: '图件号', hidden: false }
+             , { field: 'ZL', title: '坐落', hidden: false }
+             , { field: 'REGISTERDATE', title: '立案时间', hidden: false, formatter: pageCommonJS.DateFormatter }
+             , { field: 'SJR', title: '收件人', hidden: false }
+             , { field: 'SJRQ', title: '收件日期', hidden: false, formatter: pageCommonJS.DateFormatter }
+             , { field: 'BZ', title: '备注', hidden: false }
+             , { field: 'FK_FLOW', hidden: true }
+             , { field: 'FLOWNAME', hidden: true }
+             , { field: 'WORKID', hidden: true }
+             , { field: 'FK_NODE', hidden: true }
+             , { field: 'FID', hidden: true }
+             , { field: 'RDT', hidden: true }
+            ]]
+        });
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+    function Refresh() {
+        mygrid.datagrid('reload');
+    }
+
+    function UnShift() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            $.messager.progress();
+            $.ajax({
+                url: '@Url.Action("Node_UnShift", "WfFlow")',
+                data: { flowNo: record.FK_FLOW, workID: record.WORKID, nodeID: record.FK_NODE, toEmpName: record.TOEMP },
+                success: function (result) {
+                    $.messager.progress('close');
+                    mygrid.datagrid('reload');
+                    $.messager.alert('提示', result.msg);
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                }
+            })
+        })
+    }
+</script>

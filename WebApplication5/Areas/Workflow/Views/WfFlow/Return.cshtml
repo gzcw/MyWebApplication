@@ -1,0 +1,91 @@
+﻿@{
+    ViewBag.Title = "退件业务";
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.searchHeight = 70;
+}
+@section HardCodePageButtons{
+    <div id="searchPanel"></div>
+    <div class="toolbar panel-header" style="margin-bottom:0px;">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-read'" plain="true" onclick="View()">查看</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-process'" plain="true" onclick="FlowChart()">进度情况</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    </div>
+}
+<script src="~/Areas/Workflow/Scripts/WorkflowHelper.js"></script>
+<script src="~/Areas/Workflow/Application/BWA/Grid.js"></script>
+
+<table id="return"></table>
+<script>
+    var me = this;
+    var mygrid = $('#return');
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+        var isTip = pageCommonJS.getUrlParam('isTip');
+        var readUrl = '@Url.Action("GetPagedOfReturn", "BWA")';
+        if (isTip) {
+            readUrl = '@Url.Action("GetPagedOfReturn_Current", "BWA")';
+        }
+        mygridConfig = $.extend(new BWA_GridConfig(mygrid), {
+            border: true,
+            url: readUrl,
+            singleSelect: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify([])
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchPanel").searchpanel({
+            border: false,
+            items: [{
+                text: '受理编号',
+                value: 'SLBH'
+            }, {
+                text: '业务名称',
+                value: 'BWLXMC'
+            }, {
+                text: '申请人',
+                value: 'SQRMC'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function FlowChart() {
+        var record = mygrid.datagrid('getSelected');
+        WorkflowHelper.ShowWorkflowChart(record.ID);
+    }
+
+    function View() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            pageCommonJS.openWindowInWorkArea('@Url.Action("Form", "TJXX")', {
+                title: '退件信息',
+                privilege: "read",
+                BWAID: id
+            });
+        })
+    }
+    function Refresh() {
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+    function Search() {
+
+    }
+</script>

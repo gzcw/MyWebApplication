@@ -1,0 +1,94 @@
+﻿@*-------------------------------------------------------------------
+    【MyForm】Index
+    -------------------------------------------------------------------*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+<script src="~/Areas/Workflow/js/grid/MyFormGrid.js"></script>
+
+@section searchform{
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" onclick="Refresh()">刷新</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-detail'" onclick="Publish()">发布</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'">查询</a>
+}
+<table id="MyForm_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#MyForm_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var defaultConfig = new MyForm_GridConfig(mygrid, { defaultValues: me.defaultValues || {} });
+
+        mygridConfig = $.extend(defaultConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SORTORDER"
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: "SORTORDER"
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					     { text: '表单名称', value: 'NAME' }
+		     			, { text: '表名', value: 'TABLENAME' }
+
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    //发布
+    function Publish() {
+        pageCommonJS.MultiSelectGrid(mygrid, function (ids, rows) {
+            $.messager.progress();
+            $.ajax({
+                url: RootDirectory + '/Workflow/FormManage/Publish',
+                data: { ids: ids },
+                traditional: true,
+                type: 'post',
+                success: function (result) {
+                    $.messager.progress('close');
+                    if (result.success) {
+                        $.messager.alert("提示", "发布成功！");
+                        mygrid.datagrid('reload');
+                    }
+                    else {
+                        $.messager.alert("提示", result.msg);
+                    }
+                }
+            });
+        }, true, "ID", "重新发布会导致数据表数据清空，确认发布吗？");
+    }
+</script>

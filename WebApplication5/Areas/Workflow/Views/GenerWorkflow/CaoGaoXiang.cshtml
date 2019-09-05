@@ -1,0 +1,143 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【WF_GENERWORKFLOW】Index
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+@section Buttons{
+    <a class="easyui-linkbutton" data-options="plain:true,iconCls:'icon-edit'" onclick="Approve();">办理</a>
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+
+<table id="WF_GENERWORKFLOW_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#WF_GENERWORKFLOW_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Workflow/GenerWorkFlow/GetPaged_Draft',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'WORKID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'YWH', title: "业务号",width:120 },
+			                { field: 'Title', title: "标题",width:300 },
+			                { field: 'FlowName', title: "流程名称",width:100 },
+			                { field: 'NodeName', title: "当前节点名称",width:100 },
+			                { field: 'StarterName', title: "发起人",width:100 },
+			                { field: 'RDT', title: "记录日期",width:120 },
+			                { field: 'DeptName', title: "部门名称",width:100 },
+			                { field: 'FlowNote', title: "备注",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+                orders:'RDT DESC'
+            }
+	    };
+
+
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+                    orders:'RDT DESC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+                { text: '标题', value: 'TITLE' },
+		     	  {text:'业务号',value:'YWH'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+    function refresh() {
+            				            mygrid.datagrid('clearSelections');
+                            mygrid.datagrid('reload');
+				           }
+    function detail() {
+        commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(window.applicationPath+'/Workflow/GenerWorkFlow/Form?permission=0&id=' + id, {
+                    frame: true,
+                    title: '查看',
+                    parentGrid: mygrid
+                });
+            });
+    }
+
+
+    //导出Excel
+    function exportExcel() {
+        var url = '@Url.Action("ExportExcel","GenerWorkFlow")';
+        var form = $('<form method="post" action="' + url + '"></form>').appendTo('body');
+        var rows = mygrid.datagrid('getSelections');
+        var opts = mygrid.datagrid('options');
+
+        if (rows.length == 0) {
+            $.ajax({
+                url: opts.url,
+                async: false,
+                data: $.extend({ page: 1, rows: 10000 }, opts.queryParams),
+                success: function (result) {
+                    rows = result.rows;
+                }
+            });
+        }
+
+        var columns = mygrid.datagrid('options').columns;
+        var dic = {};
+        $.each(columns[0], function (index, item) {
+            if (item.formatter) {
+                dic[item.field] = item.formatter;
+            }
+        });
+        rows = $.map(rows, function (row) {
+            $.map(row, function (value, pro) {
+                if (dic[pro]) {
+                    row[pro] = dic[pro](value, row);
+                }
+            });
+            return row;
+        });
+        $("<input type='hidden' name='sheetName' />").appendTo(form).val("流程查询");
+        $("<input type='hidden' name='data' />").appendTo(form).val(JSON.stringify(rows));
+        $("<input type='hidden' name='columns' />").appendTo(form).val(JSON.stringify(opts.columns[0]));
+
+        form.submit().remove();
+    }
+    //办理
+    function Approve() {
+        commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                WorkID: row.WorkID,
+                NodeID: row.FK_Node,
+                WfState: 1,
+                FID: 0
+            };
+            var url = applicationPath + "/Workflow/Flow/WfPanel?" + $.param(workflowParams);
+            window.location.href = url;
+        })
+    }
+</script>

@@ -1,0 +1,635 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.searchHeight = 105;
+}
+@section HardCodePageButtons{
+    <div id="searchPanel"></div>
+    <div class="toolbar panel-header">
+        <a href="#" class="easyui-linkbutton" id="SignOut" data-options="iconCls: 'icon-undo'" plain="true" onclick="SignOut()">取消签收</a>
+        @if (ViewBag.UserName.IndexOf("zhg") == -1)
+        {
+            <a href="#" class="easyui-linkbutton" id="Approve" data-options="iconCls: 'icon-edit'" plain="true" onclick="Approve()">办理</a>
+            @*<a href="#" class="easyui-linkbutton" data-options="iconCls: 'arrow-right'" plain="true" onclick="BatchSend()">批量发送</a>*@
+            @*<a href="#" class="easyui-linkbutton" data-options="iconCls: 'up_16'" plain="true" onclick="HungUp()">挂起</a>
+                <a href="#" class="easyui-linkbutton" data-options="iconCls: 'down_16'" plain="true" onclick="UnHungUp()">解挂</a>*@
+            <a href="#" class="easyui-linkbutton" id="OnReturn" data-options="iconCls: 'icon-clear'" plain="true" onclick="OnReturn()">作废</a>
+            <a href="#" id="CC" class="easyui-linkbutton" data-options="iconCls: 'icon-redo',plain:true" onclick="CC()">抄送</a>
+        }
+        else
+        {
+            <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-read',plain:true" onclick="View()">查看</a>
+            <a href="#" class="easyui-linkbutton" id="Send" data-options="iconCls: 'arrow-right'" plain="true" onclick="Send()">发送</a>
+            <a href="#" id="CC" class="easyui-linkbutton" data-options="iconCls: 'icon-redo',plain:true" onclick="CC()">抄送</a>
+        }
+        <a href="#" class="easyui-linkbutton" id="OnSendBack" data-options="iconCls: 'arrow-turn-left'" plain="true" onclick="OnSendBack()">退回</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-process'" plain="true" onclick="FlowChart()">进度情况</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    </div>
+}
+<script src="~/Areas/Workflow/Scripts/WorkflowHelper.js"></script>
+<script src="~/Areas/Workflow/Application/BWA/Grid.js"></script>
+
+<table id="personalToDo"></table>
+<script>
+    var me = this;
+    var mygrid = $('#personalToDo');
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    //初始化表格
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var isOutdate = pageCommonJS.getUrlParam('isOutdate');
+        if (isOutdate) {
+            filters.push({
+                property: 'ISOUTDATE',
+                value: 1,
+                relation: '=',
+                dataType: 'int'
+            });
+        }
+        var ywfz = pageCommonJS.getUrlParam('YWFZID');
+        if (ywfz) {
+            $.each(ywfz.split(','), function (index, item) {
+                var isLast = index == (ywfz.split(',').length - 1);
+                filters.push({
+                    left: index == 0 ? '(' : '',
+                    property: 'YWFZID',
+                    value: item,
+                    relation: '=',
+                    right: isLast ? ')' : '',
+                    connect: index == 0 ? 'AND' : 'OR',
+                });
+            })
+        }
+
+        var bwaGridConfig = new BWA_GridConfig(mygrid, {
+            isZBX: true,
+            onDblClickRow: function (rowIndex, rowData) {
+                mygrid.datagrid('clearSelections');
+                mygrid.datagrid('selectRow', rowIndex);
+                Approve();
+            }
+        });
+        mygridConfig = $.extend(bwaGridConfig, {
+            border: false,
+            url: '@Url.Action("GetMyPagedOfPersonalToDo", "BWA")',
+            singleSelect: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            onSelect: function (index, row) {
+                if (row.LISTTYPE == 1) {
+                    disabelButtons(['SignOut', 'OnReturn', 'OnSendBack', 'CC']);
+                }
+                else if (row.CCROLE != 1 && row.CCROW != 3) {
+                    disabelButtons(['CC']);
+                }
+                else {
+                    disabelButtons([]);
+                }
+            },
+            onDblClickRow: function (index, row) {
+
+                var workflowParams = {
+                    workflowNo: row.FK_FLOW,
+                    workID: row.WORKID,
+                    nodeID: row.FK_NODE,
+                    nodeName: row.NODENAME,
+                    wfState: 2,
+                    bwaID: row.ID,
+                    FID: row.FID,
+                    SLBH: row.SLBH,
+                    BWLXID: row.BWLXID,
+                    BWLXMC: row.BWLXMC,
+                    YWFZ: row.YWFZ,
+                    LISTTYPE: row.LISTTYPE,
+                    ISLASTNODE: row.ISLASTNODE || 0
+                };
+                var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+                pageCommonJS.openWindowAsRedirect(url, {
+                    parentGrid: mygrid
+                }); // 在用户点双击节点的时候办理
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+    //监听选项卡onSelect事件
+    function onSelectTab() {
+        mygrid.datagrid('reload');
+    }
+
+    //禁用按钮
+    function disabelButtons(buttons) {
+        if (buttons) {
+            $('.toolbar').find('.easyui-linkbutton').each(function (index, item) {
+                if (buttons.indexOf($(item).attr('id')) >= 0) {
+                    $(item).linkbutton('disable');
+                }
+                else {
+                    $(item).linkbutton('enable');
+                }
+            });
+        }
+    }
+
+    //取消签收
+    function SignOut() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            $.messager.progress();
+            $.ajax({
+                url: '@Url.Action("Node_SetWorkUnRead", "WfFlow")',
+                data: { nodeID: record.FK_NODE, workID: record.WORKID },
+                success: function (result) {
+                    $.messager.progress('close');
+                    if (result.success) {
+                        $.messager.showMessage("操作成功！");
+                        mygrid.datagrid('reload');
+                    }
+                }
+            })
+        })
+    }
+
+    //办理
+    function Approve() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                workflowNo: row.FK_FLOW,
+                workID: row.WORKID,
+                nodeID: row.FK_NODE,
+                nodeName: row.NODENAME,
+                wfState: 2,
+                bwaID: row.ID,
+                FID: row.FID,
+                SLBH: row.SLBH,
+                BWLXID: row.BWLXID,
+                BWLXMC: row.BWLXMC,
+                YWFZ: row.YWFZ,
+                LISTTYPE: row.LISTTYPE,
+                ISLASTNODE: row.ISLASTNODE || 0
+            };
+            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+            pageCommonJS.openWindowAsRedirect(url, {
+                parentGrid: mygrid
+            });
+        });
+    }
+
+    //发送
+    function Send() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            if (record.ISLASTNODE == 1) {
+                SimpleSend();
+            }
+            else {
+                SelectSend();
+            }
+        })
+    }
+
+    //直接发送
+    function SelectSend() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            var url = '@Url.Action("WorkOpt_GetToNodes", "Node")' + '?workflowNo=' + record.FK_FLOW + '&nodeFrom=' + record.FK_NODE + '&workID=' + record.WORKID + '&FID=' + record.FID + '&singleSelect=1';
+            pageCommonJS.openDialog({
+                title: '选择发送节点',
+                items: [{
+                    url: url,
+                    textField: 'NAME',
+                    valueField: 'NO',
+                    parentField: 'FK_NODE',
+                    singleSelect: true,
+                    onlyLeafCheck: true
+                }],
+                callback: function (value, rows) {
+                    $.messager.progress();
+                    var url = '@Url.Action("Node_SendWork", "WfFlow")';
+
+                    @*if (rows[0].RUNMODEL == -1) {
+                        url = '@Url.Action("Node_SkipSendWork", "WfFlow")';
+                    }*@
+                    $.ajax({
+                        url: url,
+                        data: {
+                            flowNo: record.FK_FLOW,
+                            workID: record.WORKID,
+                            currentNodeId: record.FK_NODE,
+                            toNodeId: rows[0].FK_NODE,
+                            SLBH: record.SLBH,
+                            bwaId: record.ID,
+                            paramPairs: "",
+                            nextWorker: value
+                        },
+                        success: function (result) {
+                            $.messager.progress('close');
+                            var message = result.success ? "操作成功" : "操作失败";
+                            $.messager.alert("提示", result.message || message);
+                            if (result.success) {
+                                mygrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+        })
+    }
+
+
+    //简单发送
+    function SimpleSend() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            $.messager.confirm('确认对话框', '您想要执行该操作吗？', function (r) {
+                if (r) {
+                    $.ajax({
+                        url: '@Url.Action("Node_SendWork", "WfFlow")',
+                        data: { flowNo: record.FK_FLOW, workID: record.WORKID, SLBH: record.SLBH, currentNodeId: record.FK_NODE, bwaId: record.WORKID },
+                        success: function (result) {
+                            $.messager.progress('close');
+                            var message = result.success ? "操作成功" : "操作失败";
+                            window.top.$.messager.alert("提示", result.message || message);
+                            if (result.success) {
+                                mygrid.datagrid('reload');
+                            }
+                        }
+                    });
+                }
+            });
+        });
+    }
+
+    //批量发送
+    function BatchSend() {
+        pageCommonJS.MultiSelectGrid(mygrid, function (ids, rows) {
+
+            //判断是否同一节点
+            var flag = true;
+
+            $.each(rows, function (index, row) {
+                if (row.FK_NODE != rows[0].FK_NODE) {
+                    flag = false;
+                    return false;
+                }
+            })
+
+            if (!flag) {
+                $.messager.alert('提示', '批量发送的案件必须是在同一业务和同一环节！');
+                return false;
+            }
+
+            var nodeRunModel = undefined;
+
+            $.ajax({
+                url: '@Url.Action("GetNode", "Node")',
+                data: { nodeID: rows[0].FK_NODE },
+                async: false,
+                success: function (node) {
+                    nodeRunModel = node.RunModel;
+                }
+            });
+
+            if (nodeRunModel == undefined) {
+                $.messager.alert('提示', '请联系管理员配置节点运行方式！节点ID:' + rows[0].FK_NODE);
+                return false;
+            }
+            if (nodeRunModel == 2) {
+                $.messager.alert('提示', '分叉节点暂不支持批量发送！');
+                return false;
+            }
+
+            //选择经办人发送
+            if (nodeRunModel == 1) {
+                pageCommonJS.openDialog({
+                    title: '选择经办人',
+                    height: 300,
+                    items: [{
+                        url: '@Url.Action("GetUserOfNextNodeIDs", "FLOW")?nodeIDs=' + rows[0].FK_NODE,
+                        textField: 'NAME',
+                        valueField: 'NO',
+                        singleSelect: true
+                    }],
+                    callback: function (value) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: '@Url.Action("BatchSend", "WfFlow")',
+                            data: { flowDatas: JSON.stringify(rows), toEmp: value },
+                            type: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                mygrid.datagrid('reload');
+                                if (result.success) {
+                                    $.messager.alert('提示', '发送成功！');
+                                }
+                                else {
+                                    $.messager.alert('提示', result.msg);
+                                }
+                            }
+                        });
+                    }
+                });
+            }
+                //发送到岗位待办
+            else {
+                $.messager.confirm('确认对话框', '您想要执行该操作吗？', function (r) {
+                    if (r) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: '@Url.Action("BatchSend", "WfFlow")',
+                            data: { flowDatas: JSON.stringify(rows) },
+                            type: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                mygrid.datagrid('reload');
+                                if (result.success) {
+                                    $.messager.alert('提示', '发送成功！');
+                                }
+                                else {
+                                    $.messager.alert('提示', result.msg);
+                                }
+                            }
+                        });
+                    }
+                })
+            }
+        });
+
+    }
+
+    //退回
+    function OnSendBack() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            if (isAllPreOpinionAgree(record.ID, record.FK_NODE) == false) {
+                return;
+            }
+            $.messager.progress();
+            $.ajax({
+                url: RootDirectory + '/Workflow/WfFlow/DB_GenerWillReturnNodes',
+                data: { fk_node: record.FK_NODE, workId: record.WORKID, fid: record.FID },
+                success: function (result) {
+                    $.messager.progress('close');
+                    if (!result || result.length == 0) {
+                        $.messager.alert('提示', '当前节点不能退回！');
+                        return;
+                    }
+
+                    pageCommonJS.openDialog({
+                        title: '选择需要退回的环节',
+                        items: [{
+                            data: result,
+                            textField: 'Name',
+                            valueField: 'NodeID',
+                            singleSelect: true
+                        }],
+                        callback: function (val) {
+                            Back(record, val);
+                        }
+                    });
+                }
+            });
+        });
+    }
+    //执行退回
+    function Back(record, val) {
+        $.ajax({
+            url: RootDirectory + '/Workflow/WfFlow/Node_ReturnWork',
+            data: { fk_flow: record.FK_FLOW, workID: record.WORKID, fid: record.FID, currentNodeID: record.FK_NODE, returnToNodeID: val },
+            success: function (result) {
+
+                if (result.success) {
+                    mygrid.datagrid("reload");
+                }
+                else {
+                    $.messager.alert('提示', result.msg || result.message);
+                }
+            }
+        });
+    }
+    //退件
+    function OnReturn() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            Return(row);
+        });
+    }
+    //执行退件
+    function Return(row) {
+        pageCommonJS.openWindowInWorkArea('@Url.Action("Form","TJXX")', {
+            title: '退件信息',
+            defaultValues: {
+                BWAID: row.ID,
+                SLBH: row.SLBH,
+                YWLX: row.BWLXMC,
+                YWFZ: row.YWFZ
+            },
+            parentGrid: mygrid,
+            flowParam: { flowNo: row.FK_FLOW, nodeID: row.FK_NODE, workID: row.WORKID, FID: row.FID, currentNodeID: row.FK_NODE }
+        });
+    }
+
+    //该环节以前的审批意见是否都同意
+    function isAllPreOpinionAgree(bwaId, nodeId) {
+        var flag = false;
+        $.ajax({
+            url: '@Url.Action("IsAllPreOpinionAgree","WfFlow")',
+            data: { bwaId: bwaId, nodeId: nodeId },
+            async: false,
+            success: function (result) {
+                if (result.success == true) {
+                    flag = true;
+                }
+                else {
+                    $.messager.alert('提示', result.msg || "该流程不能执行此操作");
+                }
+            }
+        });
+        return flag;
+    }
+
+    function FlowChart() {
+        var record = mygrid.datagrid('getSelected');
+        if (record && record.ID) {
+            WorkflowHelper.ShowWorkflowChart(record.ID);
+        }
+        else {
+            $.messager.alert('提示', '请选中一条记录！');
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            border: false,
+            items: [{
+                text: '业务编号',
+                value: 'SLBH'
+            }, {
+                text: '业务名称',
+                value: 'BWLXID',
+                easyType: 'mycombotree',
+                easyConfig: {
+                    valueField: 'ID',
+                    textField: 'BWLXMC',
+                    url: '@Url.Action("GetTreeData", "BWLX")',
+                    parentId: 'YWFZID',
+                    state: 'closed'
+                }
+            }, {
+                text: '节点名称',
+                value: 'NODENAME'
+            }, {
+                text: '发起用户',
+                value: 'SJR'
+            }, {
+                text: '呈批内容',
+                value: 'ZL'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    //刷新
+    function Refresh() {
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+
+    //移交清单
+    function BwaMove() {
+        var rows = mygrid.datagrid('getSelections');
+        if (rows) {
+            var ywhArr = [];
+            for (var i = 0 ; i < rows.length; i++) {
+                ywhArr.push(rows[i].SLBH);
+            }
+            var ywhs = ywhArr.join(",");
+            ywhs = encodeURIComponent(ywhs);
+            var url = '@Url.Action("AJYJQD", "SLSQ", new { area =""})' + "?ywhs=" + ywhs;
+
+            window.open(url, '案件移交清单');
+        }
+    }
+
+    //挂起
+    function HungUp() {
+        pageCommonJS.MultiSelectGrid(mygrid, function (ids, rows) {
+            $.messager.confirm('确认对话框', '您想要执行挂起操作吗？', function (r) {
+                if (r) {
+                    $.messager.progress();
+                    $.ajax({
+                        url: '@Url.Action("Node_HungUpWork", "WfFlow")',
+                        data: { flowDatas: JSON.stringify(rows) },
+                        type: 'post',
+                        success: function (result) {
+                            $.messager.progress('close');
+                            mygrid.datagrid('reload');
+                            if (result.success) {
+                                $.messager.alert('提示', '操作成功！');
+                            }
+                            else {
+                                $.messager.alert('提示', result.msg);
+                            }
+                        }
+                    });
+                }
+            })
+        });
+    }
+
+    //解挂
+    function UnHungUp() {
+        pageCommonJS.MultiSelectGrid(mygrid, function (ids, rows) {
+            $.messager.confirm('确认对话框', '您想要执行解挂操作吗？', function (r) {
+                if (r) {
+                    $.messager.progress();
+                    $.ajax({
+                        url: '@Url.Action("Node_UnHungUpWork", "WfFlow")',
+                        data: { flowDatas: JSON.stringify(rows) },
+                        type: 'post',
+                        success: function (result) {
+                            $.messager.progress('close');
+                            mygrid.datagrid('reload');
+                            if (result.success) {
+                                $.messager.alert('提示', '操作成功！');
+                            }
+                            else {
+                                $.messager.alert('提示', result.msg);
+                            }
+                        }
+                    });
+                }
+            })
+        });
+    }
+    //查看
+    function View() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                workflowNo: row.BWLXID,
+                workID: row.WORKID,
+                nodeID: row.FK_NODE,
+                nodeName: row.NODENAME,
+                wfState: row.WFSTATE,
+                bwaID: row.ID,
+                privilege: "read",
+                permission: 0,
+                SLBH: row.SLBH
+            };
+            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+            pageCommonJS.openWindowAsRedirect(url);
+        })
+    }
+    //抄送
+    function CC() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            if (record.CCROLE != 1 && record.CCROLE != 3) {
+                $.messager.alert('提示', '该流程节点不能抄送！');
+                return;
+            }
+            pageCommonJS.openDialog({
+                title: '选择抄送人',
+                height: 300,
+                items: [{
+                    url: '/LandSystem/Workflow/CommonBussiness/GetAllUser?filterCurrentDepartment=' + (record.HISDEPTSTRS == 1 ? "true" : "false"),
+                    textField: 'NAME',
+                    valueField: 'ID',
+                    parentField: 'PARENTID',
+                    onlyLeafCheck: true,
+                    expand: record.HISDEPTSTRS == 1 ? true : false
+                }],
+                callback: function (value, row) {
+
+                    $.messager.progress();
+                    $.ajax({
+                        url: '@Url.Action("CC", "WfFlow")',
+                        data: {
+                            flowNo: record.FK_FLOW,
+                            workID: record.WORKID,
+                            currentNodeId: record.FK_NODE,
+                            SLBH: record.SLBH,
+                            cclist: value
+                        },
+                        type: 'post',
+                        success: function (result) {
+                            $.messager.progress('close');
+                            $.messager.alert('提示', result.msg);
+                        }
+                    });
+                }
+            });
+        });
+    }
+</script>

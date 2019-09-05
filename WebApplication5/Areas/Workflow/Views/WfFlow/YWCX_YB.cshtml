@@ -1,0 +1,224 @@
+﻿@{
+    ViewBag.Title = "业务查询";
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.searchHeight = 105;
+}
+@section HardCodePageButtons{
+    <div id="searchPanel"></div>
+    <div class="toolbar panel-header" style="margin-bottom:0px;">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-undo'" plain="true" onclick="GetBack()">追回</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'information_16'" plain="true" onclick="View()">查看</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-process'" plain="true" onclick="FlowChart()">进度情况</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    </div>
+}
+<script src="~/Areas/Workflow/Scripts/WorkflowHelper.js"></script>
+<script src="~/Areas/Workflow/Application/BWA/Grid.js?version=1.0"></script>
+<table id="wfApplying"></table>
+<style>
+    .window > .panel-body {
+        padding: 2px 2px;
+    }
+</style>
+
+<script>
+    var me = this;
+    var mygrid = $('#wfApplying');
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var ywfz = pageCommonJS.getUrlParam('YWFZID');
+        if (ywfz) {
+            $.each(ywfz.split(','), function (index, item) {
+                var isLast = index == (ywfz.split(',').length - 1);
+                filters.push({
+                    left: index == 0 ? '(' : '',
+                    property: 'YWFZID',
+                    value: item,
+                    relation: '=',
+                    right: isLast ? ')' : '',
+                    connect: index == 0 ? 'AND' : 'OR'
+                });
+            })
+        }
+
+        mygridConfig = $.extend(new BWA_GridConfig(mygrid, { isYWCX_YB: true }), {
+            border: true,
+            url: '@Url.Action("GetPagedOfYWCX_YB", "BWA")',
+            singleSelect: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: 'CDT DESC'
+            },
+            onDblClickRow: function (index, row) {
+                var workflowParams = {
+                    workflowNo: row.BWLXID,
+                    workID: row.WORKID,
+                    nodeID: row.DQHJ,
+                    nodeName: row.NODENAME,
+                    wfState: row.WFSTATE,
+                    bwaID: row.ID,
+                    privilege: "read",
+                    permission: 0,
+                    SLBH: row.SLBH
+
+                };
+                var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+                pageCommonJS.openWindowAsRedirect(url);
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: 'CDT DESC'
+        }
+    }
+ 
+
+    function initSearchBtn() {
+        $("#searchPanel").searchpanel({
+            border: false,
+            items: [{
+                text: '业务编号',
+                value: 'SLBH'
+            }, {
+                text: '业务名称',
+                value: 'BWLXID',
+                easyType: 'mycombotree',
+                easyConfig: {
+                    valueField: 'ID',
+                    textField: 'BWLXMC',
+                    url: '@Url.Action("GetTreeData", "BWLX")',
+                    parentId: 'YWFZID',
+                    state: 'closed'
+                }
+            }, {
+                text: '环节状态',
+                value: 'HJZT',
+                easyType: 'combobox',
+                easyConfig: {
+                    data: [{ value: '办理中', text: '办理中' }, { value: '已完成', text: '已完成' }, { value: '已退件', text: '已退件' }]
+                }
+            }, {
+                text: '发起用户',
+                value: 'SJR'
+            }, {
+                text: '呈批内容',
+                value: 'ZL'
+            }],
+            parentGrid: mygrid,
+            memory: true
+        });
+    }
+
+    //进度情况
+    function FlowChart() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            WorkflowHelper.ShowWorkflowChart(record.ID);
+        })
+    }
+
+    //刷新
+    function Refresh() {
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+
+    //查看
+    function View() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                workflowNo: row.BWLXID,
+                workID: row.WORKID,
+                nodeID: row.DQHJ,
+                nodeName: row.NODENAME,
+                wfState: row.WFSTATE,
+                bwaID: row.ID,
+                privilege: "read",
+                permission: 0,
+                SLBH: row.SLBH
+
+            };
+            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+            pageCommonJS.openWindowAsRedirect(url);
+        })
+    }
+
+    //快速打印
+    function Print() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var url = RootDirectory + "/PrintCommon/FastPrint?nodeId=" + row.FK_NODE + "&bwlxId=" + row.BWLXID;
+            window.location.href = url;
+        })
+    }
+
+    function BwaMove() {
+        var rows = mygrid.datagrid('getSelections');
+        if (rows) {
+            var ywhArr = [];
+            for (var i = 0 ; i < rows.length; i++) {
+                ywhArr.push(rows[i].SLBH);
+            }
+            var ywhs = ywhArr.join(",");
+            ywhs = encodeURIComponent(ywhs);
+            var url = '@Url.Action("AJYJQD", "SLSQ", new { area =""})' + "?ywhs=" + ywhs;
+
+            window.open(url, '案件移交清单');
+        }
+    }
+
+    //追回
+    function GetBack() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+
+            $.messager.progress();
+            $.ajax({
+                url: RootDirectory + '/Workflow/WfFlow/GetBackNodeList',
+                data: { fk_flow: record.FK_FLOW, workId: record.WORKID, fid: record.FID },
+                success: function (result) {
+                    $.messager.progress('close');
+                    if (result.success == false) {
+                        $.messager.alert('提示', result.msg);
+                        return;
+                    }
+                    pageCommonJS.openDialog({
+                        title: '选择追回节点',
+                        items: [{
+                            data: result.trackList,
+                            textField: 'NDFromT',
+                            valueField: 'NDFrom',
+                            singleSelect: true,
+                            onlyLeafCheck: true
+                        }],
+                        callback: function (value, rows) {
+                            $.messager.progress();
+                            $.ajax({
+                                url: RootDirectory + '/Workflow/WfFlow/Node_GetBackWork',
+                                data: { fk_flow: record.FK_FLOW, workID: record.WORKID, fid: record.FID, currentNodeID: result.currentNodeID, returnToNodeID: value },
+                                success: function (result) {
+                                    $.messager.progress('close');
+                                    if (result.success) {
+                                        mygrid.datagrid("reload");
+                                    }
+                                    $.messager.alert('提示', result.msg || '追回成功！', 'info');
+                                }
+                            });
+                        }
+                    });
+                }
+            });
+        });
+    }
+</script>

@@ -1,0 +1,174 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【WF_Flow】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh();">刷新</a>
+}
+
+<table id="WF_Flow_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#WF_Flow_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Workflow/Flow/GetPaged',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'No', title: "编号(主键)",width:100 },
+			                { field: 'FK_FlowSort', title: "流程类别,",width:100 },
+			                { field: 'Name', title: "流程名称",width:100 },
+			                { field: 'FlowMark', title: "流程标记",width:100 },
+			                { field: 'FlowEventEntity', title: "流程事件实体",width:100 },
+			                { field: 'TitleRole', title: "标题生成规则",width:100 },
+			                { field: 'IsCanStart', title: "可以独立启动否？(独立启动的流程可以显示在发起流程列表里)",width:100 },
+			                { field: 'IsFullSA', title: "是否自动计算未来的处理人？",width:100 },
+			                { field: 'IsAutoSendSubFlowOver', title: "为子流程时结束规则,枚举类型:0",width:100 },
+			                { field: 'IsGuestFlow', title: "是否外部用户参与流程(非组织结构人员参与的流程)",width:100 },
+			                { field: 'FlowAppType', title: "流程应用类型,枚举类型:0",width:100 },
+			                { field: 'TimelineRole', title: "时效性规则,枚举类型:0",width:100 },
+			                { field: 'Draft', title: "草稿规则,枚举类型:0",width:100 },
+			                { field: 'FlowDeleteRole', title: "流程实例删除规则,枚举类型:0",width:100 },
+			                { field: 'HelpUrl', title: "帮助文档",width:100 },
+			                { field: 'SysType', title: "系统类型",width:100 },
+			                { field: 'Tester', title: "发起测试人",width:100 },
+			                { field: 'NodeAppType', title: "业务类型枚举(可为Null)",width:100 },
+			                { field: 'NodeAppTypeText', title: "业务类型枚举(可为Null)",width:100 },
+			                { field: 'ChartType', title: "节点图形类型,枚举类型:0",width:100 },
+			                { field: 'HostRun', title: "运行主机(IP+端口)",width:100 },
+			                { field: 'IsBatchStart', title: "是否可以批量发起流程？(如果是就要设置发起的需要填写的字段,多个用逗号分开)",width:100 },
+			                { field: 'BatchStartFields', title: "发起字段s",width:100 },
+			                { field: 'HistoryFields', title: "历史查看字段",width:100 },
+			                { field: 'IsResetData', title: "是否启用开始节点数据重置按钮？",width:100 },
+			                { field: 'IsLoadPriData', title: "是否自动装载上一笔数据？",width:100 },
+			                { field: 'IsDBTemplate', title: "是否启用数据模版？",width:100 },
+			                { field: 'IsStartInMobile', title: "是否可以在手机里启用？(如果发起表单特别复杂就不要在手机里启用了)",width:100 },
+			                { field: 'IsMD5', title: "是否是数据加密流程(MD5数据加密防篡改)",width:100 },
+			                { field: 'DataStoreModel', title: "流程数据存储模式,枚举类型:0",width:100 },
+			                { field: 'PTable', title: "流程数据存储表",width:100 },
+			                { field: 'FlowNoteExp', title: "备注的表达式",width:100 },
+			                { field: 'BillNoFormat', title: "单据编号格式",width:100 },
+			                { field: 'DesignerNo', title: "设计者编号",width:100 },
+			                { field: 'DesignerName', title: "设计者名称",width:100 },
+			                { field: 'DesignTime', title: "创建时间",width:100 },
+			                { field: 'Note', title: "流程描述",width:100 },
+			                { field: 'FlowRunWay', title: "启动方式,枚举类型:0",width:100 },
+			                { field: 'RunObj', title: "运行内容",width:100 },
+			                { field: 'RunSQL', title: "流程结束执行后执行的SQL",width:100 },
+			                { field: 'NumOfBill', title: "是否有单据",width:100 },
+			                { field: 'NumOfDtl', title: "NumOfDtl",width:100 },
+			                { field: 'AvgDay', title: "平均运行用天",width:100 },
+			                { field: 'Idx', title: "显示顺序号(在发起列表中)",width:100 },
+			                { field: 'Paras', title: "参数",width:100 },
+			                { field: 'DRCtrlType', title: "部门查询权限控制方式",width:100 },
+			                { field: 'StartLimitRole', title: "启动限制规则,枚举类型:0",width:100 },
+			                { field: 'StartLimitPara', title: "规则参数",width:100 },
+			                { field: 'StartLimitAlert', title: "限制提示",width:100 },
+			                { field: 'StartLimitWhen', title: "提示时间",width:100 },
+			                { field: 'StartGuideWay', title: "前置导航方式,枚举类型:0",width:100 },
+			                { field: 'StartGuideLink', title: "右侧的连接",width:100 },
+			                { field: 'StartGuideLab', title: "连接标签",width:100 },
+			                { field: 'StartGuidePara1', title: "参数1",width:100 },
+			                { field: 'StartGuidePara2', title: "参数2",width:100 },
+			                { field: 'StartGuidePara3', title: "参数3",width:100 },
+			                { field: 'Ver', title: "版本号",width:100 },
+			                { field: 'AtPara', title: "AtPara",width:100 },
+			                { field: 'DTSWay', title: "同步方式,枚举类型:0",width:100 },
+			                { field: 'DTSDBSrc', title: "数据库,",width:100 },
+			                { field: 'DTSBTable', title: "业务表名",width:100 },
+			                { field: 'DTSBTablePK', title: "业务表主键",width:100 },
+			                { field: 'DTSTime', title: "执行同步时间点,枚举类型:0",width:100 },
+			                { field: 'DTSSpecNodes', title: "指定的节点ID",width:100 },
+			                { field: 'DTSField', title: "要同步的字段计算方式,枚举类型:0",width:100 },
+			                { field: 'DTSFields', title: "要同步的字段s,中间用逗号分开.",width:100 },
+			                { field: 'PStarter', title: "发起人可看(必选)",width:100 },
+			                { field: 'PWorker', title: "参与人可看(必选)",width:100 },
+			                { field: 'PCCer', title: "被抄送人可看(必选)",width:100 },
+			                { field: 'PMyDept', title: "本部门人可看",width:100 },
+			                { field: 'PPMyDept', title: "直属上级部门可看(比如:我是)",width:100 },
+			                { field: 'PPDept', title: "上级部门可看",width:100 },
+			                { field: 'PSameDept', title: "平级部门可看",width:100 },
+			                { field: 'PSpecDept', title: "指定部门可看",width:100 },
+			                { field: 'PSpecDeptExt', title: "部门编号",width:100 },
+			                { field: 'PSpecSta', title: "指定的岗位可看",width:100 },
+			                { field: 'PSpecStaExt', title: "岗位编号",width:100 },
+			                { field: 'PSpecGroup', title: "指定的权限组可看",width:100 },
+			                { field: 'PSpecGroupExt', title: "权限组",width:100 },
+			                { field: 'PSpecEmp', title: "指定的人员可看",width:100 },
+			                { field: 'PSpecEmpExt', title: "指定的人员编号",width:100 },
+			                { field: 'MyDeptRole', title: "本部门发起的流程,枚举类型:0",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }	    };
+
+        
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+						],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	    if(urlParams.singleSelect){
+            commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+		      if(window.selectCallback){
+			     window.selectCallback([id],[row]);
+			  }
+            });
+		}
+		else{
+		    commonhelper.MultiSelectGrid(mygrid, function (ids, rows) {
+		      if(window.selectCallback){
+			     window.selectCallback(ids,rows);
+			  }
+            });
+		}
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+</script>

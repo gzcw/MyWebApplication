@@ -1,0 +1,15 @@
+﻿@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<div class="easyui-tabs" data-options="fit:true,border:true">
+    <div title="轨迹图" data-options="href:'@Url.Action("WfChart", "WfFlow", new { bwaId=ViewBag.bwaId })',style:{padding:2},iniframe:true" style="overflow:auto">
+    </div>
+    <div title="流程日志" data-options="href:'WfLog',style:{padding:2}"></div>
+</div>
+<script>
+    function CloseWindow() {
+        if (this.easyWindow) {
+            this.easyWindow.window('close');
+        }
+    }
+</script>

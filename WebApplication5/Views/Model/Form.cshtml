@@ -1,0 +1,115 @@
+﻿  
+  
+
+@*-------------------------------------------------------------------
+【SYS_MODEL】Form
+-------------------------------------------------------------------*@
+@{
+    
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+
+<form id="SYS_MODEL_form" class="myform" method="post">
+<div style="margin-bottom: 10px;">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 10px;" onclick="save();">保存</a>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+</div>
+    	<input type="hidden" name="SORTNUMBER" />
+		<input type="hidden" name="ISDELETED" />
+		<input type="hidden" name="MODIFYTIME" />
+		<input type="hidden" name="MODIFIER" />
+		<input type="hidden" name="CREATETIME" />
+		<input type="hidden" name="CREATOR" />
+		<input type="hidden" name="ID" />
+	
+    	 <fieldset>
+	    <legend>基本信息</legend>
+		<table class="mytable">
+<tr>
+<th>名称:</th>
+<td><input class='easyui-textbox' name='MODELNAME' data-options='width:230,height:28'/></td>
+<th>控制器名称:</th>
+<td><input class='easyui-textbox' name='CONTROLLERNAME' data-options='width:230,height:28'/></td></tr>
+<tr>
+<th>区域名称:</th>
+<td><input class='easyui-textbox' name='AREANAME' data-options='width:230,height:28'/></td>
+<th>导航菜单名称:</th>
+<td><input class='easyui-textbox' name='MENUNAME' data-options='width:230,height:28'/></td></tr>
+<tr>
+<th>项目标识:</th>
+<td colspan='3'><input class='easyui-textbox' name='PROJECTID' data-options='width:230,height:28'/></td></tr></table>
+	 </fieldset>
+	</form>
+
+<script>
+    var me = this;
+    var myform = $('#SYS_MODEL_form');
+
+    me.formId = me.formId || '@ViewBag.id'
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initForm();
+
+        $.messager.progress();
+        loadForm();
+
+		    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","Model")?id=' + me.formId);
+    }
+
+	
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Model")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+					   					    me.parentGrid.datagrid('reload');
+					                       }
+					myform.form('load',{ID:result.entity.ID});
+                }
+                $.messager.alert("提示", result.msg||"保持成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+

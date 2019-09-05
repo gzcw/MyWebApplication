@@ -1,0 +1,95 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【WF_Page】Form
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<div class="easyui-layout" data-options="fit:true">
+    <div class="datagrid-toolbar" data-options="region:'north',height:41" style="padding:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 40px;" onclick="save();">保存</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+    </div>
+    <div data-options="region:'center',border:false" style="background-color:#f2f5f7">
+		<form id="Page_form" class="myform" method="post">
+			<fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th><span class='x'>*</span>页面名称:</th>	<td><input class='easyui-textbox' name='Name' /></td><th>	<span class='x'>*</span>排序号:</th>	<td><input class='easyui-numberbox' name='SortNumber' /></td>	</tr>	<tr>	<th><span class='x'>*</span>路径:</th>	<td colspan='3'><input class='easyui-textbox' name='Url' data-options='width:604'/></td>	</tr>	</table>	<input type='hidden' name='ID' />		</fieldset>	
+		</form>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    var myform = $('#Page_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadForm","Page")?id=' + me.formId);
+    }
+
+	
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Page")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                result = JSON.parse(result);
+                if (result.success) {
+                    if (me.callback) {
+					   me.callback(result.entity);
+                    }
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+                $.messager.alert("提示", result.msg||"保存成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+
+@*----------------------------*@
+

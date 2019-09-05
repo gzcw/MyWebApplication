@@ -1,0 +1,176 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【Auth_Station】Index
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+
+<table id="Auth_Station_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#Auth_Station_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Authorize/Station/GetPaged',
+            border: false,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'Name', title: "岗位名称",width:236 },
+			                { field: 'Responsibility', title: "岗位职责",width:460 },
+			                { field: 'SortNumber', title: "排序号",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:''
+            },
+             loadFilter: function (data, parentId) {
+                if (parentId != undefined && (data.length == 0 || !Array.isArray(data))) {
+                    mygrid.treegrid('update', { id: parentId, row: { state: 'open' } });
+                    return data;
+                }
+                $.each(data.rows || data, function (index, item) {
+                    item.state = item.ISLEAF == 1 || item.isleaf == 1 ? 'open' : 'closed';
+                });
+                return data;
+            }
+	    };
+
+        
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:''
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'岗位名称',value:'Name'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function create() {
+         var url=window.applicationPath+'/Authorize/Station/Form';
+            commonhelper.openWindowInWorkArea(url, {
+                frame: true,
+                title: '新增',
+                callback: function(){
+								  mygrid.datagrid('reload');
+				 				}
+            });
+    }
+    function update() {
+        var url=url||(window.applicationPath+'/Authorize/Station/Form');
+            commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(url+'?id=' + id, {
+                    frame: true,
+                    title: '修改',
+                    parentGrid: mygrid,
+                    callback: function(entity){
+				    				    mygrid.datagrid('reload');
+				    				    }
+                });
+            });
+    }
+    function del() {
+        commonhelper.RemoveDatagridSelected(mygrid, function (ids, rows) {
+		    $.messager.progress();
+                $.ajax({
+                    url: window.applicationPath+'/Authorize/Station/DeleteEntities',
+                    data: { ids: ids },
+                    traditional: true,
+                    method:'post',
+                    success: function (result) {
+                        $.messager.progress('close');
+                        if (result.success) {
+										            mygrid.datagrid('clearSelections');
+                            mygrid.datagrid('reload');
+				                               }
+                        else {
+                            $.messager.alert("提示", result.Message);
+                        }
+                    }
+                });
+            });
+    }
+    function refresh() {
+            				            mygrid.datagrid('clearSelections');
+                            mygrid.datagrid('reload');
+				           }
+    function detail() {
+        commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(window.applicationPath+'/Authorize/Station/Form?permission=0&id=' + id, {
+                    frame: true,
+                    title: '查看',
+                    parentGrid: mygrid
+                });
+            });
+    }
+	
+
+    //导出Excel
+    function exportExcel() {
+        var url = '@Url.Action("ExportExcel","Station")';
+        var form = $('<form method="post" action="' + url + '"></form>').appendTo('body');
+        var rows = mygrid.datagrid('getSelections');
+        var opts = mygrid.datagrid('options');
+        
+        if (rows.length == 0) {
+            $.ajax({
+                url: opts.url,
+                async: false,
+                data: $.extend({ page: 1, rows: 10000 }, opts.queryParams),
+                success: function (result) {
+                    rows = result.rows;
+                }
+            });
+        }
+		
+        var columns = mygrid.datagrid('options').columns;
+        var dic = {};
+        $.each(columns[0], function (index, item) {
+            if (item.formatter) {
+                dic[item.field] = item.formatter;
+            }
+        });
+        rows = $.map(rows, function (row) {
+            $.map(row, function (value, pro) {
+                if (dic[pro]) {
+                    row[pro] = dic[pro](value, row);
+                }
+            });
+            return row;
+        });
+        $("<input type='hidden' name='sheetName' />").appendTo(form).val("岗位");
+        $("<input type='hidden' name='data' />").appendTo(form).val(JSON.stringify(rows));
+        $("<input type='hidden' name='columns' />").appendTo(form).val(JSON.stringify(opts.columns[0]));
+
+        form.submit().remove();
+    }
+</script>

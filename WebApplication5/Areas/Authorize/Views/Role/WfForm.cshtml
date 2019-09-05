@@ -1,0 +1,69 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【AUTH_ROLE】WfForm
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<form id="Role_form" class="myform" method="post">
+    <fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th><span class='x'>*</span>角色名称:</th>	<td><input class='easyui-textbox' name='NAME' /></td><th>	<span class='x'>*</span>是否有效:</th>	<td><input id='3224' class='easyui-boolcombobox component' name='ISVALID' data-componenttype='boolcombobox' data-options='width:230,height:28'/></td>	</tr>	<tr>	<th>角色描述:</th>	<td colspan='3'><input class='easyui-textbox' name='DESCRIPTION' data-options='width:604,height:80'/></td>	</tr>	</table>	<input type='hidden' name='ISDELETED' />	<input type='hidden' name='CREATOR' />	<input type='hidden' name='CREATETIME' />	<input type='hidden' name='SORTNUMBER' />	<input type='hidden' name='ID' />		</fieldset>	<fieldset>	<legend>用户列表</legend>	<table id='UserRole'></table>		</fieldset>	<fieldset>	<legend>操作权限</legend>	<table id='RoleAuthorization'></table>		</fieldset>	
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#Role_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadForm","Role")?WORKID=' + urlParams.WORKID);
+    }
+
+	
+    //保存
+    function save() {
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Role")',
+            async: false,
+            iframe: false,
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    error="表单未正确填写，请检查";
+                }
+                return isValid;
+            },
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.success) {
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+				else{
+                   error=result.msg || "保存失败";
+				}
+            }
+        })
+    }
+</script>
+

@@ -1,0 +1,137 @@
+﻿@*-------------------------------------------------------------------
+    【MyForm】Grid
+    -------------------------------------------------------------------*@
+@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+<form id="MyForm_form" method="post">
+    <input type="hidden" name="ID" />
+    <table cellpadding="0" cellspacing="0" style="width: 700px" class="formtable">
+        <tr>
+            <th><span class="x">*</span>表单名称：</th>
+            <td>
+                <input class="easyui-validatebox input" data-options="required:true" name="NAME" />
+            </td>
+            <th><span class="x">*</span>表名(数据库)：</th>
+            <td>
+                <input class="easyui-validatebox input" data-options="required:true" name="TABLENAME" />
+            </td>
+        </tr>
+        <tr>
+            <th><span class="x">*</span>排序号：</th>
+            <td colspan="3">
+                <input class="easyui-numberbox input" data-options="required:true" name="SORTORDER" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#MyForm_form');
+
+    $(document).ready(function () {
+        initForm();
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+    //region个性化代码
+
+
+    //endregion
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: [{
+                iconCls: 'icon-add',
+                text: '保存',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '取消',
+                handler: cancel
+            }]
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","FormManage")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("Save", "FormManage")',
+            onSubmit: function () {
+
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+                else {
+                    $.messager.alert("提示",result.msg||"保存失败！");
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

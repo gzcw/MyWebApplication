@@ -1,0 +1,133 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<link rel="stylesheet" href="~/Scripts/plupload-3.1.2/js/jquery.plupload.queue/css/jquery.plupload.queue.css" type="text/css" media="screen" />
+<script type="text/javascript" src="~/Scripts/plupload-3.1.2/js/plupload.full.min.js"></script>
+<script type="text/javascript" src="~/Scripts/plupload-3.1.2/js/jquery.plupload.queue/jquery.plupload.queue.js"></script>
+<script src="~/Scripts/plupload-3.1.2/js/i18n/zh_CN.js"></script>
+
+
+<div class="easyui-layout" data-options="fit:true" style="height: 100%; width: 100%;">
+    <div data-options="region:'west',width:170">
+        <ul id="folderList"></ul>
+    </div>
+    <div data-options="region:'center'" style="width: 170px; height: 100%;">
+        <div id="flash_uploader" style="text-align: center;">
+        </div>
+    </div>
+</div>
+
+<script type="text/javascript">
+    var me = this;
+    var uniqueArr = [];
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initFolderList();
+        InitUpload();
+    });
+
+    function initFolderList() {
+        $('#folderList').tree({
+            url: applicationPath + '/Attachment/GetFolderList?recordID=' + urlParams.recordID + "&category=" + urlParams.category
+        });
+    }
+
+    function InitUpload() {
+        $("#flash_uploader").pluploadQueue({
+            // General settings
+            runtimes: 'html5,flash,silverlight,html4',
+            url: applicationPath + "/Attachment/Upload?recordID=" + urlParams.recordID + "&category=" + urlParams.category, //服务器端响应页面
+            chunk_size: '5mb',
+            rename: true,
+            dragdrop: true,
+
+            filters: {
+                // Maximum file size
+                max_file_size: '200mb',
+                // Specify what files to browse for
+                mime_types: [
+                    { title: "附件", extensions: "jpg,gif,png,jpeg,bmp,doc,docx,ppt,pptx,xls,xlsx,dwg,zip,rar,dxf,pdf,ceb,tif,tiff" }
+            ]
+            },
+
+            // Resize images on clientside if we can
+            resize: { width: 320, height: 240, quality: 90 },
+
+            flash_swf_url: '~/Scripts/plupload-3.1.2/js/Moxie.swf',
+            silverlight_xap_url: '~/Scripts/plupload-3.1.2/js/Moxie.xap',
+            init: {
+                BeforeUpload: function (up, file) {
+                    var param = {fileName:file.name};
+                    var row = $("#folderList").tree('getSelected');
+                    if (row && row.ID) {
+                        param.parentID = row.ID;
+                    }
+                    up.setOption("multipart_params", param)
+                },
+                FileUploaded: function (up, file, info) {
+                    var result = JSON.parse(info.response);
+                    if (result.success) {
+                        if (me.fujiantab) {
+                            me.fujiantab.loadData();
+                        }
+                        if (me.callback && typeof (me.callback) == "function") {
+                            me.callback();
+                        }
+                    }
+                    else {
+                        $.messager.alert("提示", result.message || "上传失败");
+                    }
+                },
+                //Error: function (up, args) {
+                //    $.messager.alert('提示',args.message);
+                //},
+                UploadFile: function (up, file) {
+                    var row = $("#folderList").tree('getSelected');
+                    if (row && row.ID) {
+                        up.settings.url = up.settings.url + "&parentID=" + row.ID;
+                    }
+                }
+            }
+        });
+        @*$("#flash_uploader").pluploadQueue({
+            runtimes: 'html5,flash', 	//使用Flash插件
+            url: applicationPath + "/Attachment/Upload?recordID=" + urlParams.recordID + "&category=" + urlParams.category, //服务器端响应页面
+            max_file_size: '200mb', //最大文件限制
+            chunk_size: '5mb', 	//一次上传数据大小
+            unique_names: true, 	//是否自动生成唯一名称
+            filters: [				//文件类型限制
+                { title: "附件", extensions: "jpg,gif,png,jpeg,bmp,doc,docx,ppt,pptx,xls,xlsx,dwg,zip,rar,dxf,pdf,ceb,tif,tiff" }
+            ],
+            // 缩放图片
+            //resize: { width: 320, height: 240, quality: 80 },
+            flash_swf_url: '@Url.Content("~/Scripts/plupload/plupload.flash.swf")',
+            init: {
+                FileUploaded: function (up, file, info) {
+                    var result = JSON.parse(info.response);
+                    if (result.success) {
+                        if (me.fujiantab) {
+                            me.fujiantab.loadData();
+                        }
+                        if (me.callBack && typeof (me.callBack) == "function") {
+                            me.callBack();
+                        }
+                    }
+                    else {
+                        $.messager.alert("提示", result.message || "上传失败");
+                    }
+                },
+                //Error: function (up, args) {
+                //    $.messager.alert('提示',args.message);
+                //},
+                UploadFile: function (up, file) {
+                    var folder = $("#folderList").tree('getSelected');
+                    if (folder && folder.ID) {
+                        up.settings.url = up.settings.url + "&parentId=" + folder.ID;
+                    }
+                }
+            }
+        });*@
+    }
+</script>

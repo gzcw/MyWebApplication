@@ -1,0 +1,95 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【WF_Flow】Form
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<div class="easyui-layout" data-options="fit:true">
+    <div class="datagrid-toolbar" data-options="region:'north',height:41" style="padding:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 40px;" onclick="save();">保存</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+    </div>
+    <div data-options="region:'center',border:false" style="background-color:#f2f5f7">
+		<form id="Flow_form" class="myform" method="post">
+			<fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th>流程类别,:</th>	<td><input class="easyui-combobox" name="FK_FlowSort" data-options="width:230,height:28,textField:'Name',valueField:'No',url:applicationPath+'/Workflow/FlowSort/GetData'"/></td><th>	流程名称:</th>	<td><input class='easyui-textbox' name='Name' /></td>	</tr>	<tr>	<th>编号规则:</th>	<td colspan='3'><input class="easyui-combobox" name="BHID" data-options="width:604,height:28,textField:'Name',valueField:'ID',url:applicationPath+'/Workflow/BH/GetData'"/></td>	</tr>	</table>	<input type='hidden' name='No' />	<input type='hidden' name='FlowMark' />	<input type='hidden' name='FlowEventEntity' />	<input type='hidden' name='TitleRole' />	<input type='hidden' name='IsCanStart' />	<input type='hidden' name='IsFullSA' />	<input type='hidden' name='IsAutoSendSubFlowOver' />	<input type='hidden' name='IsGuestFlow' />	<input type='hidden' name='FlowAppType' />	<input type='hidden' name='TimelineRole' />	<input type='hidden' name='Draft' />	<input type='hidden' name='FlowDeleteRole' />	<input type='hidden' name='HelpUrl' />	<input type='hidden' name='SysType' />	<input type='hidden' name='Tester' />	<input type='hidden' name='NodeAppType' />	<input type='hidden' name='NodeAppTypeText' />	<input type='hidden' name='ChartType' />	<input type='hidden' name='HostRun' />	<input type='hidden' name='IsBatchStart' />	<input type='hidden' name='BatchStartFields' />	<input type='hidden' name='HistoryFields' />	<input type='hidden' name='IsResetData' />	<input type='hidden' name='IsLoadPriData' />	<input type='hidden' name='IsDBTemplate' />	<input type='hidden' name='IsStartInMobile' />	<input type='hidden' name='IsMD5' />	<input type='hidden' name='DataStoreModel' />	<input type='hidden' name='PTable' />	<input type='hidden' name='FlowNoteExp' />	<input type='hidden' name='BillNoFormat' />	<input type='hidden' name='DesignerNo' />	<input type='hidden' name='DesignerName' />	<input type='hidden' name='DesignTime' />	<input type='hidden' name='Note' />	<input type='hidden' name='FlowRunWay' />	<input type='hidden' name='RunObj' />	<input type='hidden' name='RunSQL' />	<input type='hidden' name='NumOfBill' />	<input type='hidden' name='NumOfDtl' />	<input type='hidden' name='AvgDay' />	<input type='hidden' name='Idx' />	<input type='hidden' name='Paras' />	<input type='hidden' name='DRCtrlType' />	<input type='hidden' name='StartLimitRole' />	<input type='hidden' name='StartLimitPara' />	<input type='hidden' name='StartLimitAlert' />	<input type='hidden' name='StartLimitWhen' />	<input type='hidden' name='StartGuideWay' />	<input type='hidden' name='StartGuideLink' />	<input type='hidden' name='StartGuideLab' />	<input type='hidden' name='StartGuidePara1' />	<input type='hidden' name='StartGuidePara2' />	<input type='hidden' name='StartGuidePara3' />	<input type='hidden' name='Ver' />	<input type='hidden' name='AtPara' />	<input type='hidden' name='DTSWay' />	<input type='hidden' name='DTSDBSrc' />	<input type='hidden' name='DTSBTable' />	<input type='hidden' name='DTSBTablePK' />	<input type='hidden' name='DTSTime' />	<input type='hidden' name='DTSSpecNodes' />	<input type='hidden' name='DTSField' />	<input type='hidden' name='DTSFields' />	<input type='hidden' name='PStarter' />	<input type='hidden' name='PWorker' />	<input type='hidden' name='PCCer' />	<input type='hidden' name='PMyDept' />	<input type='hidden' name='PPMyDept' />	<input type='hidden' name='PPDept' />	<input type='hidden' name='PSameDept' />	<input type='hidden' name='PSpecDept' />	<input type='hidden' name='PSpecDeptExt' />	<input type='hidden' name='PSpecSta' />	<input type='hidden' name='PSpecStaExt' />	<input type='hidden' name='PSpecGroup' />	<input type='hidden' name='PSpecGroupExt' />	<input type='hidden' name='PSpecEmp' />	<input type='hidden' name='PSpecEmpExt' />	<input type='hidden' name='MyDeptRole' />		</fieldset>	
+		</form>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    var myform = $('#Flow_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadForm","Flow")?id=' + me.formId);
+    }
+
+	
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Flow")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                result = JSON.parse(result);
+                if (result.success) {
+                    if (me.callback) {
+					   me.callback(result.entity);
+                    }
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+                $.messager.alert("提示", result.msg||"保存成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+
+@*----------------------------*@
+

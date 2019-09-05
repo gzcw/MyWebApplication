@@ -1,0 +1,196 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【WF_GENERWORKFLOW】Index
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+
+<table id="WF_GENERWORKFLOW_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#WF_GENERWORKFLOW_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Workflow/GenerWorkFlow/GetPaged_YiBan',
+            border: false,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'WorkID',
+            columns: [[
+                { field: 'ck', checkbox: true },
+                { field: 'YWH', title: "业务号", width: 120 },
+                { field: 'Title', title: "标题", width: 250 },
+                { field: 'FlowName', title: "流程名称", width: 150 },
+                { field: 'NodeName', title: "当前节点名称", width: 100 },
+                { field: 'WfStateName', title: "流程状态", width: 100 },
+                { field: 'StarterName', title: "发起人", width: 100 },
+                {
+                    field: 'TodoEmps', title: "待办人员", width: 100, formatter: function (val, row) {
+                        if (row.WFSTATE == 3 || row.WFSTATE == 7 || !val) {
+                            return "--"
+                        }
+                        var array = $.map(val.match(/,.*?;/), function (item) {
+                            return item.substr(1, item.length - 2);
+                        });
+                        return array.join('、');
+                    }
+                },
+                { field: 'DeptName', title: "部门名称", width: 100 }
+            ]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+                orders:'RDT DESC'
+            }
+	    };
+
+
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+                    orders:'RDT DESC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+                { text: '业务号', value: 'YWH' }
+                , { text: '标题', value: 'TITLE' }
+                , { text: '发起人', value: 'STARTERNAME' }
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function create() {
+         var url=window.applicationPath+'/Workflow/GenerWorkFlow/Form';
+            commonhelper.openWindowInWorkArea(url, {
+                frame: true,
+                title: '新增',
+                callback: function(){
+								  mygrid.datagrid('reload');
+				 				}
+            });
+    }
+    function update() {
+        var url=url||(window.applicationPath+'/Workflow/GenerWorkFlow/Form');
+            commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(url+'?id=' + id, {
+                    frame: true,
+                    title: '修改',
+                    parentGrid: mygrid,
+                    callback: function(){
+				    				    mygrid.datagrid('reload');
+				    				    }
+                });
+            });
+    }
+    function del() {
+        commonhelper.RemoveDatagridSelected(mygrid, function (ids, rows) {
+		    $.messager.progress();
+                $.ajax({
+                    url: window.applicationPath+'/Workflow/GenerWorkFlow/DeleteEntities',
+                    data: { ids: ids },
+                    traditional: true,
+                    method:'post',
+                    success: function (result) {
+                        $.messager.progress('close');
+                        if (result.success) {
+										            mygrid.datagrid('clearSelections');
+                            mygrid.datagrid('reload');
+				                               }
+                        else {
+                            $.messager.alert("提示", result.Message);
+                        }
+                    }
+                });
+            });
+    }
+    function refresh() {
+            				            mygrid.datagrid('clearSelections');
+                            mygrid.datagrid('reload');
+				           }
+    function detail() {
+        commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                WorkID: row.WorkID,
+                NodeID: row.FK_Node,
+                WfState: row.WfState,
+                permission: 0
+            };
+            var url = applicationPath + "/Workflow/Flow/WfPanel?" + $.param(workflowParams);
+            window.location.href = url;
+        });
+    }
+
+    //进度情况
+    function progress() {
+        commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                WorkID: row.WorkID
+            };
+            var url = applicationPath + "/Workflow/GenerWorkFlow/JinZhanQingKuang?" + $.param(workflowParams);
+            window.location.href = url;
+        });
+    }
+
+    //导出Excel
+    function exportExcel() {
+        var url = '@Url.Action("ExportExcel","GenerWorkFlow")';
+        var form = $('<form method="post" action="' + url + '"></form>').appendTo('body');
+        var rows = mygrid.datagrid('getSelections');
+        var opts = mygrid.datagrid('options');
+
+        if (rows.length == 0) {
+            $.ajax({
+                url: opts.url,
+                async: false,
+                data: $.extend({ page: 1, rows: 10000 }, opts.queryParams),
+                success: function (result) {
+                    rows = result.rows;
+                }
+            });
+        }
+
+        var columns = mygrid.datagrid('options').columns;
+        var dic = {};
+        $.each(columns[0], function (index, item) {
+            if (item.formatter) {
+                dic[item.field] = item.formatter;
+            }
+        });
+        rows = $.map(rows, function (row) {
+            $.map(row, function (value, pro) {
+                if (dic[pro]) {
+                    row[pro] = dic[pro](value, row);
+                }
+            });
+            return row;
+        });
+        $("<input type='hidden' name='sheetName' />").appendTo(form).val("已办箱");
+        $("<input type='hidden' name='data' />").appendTo(form).val(JSON.stringify(rows));
+        $("<input type='hidden' name='columns' />").appendTo(form).val(JSON.stringify(opts.columns[0]));
+
+        form.submit().remove();
+    }
+</script>

@@ -1,0 +1,97 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【Department】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="close();">刷新</a>
+}
+<table id="mygrid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#mygrid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Authorize/Station/GetPaged_Department',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+			columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'CODE', title: "部门编码",width:100 },
+			                { field: 'REGIONCODE', title: "区域代码",width:100 },
+			                { field: 'CONTACTPERSON', title: "联系人",width:100 },
+			                { field: 'CONTACTPHONE', title: "联系电话",width:100 },
+			                { field: 'FAXNUMBER', title: "创造号码",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }
+	    };
+
+		mygrid.datagrid(opts);
+        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+						],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	   commonhelper.MultiSelectGrid(mygrid, function (ids) {
+          var url=window.applicationPath+'/Authorize/Station/SaveRelation_User';
+          $.ajax({
+		        url:url,
+		        data:{STATIONID:urlParams.id,DEPARTMENTIDS:JSON.stringify(ids)},
+		        type:'post',
+		        success:function(result){
+		            $.messager.alert('提示',result.msg||'保存成功！');
+					if(me.parentGrid){
+					   me.parentGrid.datagrid('reload');
+					}
+		        }
+		 });
+       });  
+    }
+   
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+            if (mygrid.queryParams) {
+                mygrid.datagrid('load', mygrid.queryParams);
+            }
+            else {
+                mygrid.datagrid('reload');
+            }
+    }
+  
+</script>

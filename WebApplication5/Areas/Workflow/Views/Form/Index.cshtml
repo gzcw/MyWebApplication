@@ -1,0 +1,239 @@
+﻿@{
+    ViewBag.Title = "Home";
+}
+
+<form id="myform">
+    <input type="hidden" name="tableName" value="@ViewBag.tableName" />
+    <input type="hidden" name="ID" value="@ViewBag.id" />
+    <input type="hidden" name="SLBH" value="@ViewBag.SLBH" />
+</form>
+<style>
+    .x {
+        color: red;
+    }
+</style>
+<script>
+    var me = this;
+    var myform = $('#myform');
+
+    $(document).ready(function () {
+        initPanel();
+        initForm()
+        me.formId = '@ViewBag.id';
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+    });
+
+    //初始化表单
+    function initForm() {
+        var buttons = [];
+
+        if (!'@ViewBag.SLBH') {
+            buttons = [{
+                iconCls: 'icon-add',
+                text: '保存',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '取消',
+                handler: cancel
+            }];
+        }
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: buttons
+        });
+    }
+
+    //初始化面板
+    function initPanel() {
+        $.get('@Url.Action("GetZuJianList", "Form", new { tableName = ViewBag.tableName })', function (result) {
+            if (result.success) {
+                var maxHeight = 0;
+                var maxWidth = 0;
+                var minX = 1000;
+                var maxX = 0;
+                $.each(result.data, function (index, item) {
+                    var minX = minX < item.X ? minX : item.X;
+                    var maxX = maxX > item.X ? maxX : item.X;
+                    maxHeight = maxHeight > (item.Y + item.HEIGHT) ? maxHeight : (item.Y + item.HEIGHT);
+                    maxWidth = maxWidth > (item.X + item.WIDTH) ? maxWidth : (item.X + item.WIDTH);
+                    switch (item.ZJLX) {
+                        case "Label": addLabelToPanel(item); break;
+                        case "Input": addInputToPanel(item); break;
+                        case "Number": addNumberToPanel(item); break;
+                        case "Date": addDateToPanel(item); break;
+                        case "TextArea": addTextAreaToPanel(item); break;
+                        case "DropList": addDropListToPanel(item); break;
+                        default: break;
+                    }
+                })
+                myform.css('height', maxHeight).css('width', maxWidth + 10);
+                $("[name='formbutton']").css('text-align', 'left').css('margin-left', (minX + maxX) / 2 - 120)
+            }
+            else {
+                $.messager.alert('提示', result.msg);
+            }
+        })
+    }
+
+    //添加标签到面板
+    function addLabelToPanel(option) {
+        var component = $("<div style='word-wrap:break-word;'>" + option.TEXT + "</div>")
+                 .appendTo($("#myform"))
+                 .css('position', 'absolute')
+                 .css('left', option.X)
+                 .css('top', option.Y)
+                 .css('height', option.HEIGHT)
+                 .css('width', option.WIDTH);
+        if (option.SFBT) {
+            component.prepend('<span class="x">*</span>');
+        }
+    }
+
+    //添加输入框到面板
+    function addInputToPanel(option) {
+        var component = $("<input class='easyui-validatebox' name='" + option.COLUMNNAME + "' />")
+                 .appendTo($("#myform"))
+                 .css('position', 'absolute')
+                 .css('left', option.X)
+                 .css('top', option.Y)
+                 .css('width', option.WIDTH)
+                 .css('height', option.HEIGHT);
+        component.validatebox({ required: option.SFBT });
+        $.parser.parse();
+    }
+
+    //添加多行文本框到面板
+    function addNumberToPanel(option) {
+        var component = $("<input class='easyui-numberbox' name='" + option.COLUMNNAME + "' />")
+                .appendTo($("#myform"));
+        component.numberbox({ width: option.WIDTH, height: option.HEIGHT, required: option.SFBT });
+
+        $.parser.parse();
+        component.next().css('position', 'absolute')
+               .css('left', option.X)
+               .css('top', option.Y);
+    }
+
+    //添加日期输入框到面板
+    function addDateToPanel(option) {
+        var component = $("<input type='text' class='easyui-datebox' name='" + option.COLUMNNAME + "' />")
+                .appendTo($("#myform"));
+        component.datebox({ editable: false, width: option.WIDTH, height: option.HEIGHT, required: option.SFBT });
+
+        $.parser.parse();
+        component.next().css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y);
+    }
+
+    //添加多行文本框到面板
+    function addTextAreaToPanel(option) {
+        var component = $("<input class='easyui-textbox' name='" + option.COLUMNNAME + "' data-options='multiline:true' />")
+                .appendTo($("#myform"));
+
+        component.textbox({ width: option.WIDTH, height: option.HEIGHT, required: option.SFBT });
+        $.parser.parse();
+        component.next().css('position', 'absolute')
+               .css('left', option.X)
+               .css('top', option.Y);
+    }
+    //添加下拉框到面板
+    function addDropListToPanel(option) {
+        var data = option.TEXT.split(',');
+        data = $.map(data, function (item) {
+            return { text: item, value: item };
+        });
+        var component = $("<input class='easyui-combobox' name='" + option.COLUMNNAME + "' />")
+                .appendTo($("#myform"))
+                .combobox({ data: data, width: option.WIDTH, height: option.HEIGHT, required: option.SFBT });
+        $.parser.parse();
+
+        component.next().attr("targetId", option.ID)
+                .css('position', 'absolute')
+                .css('left', option.X)
+                .css('top', option.Y);
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadMyForm", "Form", new { tableName = ViewBag.tableName, id = ViewBag.id })');
+    }
+
+    function savePage() {
+        var error = '';
+        myform.form('submit', {
+            url: '@Url.Action("SaveMyForm", "Form")',
+            async: false,
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    error = "表单未正确填写，请检查。";
+                }
+                return isValid;
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    error = result.msg || result.message || "提交失败";
+                }
+            }
+        })
+        return error == '' ? true : error;
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveMyForm", "Form")',
+            onSubmit: function () {
+
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    $.messager.alert('提示', '操作成功');
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                }
+                else {
+                    $.messager.alert('提示', result.msg);
+                }
+            }
+        })
+    }
+
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

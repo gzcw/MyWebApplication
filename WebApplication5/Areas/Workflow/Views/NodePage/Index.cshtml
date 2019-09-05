@@ -1,0 +1,95 @@
+﻿
+<script src="~/Areas/Workflow/Application/NodePage/Grid.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+
+@section searchform{
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'" plain="true">搜索</a>
+</div>
+}
+<table id="NodePage_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#NodePage_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var gridConfig = new NodePage_GridConfig(mygrid, {
+            nodeID: me.parentId,
+            Create: function () {
+                pageCommonJS.openWindowInWorkArea('@Url.Action("Form", "NodePage")', {
+                    frame: true,
+                    title: '新增',
+                    parentGrid: mygrid,
+                    nodeID: me.parentID
+                });
+            },
+            Update: function () {
+                pageCommonJS.SingleSelectGrid(mygrid, function (id) {
+                    pageCommonJS.openWindowInWorkArea('@Url.Action("Form", "NodePage")/' + id, {
+                        frame: true,
+                        title: '修改',
+                        parentGrid: mygrid,
+                        formId: id,
+                        nodeID: me.parentID
+                    });
+                });
+            },
+        });
+
+        mygridConfig = $.extend(gridConfig, {
+            border: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SortNumber ASC"
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [{
+                text: '节点',
+                value: 'Nodename'
+            }, {
+                text: '页签',
+                value: 'Pagename'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+</script>

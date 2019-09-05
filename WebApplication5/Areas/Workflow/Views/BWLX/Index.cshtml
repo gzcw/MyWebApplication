@@ -1,0 +1,90 @@
+﻿@*-------------------------------------------------------------------
+    【BWLX】Index
+    -------------------------------------------------------------------*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+
+}
+<script src="~/Areas/Workflow/Application/BWLX/Grid.js"></script>
+
+@section searchform{
+    <div class="toolbar panel-header" style="top:2px">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="Create()">新增</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="Update()">修改</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="Delete()">删除</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+        <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'" plain="true">查询</a>
+    </div>
+}
+<table id="BWLX_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#BWLX_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var defaultConfig = new BWLX_GridConfig(mygrid, { defaultValues: me.defaultValues || {} });
+
+        mygridConfig = $.extend(defaultConfig, {
+            url: RootDirectory + '/Workflow/BWLX/GetTreeData',
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SORTORDER"
+            },
+            border: true,
+            pagination: false,
+            idField: 'ID',
+            parentField: 'YWFZID',
+            treeField: 'BWLXMC'
+        });
+        mygrid.mytreegrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: "SORTORDER"
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					    {
+					        text: '业务分组',
+					        value: 'YWFZ',
+					        easyType: 'combobox',
+					        easyConfig: {
+					            url: '@Url.Action("GetData","YWFZ")',
+					            valueField: 'FZMC',
+					            textField: 'FZMC'
+					        }
+					    }
+		     			, { text: '办文类型', value: 'BWLXMC' }
+		     			, { text: '办文类型说明', value: 'BWLXSM' }
+		     			, { text: '档案分类', value: 'DAFLID' }
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+</script>

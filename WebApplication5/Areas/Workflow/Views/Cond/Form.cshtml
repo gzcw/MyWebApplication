@@ -1,0 +1,121 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【WF_COND】Form
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<form id="Cond_form" class="myform" method="post">
+<div style="margin-bottom: 10px;">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 10px;" onclick="save();">保存</a>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+</div>
+    <fieldset>
+	<legend>基本信息</legend>
+	<table class='mytable'>
+	<tr>
+	<th>从节点:</th>
+	<td><input class='easyui-numberbox' name='NODEID' data-options="readonly:true"/></td><th>
+	到节点:</th>
+	<td><input class='easyui-numberbox' name='TONODEID' data-options="readonly:true"/></td>
+	</tr>
+	<tr>
+	<th>方向条件:</th>
+	<td colspan='3'><input class='easyui-textbox' name='OPERATORVALUE' data-options='width:604'/></td>
+	</tr>
+	</table>
+	<input type='hidden' name='ATPARA' />
+	<input type='hidden' name='NOTE' />
+	<input type='hidden' name='CONDORAND' />
+	<input type='hidden' name='PRI' />
+	<input type='hidden' name='MYPOID' />
+	<input type='hidden' name='CONNJUDGEWAY' />
+	<input type='hidden' name='OPERATORVALUET' />
+	<input type='hidden' name='FK_OPERATOR' />
+	<input type='hidden' name='ATTRNAME' />
+	<input type='hidden' name='ATTRKEY' />
+	<input type='hidden' name='FK_ATTR' />
+	<input type='hidden' name='FK_NODE' />
+	<input type='hidden' name='FK_FLOW' />
+	<input type='hidden' name='DATAFROM' />
+	<input type='hidden' name='CONDTYPE' />
+	<input type='hidden' name='MYPK' />
+	
+	</fieldset>
+	
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#Cond_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadMyForm","Cond")?' + $.param(urlParams));
+    }
+
+	
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Cond")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                result = JSON.parse(result);
+                if (result.success) {
+                    if (me.parentGrid) {
+					   					    me.parentGrid.datagrid('reload');
+					                       }
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+                $.messager.alert("提示", result.msg||"保存成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+

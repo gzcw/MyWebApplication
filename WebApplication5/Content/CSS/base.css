@@ -1,0 +1,299 @@
+html {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border: 0;
+	background: #fff; /*#dfe8f6*/
+	font-size: 12px;
+	/*font-family: Lucida Grande,Lucida Sans,Arial,sans-serif;*/
+	/*font-family: Verdana, Helvetica, Sans-Serif;*/
+	color: #333;
+	/* hide overflow:hidden from IE5/Mac */
+	/* \*/
+	overflow: hidden;
+	/* */
+}
+
+body {
+	height: 100%;
+	width: 100%;
+	padding: 0;
+	margin: 0;
+	border: 0;
+}
+
+.building {
+	/*background-color:#ebfefa;*/
+	background: url('images/building.jpg') no-repeat bottom left;
+}
+
+.welcome {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -120px;
+	margin-left: -300px;
+	width: 600px;
+	height: 240px;
+	background-image: url(images/welcome.jpg)
+}
+
+/*遮罩 开始*/
+#loading-mask {
+	position: absolute;
+	left: 0;
+	top: 0;
+	width: 100%;
+	height: 100%;
+	z-index: 20000;
+	background-color: white;
+}
+
+#loading {
+	position: absolute;
+	top: 50%;
+	left: 50%;
+	margin-top: -35px;
+	margin-left: -35px;
+	padding: 0;
+	width: 70px;
+	height: 70px;
+	z-index: 20001;
+	background: white url("images/loading.gif") 11px 11px no-repeat;
+	border-radius: 5px;
+}
+
+#loading .loading-text {
+	color: #555;
+	font: bold 13px tahoma, arial, helvetica;
+	padding-top: 21px;
+	margin-left: 60px;
+}
+/*遮罩 结束*/
+
+/*表单 开始*/
+.property {
+	display: inline-block;
+	margin: 5px 0 0 5px;
+	padding: 0;
+	white-space: nowrap;
+}
+
+.property .label {
+	display: inline-block;
+	white-space: nowrap;
+}
+
+.property .block {
+	display: block;
+}
+
+.property input.input {
+	border: 1px solid mediumseagreen;
+	font-size: 12px;
+	height: 20px; /*IE下为22*/
+	line-height: 20px; /*IE下为22*/
+	padding: 0 2px;
+	width: 100px;
+}
+
+.property select.input {
+	border: 1px solid mediumseagreen;
+	font-size: 12px;
+	height: 22px;
+	line-height: 22px;
+	padding: 0;
+	width: 102px;
+}
+
+.property .label span {
+	color: red;
+	font-family: '宋体';
+	padding: 0 2px;
+}
+/*表单结束*/
+
+/*头部开始*/
+.head {
+	height: 71px; 
+}
+
+.logo {
+	float: left;
+	height: 71px;   
+    
+}
+
+.logo a {
+	display: inline-block;
+	float: left;
+}
+
+.logo a.logo {
+	background: url(images/logo.png) no-repeat;
+	height: 32px;
+	width: 32px;
+}
+
+.logo .title {
+    /*font-family:'宋体';*/
+    color:#ffffff;
+	height: 60px;
+	width: 651px;
+    line-height:60px;
+    font-size:22px;
+    text-shadow:-6px 5px 10px #555;
+    /*font-weight:bold;*/
+}
+
+.tips {
+	/*background:url(images/tips_bg.gif) repeat-x;*/
+	float: right;
+	list-style-type: none;
+	margin: 0 15px 0 0;
+	padding: 0;
+	color: #fff;
+}
+
+.tips li {
+	display: inline-block;
+	float: left;
+	height: 27px;
+	line-height: 27px;
+	margin: 0;
+	padding: 0 8px 0 0;
+	position: relative;
+}
+
+.tips li .text {
+	height: 27px;
+	line-height: 27px;
+	color: #fff;
+}
+
+.tips li.left {
+	background: url(images/tips_left.gif) no-repeat left;
+	width: 39px;
+}
+
+.tips li.right {
+	background: url(images/tips_right.gif) no-repeat right;
+	width: 31px;
+}
+
+.tips li .icon {
+	margin: 6px 5px 0 0;
+}
+
+.icon {
+	display: inline-block;
+	width: 16px;
+	height: 16px;
+	overflow: hidden;
+	vertical-align: top;
+}
+
+.user {
+	background: url('images/base_icons.png') no-repeat 0 0;
+}
+
+.home {
+	background: url('images/base_icons.png') no-repeat -16px 0;
+}
+
+.help {
+	background: url('images/base_icons.png') no-repeat -32px 0;
+}
+
+.logout {
+	background: url('images/base_icons.png') no-repeat -48px 0;
+}
+
+.password {
+	background: url('images/password.png') no-repeat;
+}
+
+/*.tips li a {
+	color:inherit;
+	text-decoration: none;
+}
+.tips li a:visited {
+	
+}
+.tips li a:hover {
+	text-decoration: underline;
+}*/
+
+/*头部结束*/
+
+.dialog-form-title {
+	font-size: 14px;
+	font-weight: bold;
+	color: #666;
+	padding: 5px 0;
+	margin-bottom: 10px;
+	border-bottom: 1px solid #ccc;
+}
+
+.wrap-line {
+    word-break: break-all;
+}
+
+.required {
+	color: red;
+}
+
+/*---------------------- viewtable ---------------------*/
+
+.viewtable {
+	border: 0px solid green;
+	font-size: 12px;
+	color: #666;
+	border-collapse: collapse;
+	width: 100%;
+}
+
+.viewtable td {
+	border: 0px solid green;
+	vertical-align: top;
+	padding: 2px;
+}
+
+.viewtable .title {
+	text-align: right;
+	vertical-align: top;
+	font-weight: bold;
+}
+
+.wrap-line {
+    word-break: break-all;
+}
+
+/* rongzhida ui组件 */
+
+.datagrid-cell {
+	word-break: break-all;
+}
+
+/* 查询条 */
+.query-toolbar {
+	height: 27px;
+	vertical-align: middle;
+}
+
+.query-toolbar .title {
+	padding-left : 5px;
+	height: 27px;
+	line-height: 27px;
+}
+
+.query-toolbar input {
+	vertical-align: middle;
+}
+
+/* 公共属性 */
+.hide {
+	display: none;
+}
+

@@ -1,0 +1,79 @@
+﻿@*-------------------------------------------------------------------
+    【DLR】Index
+    -------------------------------------------------------------------*@
+<script src="~/Areas/Workflow/Application/DLR/Grid.js"></script>
+@section HardCodePageButtons{
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-ok'" onclick="Select()">确定</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'">查询</a>
+}
+<table id="DLR_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#DLR_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var defaultConfig = new DLR_GridConfig(mygrid, { defaultValues: me.defaultValues || {} });
+
+        mygridConfig = $.extend(defaultConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SORTORDER ASC,CREATEDATE DESC"
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: "SORTORDER ASC,CREATEDATE DESC"
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					    { text: '代理人名称', value: 'DLRMC' }
+		     			, { text: '代理人证件类型', value: 'DLRZJLX' }
+		     			, { text: '代理人证件号', value: 'DLRZJH' }
+		     			, { text: '通信地址', value: 'DLRTXDZ' }
+		     			, { text: '邮政编码', value: 'DLRYZBM' }
+		     			, { text: '代理人电话号码', value: 'DLRDHHM' }
+		     			, { text: '资格证书号码', value: 'ZGZSHM' }
+		     			, { text: '所属机构', value: 'SSJG' }
+		     			, { text: '机构代码，申请代码', value: 'JGDM' }
+		     			, { text: '电子邮件', value: 'EMAIL' }
+		     			, { text: '顺序号', value: 'SORTORDER' }
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    function Select() {
+        mygridConfig.Select();
+    }
+    function Search() { }
+</script>

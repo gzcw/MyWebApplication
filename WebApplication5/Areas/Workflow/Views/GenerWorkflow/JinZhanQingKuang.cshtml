@@ -1,0 +1,369 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "进展情况";
+}
+<script src="~/Scripts/jsplumb/dom.jsPlumb-1.6.2-min.js"></script>
+<link href="~/Areas/Workflow/ViewJS/Designer/demo.css" rel="stylesheet" />
+<style>
+    .state_0_1, .state_1_1 {
+        background-color: green;
+        color: black;
+    }
+
+    .state_1_0 {
+        background-color: yellow;
+        color: black;
+    }
+
+    .state_0_0 {
+        background-color: white;
+        color: black;
+    }
+
+    .panel-body {
+        background-color: #f2f5f7;
+    }
+</style>
+
+<div id="tabs">
+    <div title="轨迹图" data-options="style:{padding:2}" style="overflow:auto">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true" style="margin:3px;" onclick="window.history.back(-1);">返回</a>
+        <div class="demo statemachine-demo" id="myflow">
+        </div>
+    </div>
+    <div title="流程日志" data-options="style:{padding:2}">
+        <table id="workflowlog"></table>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    var mychart = $('#myflow');
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initTabs();
+        initChart();
+    });
+
+    function initTabs() {
+        $('#tabs').tabs({
+            fit: true,
+            border: true
+        });
+    }
+
+    var connectorPaintStyle = {
+        lineWidth: 3,
+        strokeStyle: "#61B7CF",
+        joinstyle: "round",
+        outlineColor: "white",
+        outlineWidth: 3,
+        radius: 5
+    };
+    // 已审批连线的样式
+    var processedConnectorPaintStyle = {
+        lineWidth: 3,
+        strokeStyle: "green",
+        joinstyle: "round",
+        outlineColor: "white",
+        outlineWidth: 2
+    };
+
+   var connectorHoverStyle = {
+        lineWidth: 2,
+        strokeStyle: "#216477",
+        outlineWidth: 2,
+        outlineColor: "white",
+        backgroundColor: "white"
+    };
+   var endpointHoverStyle = {
+        fillStyle: "#216477",
+        strokeStyle: "#216477"
+    };
+
+    //初始化流程设计界面
+    function initChart() {
+        me.chartWidth = window.innerWidth;
+        var nodeList = [];
+        $.ajax({
+            url: '@Url.Action("GetJinZhanQingKuang", "GenerWorkFlow")',
+            data: { WorkID: urlParams.WorkID },
+            success: function (result) {
+                if (result.success == false) {
+                    $.messager.alert('提示', '获取数据失败！');
+                    return;
+                }
+
+                $.each(result.nodeList, function (index, item) {
+                    addNodeDom(item);
+                });
+                LoadPlumb(result.nodeList, result.directionList, result.workerList, result.trackList);
+                initGrid(result.trackList);
+            }
+        });
+    }
+
+    //初始化表格
+    function initGrid(data) {
+        $('#workflowlog').datagrid({
+            rownumbers: true,
+            striped: true,
+            data:data,
+            fit: true,
+            columns: [[
+                {
+                    field: 'NDFromT', title: '从环节', formatter: function (value, row) {
+                        return value;
+                    }
+                },
+                { field: 'EmpFromT', title: '从用户' },
+                { field: 'NDToT', title: '到环节' },
+                { field: 'EmpToT', title: '到用户' },
+                { field: 'RDT', title: '完成时间', formatter: commonhelper.DateTimeFormatter }
+            ]],
+            toolbar: [{
+                text: '返回',
+                iconCls: 'icon-back',
+                handler: function () {
+                    window.history.back(-1);
+                }
+            },{
+                text: '刷新',
+                iconCls: 'icon-reload',
+                handler: function () {
+                    $('#workflowlog').datagrid('reload');
+                }
+            }]
+        });
+    }
+
+    //加载流程界面
+    function LoadPlumb(nodeList, directionList, workerList, trackList) {
+        jsPlumb.ready(function () {
+            var jsp = jsPlumb.getInstance({
+                Endpoint: ["Dot", { radius: 2 }],
+                //HoverPaintStyle: { strokeStyle: "#1e8151", lineWidth: 2 },
+                ConnectionOverlays: [
+                    ["Arrow", {
+                        location: 1,
+                        width: 8,
+                        height: 10,
+                        id: "arrow",
+                        length: 14,
+                        foldback: 0.8
+                    }]
+                ],
+                Container: "myflow"
+            });
+
+            var windows = jsPlumb.getSelector(".statemachine-demo .w");
+
+            // initialise draggable elements.
+            //instance.draggable(windows, {
+            //    stop: function (event, dom) {
+            //        if (event.e.x + 100 > me.chartWidth) {
+            //            me.chartWidth = event.e.x + 100;
+            //        }
+            //        $.each(me.nodeList, function (index, item) {
+            //            if (item.NodeID == event.el.id) {
+            //                item.X = $(event.el).offset().left;
+            //                item.Y = $(event.el).offset().top;
+            //                updateNode(item);
+            //                return false;
+            //            }
+            //        })
+            //    },
+            //    drag: function (event, dom) {
+            //        if (event.e.x + 100 > me.chartWidth) {
+            //            window.parent.$("iframe").css('width', event.e.x + 500);
+            //        }
+            //    }
+            //});
+
+            // bind a click listener to each connection; the connection is deleted. you could of course
+            // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
+            // happening.
+            //instance.bind("click", function (connector) {
+            //    if (me.selectLine) {
+            //        me.selectLine.setPaintStyle(connectorPaintStyle);
+            //    }
+            //    $('.selected').removeClass('selected');
+            //    me.selectLine = connector;
+            //    me.selectNodeId = undefined;
+
+            //    connector.setPaintStyle(connectorHoverStyle);
+
+            //});
+            //instance.bind("dblclick", function (connector) {
+            //    if (me.selectLine) {
+            //        me.selectLine.setPaintStyle(connectorPaintStyle);
+            //    }
+
+            //    me.selectLine = connector;
+            //    connector.setPaintStyle(connectorHoverStyle);
+            //    editDirectionForm(connector);
+            //});
+
+            // bind a connection listener. note that the parameter passed to this function contains more than
+            // just the new connection - see the documentation for a full list of what is included in 'info'.
+            // this listener sets the connection's internal
+            // id as the label overlay's text.
+            //instance.bind("connection", function (info) {
+            //    var lines = jsp.getConnections({ source: info.sourceId, target: info.targetId, scope: '*' }, true);
+            //    if (lines.length > 1) {
+            //        instance.detach(info.connection);
+            //        $.messager.alert("提示", "已存在相同的连接线！");
+            //        return;
+            //    }
+            //    addDirection(info.sourceId, info.targetId);
+            //    info.connection.getOverlay("label").setLabel(info.connection.id);
+            //});
+
+            // suspend drawing and initialise.
+            jsp.doWhileSuspended(function () {
+                var isFilterSupported = jsp.isDragFilterSupported();
+                // make each ".ep" div a source and give it some parameters to work with.  here we tell it
+                // to use a Continuous anchor and the StateMachine connectors, and also we give it the
+                // connector's paint style.  note that in this demo the strokeStyle is dynamically generated,
+                // which prevents us from just setting a jsPlumb.Defaults.PaintStyle.  but that is what i
+                // would recommend you do. Note also here that we use the 'filter' option to tell jsPlumb
+                // which parts of the element should actually respond to a drag start.
+                // here we test the capabilities of the library, to see if we
+                // can provide a `filter` (our preference, support by vanilla
+                // jsPlumb and the jQuery version), or if that is not supported,
+                // a `parent` (YUI and MooTools). I want to make it perfectly
+                // clear that `filter` is better. Use filter when you can.
+                if (isFilterSupported) {
+
+                    jsp.makeSource(windows, {
+                        filter: ".ep",
+                        anchor: "Continuous",
+                        connector: ["Flowchart"],
+                        connectorStyle: connectorPaintStyle,
+                        //hoverPaintStyle: endpointHoverStyle,
+                        //connectorHoverStyle: connectorHoverStyle,
+                        maxConnections: 5,
+                        onMaxConnections: function (info, e) {
+                            alert("Maximum connections (" + info.maxConnections + ") reached");
+                        }
+                    });
+                }
+                else {
+                    var eps = jsPlumb.getSelector(".ep");
+
+                    for (var i = 0; i < eps.length; i++) {
+                        var e = eps[i], p = e.parentNode;
+                        jsp.makeSource(e, {
+                            parent: p,
+                            anchor: "Continuous",
+                            connector: ["Straight"],
+                            connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
+                            maxConnections: 5,
+                            onMaxConnections: function (info, e) {
+                                alert("Maximum connections (" + info.maxConnections + ") reached");
+                            }
+                        });
+                    }
+                }
+            });
+
+            // initialise all '.w' elements as connection targets.
+            jsp.makeTarget(windows, {
+                dropOptions: { hoverClass: "dragHover" },
+                anchor: "Continuous",
+                allowLoopback: true,
+                anchor: "Continuous"
+            });
+
+            //$(windows).bind('dblclick', function (sender) {
+            //    onSelectNode(sender);
+            //});
+            //$(windows).bind('click', function (sender) {
+            //    if (me.selectLine) {
+            //        me.selectLine.setPaintStyle(connectorPaintStyle);
+            //        me.selectLine = undefined;
+            //    }
+
+            //    me.selectNodeId = sender.target.id;
+            //    $('.selected').removeClass('selected');
+
+            //    $("#" + sender.target.id).addClass('selected');
+            //});
+
+            jsPlumb.fire("jsPlumbDemoLoaded", jsp);
+
+            initConnector(jsp, directionList);
+            initApproveInfo(jsp, workerList, trackList);
+        });
+    }
+
+    //加载连接线
+    function loadCondForm(connector) {
+        var id = connector.source.id + "_" + connector.target.id + "_Dir_Paras";
+        $.ajax({
+            url: '@Url.Action("LoadForm", "COND")/' + id,
+            success: function (result) {
+                if (!result) {
+                    result = { FK_Flow: me.workflowNo, NodeID: connector.source.id, ToNodeID: connector.target.id, OPERATORVALUE: '' };
+                }
+                directionForm.form('load', result);
+                directionWin.window('open');
+            }
+        })
+    }
+
+    //添加节点DOM
+    function addNodeDom(node) {
+        var panel = $('<div class="w" id="' + node.NodeID + '" style="top:' + node.Y + 'px;left:' + node.X + 'px">' + node.Name + '</div>');
+        mychart.append(panel);
+    }
+
+    //初始化连接线
+    function initConnector(jsp, directionList) {
+        $.each(directionList, function (index, direction) {
+            jsp.connect({ source: direction.Node + '', target: "" + direction.ToNode + '' });
+        });
+    }
+
+    //获取节点
+    function getNode(id) {
+        var result = undefined;
+        $.each(me.nodeList, function (index, item) {
+            if (item.NodeID == id) {
+                result = item;
+                return false;
+            }
+        })
+        return result;
+    }
+
+    //初始化审批信息
+    function initApproveInfo(jsp, workerList, trackList) {
+        $.each(workerList, function (index, node) {
+            debugger;
+            var Y = $("#" + node.FK_Node).css('top').replace('px', '') - 15;
+            var X = $("#" + node.FK_Node).css('left').replace('px', '');
+
+            mychart.append('<div style="position:absolute;z-index: 1000;top:' + Y + 'px;left:' + X + 'px">' + node.FK_EmpText + node.CDT.split(' ')[0] + '</div>');
+            $("#" + node.FK_Node).addClass('state_' + node.IsRead + '_' + node.IsPass);
+            $("#" + node.FK_Node).bind('click', function () {
+                var params = $.extend({}, urlParams, { FK_Node: node.FK_Node });
+                var url = applicationPath + "/Workflow/Flow/WfPanel?" + $.param(params);
+                window.location.href = url;
+            });
+        });
+
+        $.each(trackList, function (index, track) {
+            var lines = jsp.getConnections({ source: track.NDFrom + '', target: track.NDTo + '', scope: '*' }, true);
+            if (lines.length > 0)
+                lines[0].setPaintStyle(processedConnectorPaintStyle);
+        });
+    }
+
+    function CloseWindow() {
+        if (this.easyWindow) {
+            this.easyWindow.window('close');
+        }
+    }
+</script>

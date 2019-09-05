@@ -1,0 +1,82 @@
+﻿@*-------------------------------------------------------------------
+    【FormList】Index
+    -------------------------------------------------------------------*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+<script src="~/Areas/Workflow/js/grid/FormListGrid.js"></script>
+
+@section searchform{
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'">查询</a>
+}
+<table id="FormList_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#FormList_Grid');
+    var mygridConfig = {};
+
+    var str = '@ViewBag.ZJList'.replace(/(&quot;)/g, '"');
+
+    var data = JSON.parse(str);
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+        var columns = [
+            { field: 'ck', checkbox: true },
+			{ field: 'ID', hidden: true },
+            { field: 'SLBH', title: '受理编号' }
+        ];
+
+        for (var i = 0; i < data.length; i++) {
+            columns.push({ field: data[i].COLUMNNAME, title: data[i].DISPLAYNAME });
+        }
+
+        var defaultConfig = new FormList_GridConfig(mygrid, { defaultValues: me.defaultValues || {}, tableName: '@ViewBag.TabelName', columns: columns });
+
+        mygridConfig = $.extend(defaultConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SLBH DESC"
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: "SLBH DESC"
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+		     		{ text: '业务编号', value: 'SLBH' }
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+</script>

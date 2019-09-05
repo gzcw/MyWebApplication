@@ -1,0 +1,162 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.searchHeight = 71;
+}
+@section HardCodePageButtons{
+<div id="searchPanel"></div>
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-redo'" plain="true" onclick="Approve()">办理</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-clear'" plain="true" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+</div>
+}
+<script src="~/Areas/Workflow/Application/BWA/Grid.js"></script>
+<table id="wfDraft"></table>
+
+<script>
+    var mygrid = $("#wfDraft");
+    var me = this;
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var bwagridConfig = new BWA_GridConfig(mygrid, {
+            onDblClickRow: function (rowIndex, rowData) {
+                mygrid.datagrid('clearSelections');
+                mygrid.datagrid('selectRow', rowIndex);
+                SendProcess();
+            }
+        });
+        mygridConfig = $.extend(bwagridConfig, {
+            border: false,
+            url: '@Url.Action("GetMyPagedOfDraft", "BWA")',
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: 'SJRQ DESC'
+            },
+            onDblClickRow: function (index, row) {
+                var workflowParams = {
+                    workflowNo: row.FK_FLOW,
+                    workID: row.WORKID,
+                    nodeID: row.NODEID,
+                    nodeName: row.NODENAME,
+                    wfState: 1,
+                    bwaID: row.ID,
+                    SLBH: row.SLBH,
+                    BWLXID: row.BWLXID,
+                    FID: row.FID
+                };
+                var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+                window.location.href = url; // 在用户点双击节点的时候办理
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify([]),
+            orders: 'SJRQ DESC'
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchPanel").searchpanel({
+            border: false,
+            items: [{
+                text: '业务编号',
+                value: 'SLBH'
+            }, {
+                text: '业务分组',
+                value: 'YWFZ'
+            }, {
+                text: '办文类型',
+                value: 'BWLXMC'
+            }],
+            parentGrid: mygrid
+        });
+    }
+    //办理
+    function Approve() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+           
+            var workflowParams = {
+                workflowNo: row.FK_FLOW,
+                workID: row.WORKID,
+                nodeID: row.NODEID,
+                nodeName: row.NODENAME,
+                wfState: 1,
+                bwaID: row.ID,
+                SLBH: row.SLBH,
+                BWLXID: row.BWLXID,
+                FID:row.FID
+            };
+            console.log(workflowParams);
+            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+            window.location.href = url;
+        })
+    }
+
+    function Delete() {
+        pageCommonJS.RemoveDatagridSelected(mygrid, function (ids, rows) {
+            $.messager.progress();
+
+            var data = $.map(rows, function (row) {
+                return { flowNo: row.FK_FLOW, workID: row.WORKID, SLBH: row.SLBH, BWLXID: row.BWLXID, NODEID: row.NODEID };
+            });
+
+            $.ajax({
+                url: '@Url.Action("Node_DeleteDraft", "WfFlow")',
+                data: { recordsStr: JSON.stringify(data) },
+                traditional: true,
+                type: 'post',
+                success: function (result) {
+                    $.messager.progress('close');
+                    if (result.success) {
+                        mygrid.datagrid('reload');
+                        $.messager.alert("提示", result.message || "删除成功");
+                    }
+                    else {
+                        $.messager.alert("提示", result.message || "删除失败");
+                    }
+                }
+            });
+        });
+    }
+    function Refresh() {
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+    function Search() { }
+
+    var _alert = $.messager.alert;
+    $.messager.alert = function (title, msg, icon, fn) {
+        $.messager.show({
+            title: arguments[0],
+            msg: arguments[1],
+            timeout: 3000,
+            showType: 'slide',
+            style: {
+                right: '',
+                top: document.body.scrollTop + document.documentElement.scrollTop + 200,
+                bottom: ''
+            }
+        })
+        return;
+    }
+
+    $.extend($.messager.alert, _alert);
+</script>

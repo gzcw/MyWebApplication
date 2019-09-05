@@ -1,0 +1,257 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【Auth_Role】Form
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<div class="easyui-layout" data-options="fit:true">
+    <div class="datagrid-toolbar" data-options="region:'north',height:41" style="padding:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 40px;" onclick="save();">保存</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+    </div>
+    <div data-options="region:'center',border:false" style="background-color:#f2f5f7">
+		<form id="Role_form" class="myform" method="post">
+			<fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th><span class='x'>*</span>角色名称:</th>	<td colspan='3'><input class='easyui-textbox' name='Name' data-options='width:604'/></td>	</tr>	<tr>	<th>是否有效:</th>	<td><input id='3320dc8f-0950-455e-bd5a-48553c8945a5' class='easyui-boolcombobox component' name='IsValid' data-componenttype='boolcombobox' data-options='width:230,height:28'/></td><th>	排序号:</th>	<td><input class='easyui-numberbox' name='SortNumber' /></td>	</tr>	<tr>	<th>描述:</th>	<td colspan='3'><input class='easyui-textbox' name='Desscription' data-options='width:604,height:100,multiline:true'/></td>	</tr>	</table>	<input type='hidden' name='ID' />	<input type='hidden' name='CreateTime' />	<input type='hidden' name='Creator' />	<input type='hidden' name='IsDeleted' />		</fieldset>	<fieldset>	<legend>操作权限</legend>	<table id='RoleAuthorization1' style='width: 753px; height: 300px;'></table>		</fieldset>	<fieldset>	<legend>用户</legend>	<table id='UserRole1' style='width: 753px; height: 300px;'></table>		</fieldset>	
+		</form>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    var myform = $('#Role_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		initGrid_UserRole1();initTreeGrid_RoleAuthorization1();
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadForm","Role")?id=' + me.formId);
+    }
+
+	function initTreeGrid_RoleAuthorization1(){
+	     var target=$('#RoleAuthorization1');
+	     var opts={
+            url: window.applicationPath+'/Authorize/Role/GetTreePaged_RoleAuthorization?RoleID=' + me.formId,
+            border: true,
+            height: 300,
+            fit:false,
+            pagination: true,
+            rownumbers: true,
+            //checkbox: true,
+            idField:'AuthorizationID',
+			treeField:'Name',
+						columns:[[
+			{ field: 'ck', checkbox: true },
+			{field:'Name',title:'资源名称',width:250,editor:'textbox'},{field:'RTypeName',title:'资源类型',width:100,editor:'textbox'},{field:'SortNumber',title:'排序号',width:100,editor:'numberbox'}
+			]],
+            queryParams: {
+                filters: JSON.stringify([]),
+				orders:'SORTNUMBER ASC'
+            },
+             loadFilter: function (data, parentId) {
+                 if (parentId != undefined && (data.length == 0 || !Array.isArray(data))) {
+                     target.treegrid('update', { id: parentId, row: { state: 'open' } });
+                     return data;
+                 }
+                 $.each(data.rows||data, function (index,item) {
+                     item.state = item.ISLEAF == 1 || item.isleaf==1?'open':'closed';
+                 });
+                 return data;
+             },
+             onLoadSuccess: function () {
+                 target.treegrid('expandAll');
+             },
+			            toolbar: [{
+                iconCls: 'icon-add',
+                text: '选择',
+                handler: function () { 
+                    if (!me.formId) {
+                        $.messager.alert('提示', '请先保存表单', 'info');
+                        return;
+                    }
+                    var ids = $.map(target.data("treegrid").options.finder.getRows(target), function (item) {
+                        return item.AuthorizationID;
+                    });
+				   commonhelper.openWindowInWorkArea(window.applicationPath +'/Authorize/Role/Select_Authorization?id=' + me.formId, {
+		                title:'选择',
+                        checked_ids: ids,
+                        selectCallback: function (ids, rows) {
+                             target.treegrid('reload');
+                        }
+                    });
+				}
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '移除',
+                handler: function () { 
+				  commonhelper.RemoveTreeGridSelected(target, function (ids, rows) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: window.applicationPath +'/Authorize/Role/DeleteRelation_RoleAuthorization',
+                            data: { ids: JSON.stringify(ids) },
+                            //traditional: true,
+                            method: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                if (result.success) {
+                                    target.treegrid('clearSelections');
+                                    target.treegrid('reload');
+                                }
+                                else {
+                                    $.messager.alert("提示", result.Message);
+                                }
+                            }
+                        });
+                    });
+				 }
+            }
+			, '-', {
+                iconCls: 'icon-reload',
+                text: '刷新',
+                handler: function () { 
+				  target.treegrid('reload');
+				}
+            }
+			]
+        };
+        target.treegrid(opts);
+	   }
+function initGrid_UserRole1(){
+	     var target=$('#UserRole1');
+	     var opts={
+            url: window.applicationPath+'/Authorize/Role/GetPaged_UserRole?RoleID=' + me.formId,
+            border: true,
+            height: 300,
+            fit:false,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            idField:'ID',
+						columns:[[
+			{ field: 'ck', checkbox: true },
+			{field:'UserName',title:'用户名',width:100,editor:'textbox'},{field:'RealName',title:'真实姓名',width:100,editor:'textbox'},{field:'DepartmentName',title:'部门名称',width:200,editor:'textbox'},{field:'SationName',title:'岗位名称',width:100,editor:'textbox'}
+			]],
+            queryParams: {
+                filters: JSON.stringify([]),
+				orders:''
+            },
+			            toolbar: [{
+                iconCls: 'icon-add',
+                text: '选择',
+                handler: function () { 
+                    if (!me.formId) {
+                        $.messager.alert('提示', '请先保存表单', 'info');
+                        return;
+                    }
+				   commonhelper.openWindowInWorkArea(window.applicationPath +'/Authorize/Role/Select_User?id=' + me.formId, {
+		                title:'选择',
+                        selectCallback: function (ids, rows) {
+                             target.datagrid('reload');
+                        }
+                    });
+				}
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '移除',
+                handler: function () { 
+				  commonhelper.RemoveDatagridSelected(target, function (ids, rows) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: window.applicationPath +'/Authorize/Role/DeleteRelation_UserRole',
+                            data: { ids: JSON.stringify(ids) },
+                            //traditional: true,
+                            method: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                if (result.success) {
+                                    target.datagrid('clearSelections');
+                                    target.datagrid('reload');
+                                }
+                                else {
+                                    $.messager.alert("提示", result.Message);
+                                }
+                            }
+                        });
+                    });
+				 }
+            }
+			, '-', {
+                iconCls: 'icon-reload',
+                text: '刷新',
+                handler: function () { 
+				  target.datagrid('reload');
+				}
+            }
+			]
+        };
+        target.datagrid(opts);
+	   }
+
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Role")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                result = JSON.parse(result);
+                if (result.success) {
+                    if (me.callback) {
+					   me.callback(result.entity);
+                    }
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+                $.messager.alert("提示", result.msg||"保存成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+
+@*----------------------------*@
+
+
+
+
+

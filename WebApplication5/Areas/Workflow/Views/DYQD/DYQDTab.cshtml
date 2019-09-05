@@ -1,0 +1,93 @@
+﻿@*-------------------------------------------------------------------
+    【DYQD】Index
+    -------------------------------------------------------------------*@
+<script src="~/Areas/Workflow/Application/DYQD/Grid.js"></script>
+<script type="text/javascript" src="~/Areas/Workflow/Scripts/Common/PageCommon.js"></script>
+
+<table id="DYQD_Grid"></table>
+<style>
+    a {
+        color: blue;
+        text-decoration: underline;
+    }
+</style>
+
+<script>
+    var me = this;
+    var mygrid = $('#DYQD_Grid');
+    var mygridConfig = {};
+
+    me.workflowParams = pageCommonJS.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+        if (me.workflowParams.nodeId) {
+            filters.push({ property: 'NODE_ID', value: me.workflowParams.nodeId, relation: '=' });
+        }
+        if (me.workflowParams.BWLXID) {
+            filters.push({ property: 'BWLX_ID', value: me.workflowParams.BWLXID, relation: '=' });
+        }
+        var dyqdGridConfig = new DYQD_GridConfig(mygrid, {
+            columns: [[
+                        { field: 'ck', checkbox: true },
+                        { field: 'ID', hidden: true },
+                                        { field: 'NAME', title: '打印材料名称', hidden: false }
+                        , {
+                            field: 'URL', title: '打印', hidden: false, formatter: function (value, row) {
+                                if (!row.URL) {
+                                    return "未配置URL地址";
+                                }
+                                var baseUrl = row.URL.indexOf('?') > 0 ? row.URL : row.URL + "?test=1"
+                                var url = RootDirectory + baseUrl + "&bwaID=" + me.workflowParams.bwaID + "&Name=" + row.NAME + "&nodeID=" + row.NODE_ID + "&SLBH=" + me.workflowParams.SLBH;
+                                return "<a href='#' onclick=window.open('" + url + "','newwindow')>打印</a>";
+                            }
+                        }
+            ]]
+        });
+
+        mygridConfig = $.extend(dyqdGridConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            border:true
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					    { text: '打印材料名称', value: 'NAME' }
+		     			, { text: '流程节点', value: 'NODE_ID' }
+                        , { text: '路径', value: 'URL', hidden: true }
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    function Select() {
+        mygridConfig.Select();
+    }
+    function Search() { }
+</script>

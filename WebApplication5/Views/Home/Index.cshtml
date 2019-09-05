@@ -1,0 +1,179 @@
+﻿<style>
+    .custom-panel-header {
+        height: 18px;
+    }
+
+    #workPlace > div > div > div {
+        overflow: hidden;
+        
+    }
+</style>
+<body>
+    <div class="easyui-layout" data-options="fit:true">
+        <div data-options="region:'north',border:false, split:true" style="height: 60px; background-color: #99bbeb; overflow: hidden;">
+            <div class="head" style="background-color:#3e6d95">
+                <div class="logo">
+                    <img src="~/Content/images/logo.png" style="float: left;width:40px;height:32px;margin:13px 5px 0px 0px;padding-left:10px;" />
+                    <div class="title" style="float:left;">@ViewBag.Title</div>
+                </div>
+                <ul class="tips" style="margin-top: 25px;">
+                    <li><span class="icon icon-login-user"></span><span class="text">欢迎您，</span>@ViewBag.RealName<span>&nbsp;|&nbsp;@ViewBag.DepartmentName</span></li>
+                    <li><a href="#" style="text-decoration:none;" onclick="$('#passwordWin').window('open');" class="text"><span class="icon icon-login-unlock"></span>修改密码</a></li>
+                    <li>
+                        @using (Html.BeginForm("LogOff", "Account", FormMethod.Post, new { id = "logoutForm" }))
+                        {
+                            @Html.AntiForgeryToken()
+
+                            <a href="javascript:document.getElementById('logoutForm').submit();" class="text" style="text-decoration: none;"><span class="icon icon-login-logout"></span>退出登录</a>
+                        }
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div data-options="region:'west', title:'系统菜单', split:true, iconCls:'home_16'" style="width: 170px; ">
+            <div id="systemMenu" class="easyui-accordion" data-options="fit:true"></div>
+        </div>
+        <div data-options="region:'center',border:0, split:true">
+            <div id="workPlace" class="easyui-tabs" data-options="fit:true">
+                <div title="欢迎" data-options="href:applicationPath+'/Home/Message'">
+                </div>
+            </div>
+        </div>
+        <div data-options="region:'south', border:1, split:true,maxHeight:32,minHeight:32">
+            <header style="text-align:right;">Copyright © 2019-2019 禅微工作室</header>
+        </div>
+    </div>
+    <div id="passwordWin" class="easyui-window" title="修改密码" data-options="iconCls:'icon-save',modal:true,closed:true,width:480,height:310">
+        <table style="width:390px;margin:20px auto 20px auto;">
+            <tr>
+                <th style="width:280px">旧密码：</th>
+                <td><input class="easyui-passwordbox" data-options="width:200" id="oldPwd" /></td>
+            </tr>
+            <tr>
+                <th style="width:280px">新密码：</th>
+                <td><input class="easyui-passwordbox"  data-options="width:200" id="newPwd" /></td>
+            </tr>
+            <tr>
+                <th style="width:280px">确认密码：</th>
+                <td><input class="easyui-passwordbox" data-options="width:200" id="confirmPwd" /></td>
+            </tr>
+            <tr>
+                <td colspan="2" style="text-align:center">
+                    <a class="easyui-linkbutton" onclick="modifyPassword()" data-options="iconCls: 'icon-add'">确定</a>
+                </td>
+            </tr>
+        </table>
+        <hr style="opacity:0.3" />
+        <span style="position:relative;left:7%;">新密码必须由8-20位字母、数字或特殊符号( !#$%^&*@("@") )组成</span>
+    </div>
+
+</body>
+<script>
+    $(document).ready(function () {
+        initMenu();
+    });
+
+    //初始化系统菜单
+    function initMenu() {
+        var systemMenu = $("#systemMenu");
+        $.get(applicationPath +'/Authorization/GetSystemMenu', function (result) {
+            $.each(result, function (index, menu) {
+
+                systemMenu.accordion('add', {
+                    title: menu.Name,
+                    selected: index == 0,
+                    iconCls: menu.Icon,
+                    halign:'center'
+                });
+                var panel = systemMenu.accordion('getPanel', index);
+                $("<ul></ul>").appendTo(panel).tree({
+                    data: menu.children,
+                    lines: true,
+                    onClick: function (node) {
+                        if (!node.children.length == 0) {
+                            systemMenu.tree("toggle", node.target);
+                            return; // 非叶子节点直接返回
+                        }
+
+                        // 链接的默认值为~
+                        if (node.URL == '~') {
+                            $.messager.alert("提示", "此模块还在开发中...", "info");
+                            return;
+                        }
+
+                        var url = applicationPath + node.Url;
+                        commonhelper.addTab($('#workPlace'), node.text, url, node.iconCls, {
+                            tools: [{
+                                iconCls: 'icon-mini-refresh',
+                                handler: function (opt) {
+                                    setTimeout(function () {
+                                        var tab = $('#workPlace').tabs('getSelected');
+                                        tab.children()[0].contentWindow.location.reload();
+                                    });
+                                }
+                            }]
+                        });
+
+                    }
+                });
+            })
+        });
+    }
+
+
+    //修改密码
+    function modifyPassword() {
+
+        var oldPwd = $('#oldPwd').textbox('getValue');
+        var newPwd = $('#newPwd').textbox('getValue');
+        var confirmPwd = $('#confirmPwd').textbox('getValue');
+        if (!checkPasswordIsNull(newPwd) || !checkPasswordIsNull(oldPwd) || !checkPasswordIsNull(confirmPwd)) {
+            $.messager.alert('提示', "密码不能为空");
+            return;
+        }
+        reg = /^(?![\d]+$)(?![a-zA-Z]+$)(?![!#$%^&*@("@")]+$)[\da-zA-Z!#$%^&*@("@")]{8,20}$/;
+        var flag = reg.test($('#newPwd').textbox('getValue'));
+        if (flag == false) {
+            $.messager.alert("提示", "新密码必须由8-20位字母、数字或特殊符号( !#$%^&*@("@") )组成.");
+            return false;
+        }
+        var flag1 = reg.test($('#confirmPwd').textbox('getValue'));
+        if (flag1 == false) {
+            $.messager.alert("提示", "确认密码必须由8-20位字母、数字或特殊符号( !#$%^&*@("@") )组成.");
+            return false;
+        }
+        function checkPasswordIsNull(value) {
+            if (value == undefined || value == null || value == "") {
+                return false;
+            } else {
+                return true;
+            }
+        }
+        if (newPwd != confirmPwd) {
+            $.messager.alert('提示', "新密码和确认密码不一致，请重新输入！");
+            return;
+        }
+
+        $.ajax({
+            url: '@Url.Action("ModifyPassword","Account")',
+            type: 'post',
+            data: { oldPassword: oldPwd, newPassword: newPwd },
+            success: function (result) {
+                if (result.success == true) {
+                    $('#passwordWin').window('close');
+                }
+
+                $.messager.alert('提示', result.msg || "修改密码成功！");
+            }
+        });
+    }
+
+    window.onbeforeunload = function (event) {
+        if (window.event.clientY < 0 || window.event.altKey) {
+            logout();
+        }
+    }
+
+
+
+</script>

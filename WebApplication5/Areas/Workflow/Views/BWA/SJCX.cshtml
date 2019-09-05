@@ -1,0 +1,103 @@
+﻿@*-------------------------------------------------------------------
+    【收件查询】
+    -------------------------------------------------------------------*@
+@{
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.Title = "收件查询";
+}
+@section HardCodePageButtons{
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-tip'" plain="true" onclick="View()">查看</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    <a href="#" id="btnSearch" class="easyui-linkbutton" data-options="iconCls: 'icon-search'" plain="true" onclick="Search()">查询</a>
+    <a href="#" id="btnPrint" class="easyui-linkbutton" data-options="iconCls: 'icon-print'" plain="true" onclick="Print()">快速打印</a>
+</div>
+}
+<script src="~/Areas/Workflow/Application/BWA/Grid.js"></script>
+<table id="JSCX"></table>
+
+<script>
+    var mygrid = $("#JSCX");
+    var me = this;
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        mygridConfig = $.extend(new BWA_GridConfig(mygrid), {
+            border:true,
+            url: '@Url.Action("GetMyPagedOfDraft", "BWA")',
+            singleSelect: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: 'SJRQ DESC'
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify([])
+        }
+    }
+
+    function initSearchBtn() {
+        $("#btnSearch").searchbutton({
+            windowHeight: 280,
+            items: [{
+                text: '业务分组',
+                value: 'FZMC',
+                easyType: 'combobox',
+                easyConfig: {
+                    url: '@Url.Action("GetData","YWFZ")',
+                    valueField: 'FZMC',
+                    textField: 'FZMC',
+                    width: 180
+                }
+            }, {
+                text: '办文类型',
+                value: 'BWLXMC'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function View() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                workflowNo: row.FK_FLOW,
+                workID: row.WORKID,
+                nodeID: row.NODEID,
+                nodeName: row.NODENAME,
+                wfState: 1,
+                bwaID: row.ID,
+                privilege: "read"
+            };
+            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+            window.location.href = url;
+        })
+    }
+    function Refresh() {
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+    function Search() { }
+
+    //快速打印
+    function Print() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var url = RootDirectory + "/PrintCommon/FastPrint?nodeId=" + row.NODEID + "&bwlxId=" + row.BWLXID;
+            window.location.href = url;
+        })
+    }
+</script>

@@ -1,0 +1,216 @@
+﻿@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+
+<script src="~/Areas/Workflow/Application/SJCLMX/Grid.js"></script>
+<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+</style>
+<form id="BWA_form" method="post">
+    <input type="hidden" name="ID" />
+    <table cellpadding="0" cellspacing="0" style="width: 700px" class="formtable">
+        <caption style="padding:0px">受理收件信息</caption>
+        <tr>
+            <th width="140">受理编号：</th>
+            <td width="210">
+                <input class="easyui-validatebox input" name="SLBH" readonly="readonly" />
+            </td>
+            <th width="140">计划完成时间：</th>
+            <td width="210">
+                <input class="easyui-datetimebox input" data-options="required:true,showSeconds:false" name="SHJHWCRQ" />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd">分组名称：</th>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="FZMC" readonly="readonly" />
+            </td>
+            <th class="labelTd">申请类型：</th>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="BWLXMC" readonly="readonly" />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd"><span class="x">*</span>申请人/单位：</th>
+            <td class="fieldTd">
+                <input name="SQRID" />
+            </td>
+            <th class="labelTd">联系电话：</th>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="LXDH" readonly="readonly" />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd">通讯地址：</th>
+            <td class="fieldTd colspanFieldTd" colspan="3">
+                <input class="easyui-validatebox input" name="TXDZ" readonly="readonly" style="width: 558px" />
+            </td>
+        </tr>
+        @*<tr>
+                <th class="labelTd">图号：</th>
+                <td class="fieldTd">
+                    <input class="easyui-validatebox input" name="TJH" />
+                </td>
+                <th class="labelTd">坐落：</th>
+                <td class="fieldTd colspanFieldTd">
+                    <input class="easyui-validatebox input" name="ZL" />
+                </td>
+            </tr>*@
+        <tr>
+            <th style="text-align:right">经办人：</th>
+            <td>
+                <input class="easyui-validatebox input" readonly="readonly" name="SJR" />
+            </td>
+            <th style="text-align:right">收件时间：</th>
+            <td>
+                <input class="easyui-datetimebox input" readonly="readonly" name="SJRQ" />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd">备注：</th>
+            <td class="fieldTd colspanFieldTd" colspan="3">
+                <textarea name="BZ" style="width: 558px" class=" input"></textarea>
+            </td>
+        </tr>
+    </table>
+    <div style="height:4px;"></div>
+    <table class="formtable" style="width:700px">
+        <caption>材料清单</caption>
+    </table>
+    <table id="SJCLMX_Grid"></table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#BWA_form');
+    var mygrid = $('#SJCLMX_Grid');
+
+    me.workflowParams = me.workflowParams || {};
+    $(document).ready(function () {
+        initForm();
+        if (me.workflowParams.bwaID) {
+            $.messager.progress();
+            loadForm();
+        }
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+        if (!me.workflowParams.sjdID) {
+            me.workflowParams.sjdID = GetSJDID(me.workflowParams.bwaID);
+        }
+
+        initGrid();
+    });
+    //region个性化代码
+    function initGrid() {
+        var filters = me.filters || [];
+
+        filters.push({ property: 'SJDID', relation: '=', value: me.workflowParams.sjdID });
+
+        var defalutConfig = new SJCLMX_GridConfig(mygrid, {
+            Create: function () {
+                var Id = pageCommonJS.Guid();
+                pageCommonJS.openWindowInWorkArea(RootDirectory + '/Workflow/SJCLMX/Form', {
+                    frame: true,
+                    title: '新增材料',
+                    parentGrid: mygrid,
+                    defaultValues: { SJDID: me.workflowParams.sjdID, ID: Id }
+                })
+            }
+        });
+        var mygridConfig = $.extend(defalutConfig, {
+            fit: false,
+            width: 700,
+            height: 200,
+            border: true,
+            striped: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            black: false,
+            toolbar: me.privilege == "read" ? [] : defalutConfig.toolbar
+        });
+        mygrid.datagrid(mygridConfig);
+    }
+    //endregion
+
+    //根据办文案ID获取收件单
+    function GetSJDID(bwaID) {
+        var filterStr = [{ property: 'BWAID', relation: '=', value: bwaID }];
+        var result = '';
+        $.ajax({
+            url: RootDirectory + '/Workflow/SJD/GetData',
+            data: { filterStr: JSON.stringify(filterStr) },
+            async: false,
+            success: function (data) {
+                result = data[0].ID;
+            }
+        });
+        return result;
+    }
+
+    //初始化表单
+    function initForm() {
+        var sender = $("input[name=SQRID]");
+        $("input[name=SQRID]").sqrselectwindow({
+            width: 205,
+            onSelect: function (record) {
+                //$("input[name=LXDH]").val(record.LXDH);
+                $("input[name=TXDZ]").val(record.TXDZ);
+            }
+        });
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            }
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', RootDirectory + '/Workflow/BWA/LoadForm/' + me.workflowParams.bwaID);
+    }
+
+    //保存
+    function savePage() {
+        var flag = false;
+        var error = '';
+        myform.form('submit', {
+            url: '@Url.Action("Save","BWA")',
+            async: false,
+            showMsg: false,
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                if (!isValid) {
+                    error = "表单未正确填写，请检查。";
+                }
+                return isValid;
+            },
+            success: function (result) {
+                if (result.success == false) {
+                    error = result.msg || result.message || "提交失败";
+                }
+            }
+        })
+        return error == '' ? true : error;
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

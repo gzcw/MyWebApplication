@@ -1,0 +1,76 @@
+﻿@{
+    ViewBag.Title = "流程日志";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+@section searchform{
+    <div class="toolbar panel-header">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-back',plain:true" style="margin:3px;" onclick="window.CloseWindow();">返回</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload',plain:true" onclick="Refresh()">刷新</a>
+    </div>
+}
+
+<table id="workflowlog"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#workflowlog');
+    var bwaId = pageCommonJS.getUrlParam('bwaId');
+
+    $(document).ready(function () {
+        initGrid();
+    })
+
+    function initGrid() {
+        mygrid.datagrid({
+            rownumbers: true,
+            striped: true,
+            url: RootDirectory + '/Workflow/WfFlow/DB_GenerTrack',
+            queryParams: { bwaId: bwaId },
+            fit: true,
+            columns: [[
+                {
+                    field: 'NDFromT', title: '从环节', formatter: function (value, row) {
+                        if (row.NDFromT == row.NDToT) {
+                            return value + "(收件)";
+                        }
+                        return value;
+                    }
+                },
+                { field: 'EmpFromT', title: '从用户' },
+                { field: 'NDToT', title: '到环节' },
+                { field: 'EmpToT', title: '到用户' },
+                { field: 'RDT', title: '完成时间', formatter: pageCommonJS.DateTimeFormatter }
+                //,
+                //{
+                //    field: 'ZT', title: '状态', flex: 1, formatter: function (value, row) {
+                //        if (row.ActionType == 19) {
+                //            return "已退件";
+                //        }
+
+                //        if (row.IsPass == 1) {
+                //            return "已完成";
+                //        }
+                //        if (row.IsRead == 1) {
+                //            return "办理中";
+                //        }
+                //        if (row.IsRead == 0) {
+                //            return "派件中";
+                //        }
+                //        //var rowIndex = mygrid.datagrid('getRowIndex', row);
+                //        //var rows = mygrid.datagrid('getData').rows;
+                //        //var flag = false;
+                //        //for (var i = rowIndex + 1; i < rows.length; i++) {
+                //        //    if (rows[i].NDFrom == row.NDTo) {
+                //        //        flag = true;
+                //        //    }
+                //        //}
+                //        return "已完成";
+                //    }
+                //}
+            ]]
+        });
+    }
+    function Refresh() {
+        mygrid.datagrid('reload');
+    }
+</script>

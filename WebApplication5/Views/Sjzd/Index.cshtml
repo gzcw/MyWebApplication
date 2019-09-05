@@ -1,0 +1,151 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【SYS_SJZD】Index
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+
+<table id="SYS_SJZD_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#SYS_SJZD_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Sjzd/GetPaged',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'ZDMC', title: "字典名称",width:100 },
+			                { field: 'ZDBM', title: "字典编码",width:100 },
+			                { field: 'NAME', title: "名称",width:100 },
+			                { field: 'SZ', title: "数值",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }
+	    };
+
+        
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'字典名称',value:'ZDMC'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function create() {
+         var url=window.applicationPath+'/Sjzd/Form';
+            commonhelper.openWindowInWorkArea(url, {
+                frame: true,
+                title: '新增',
+                parentGrid: mygrid
+            });
+    }
+    function update() {
+        var url=url||(window.applicationPath+'/Sjzd/Form');
+            commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(url+'?id=' + id, {
+                    frame: true,
+                    title: '修改',
+                    parentGrid: mygrid
+                });
+            });
+    }
+    function del() {
+        commonhelper.RemoveDatagridSelected(mygrid, function (ids, rows) {
+		    $.messager.progress();
+                $.ajax({
+                    url: window.applicationPath+'/Sjzd/DeleteEntities',
+                    data: { ids: ids },
+                    traditional: true,
+                    method:'post',
+                    success: function (result) {
+                        $.messager.progress('close');
+                        if (result.success) {
+						    mygrid.datagrid('clearSelections');
+                            mygrid.datagrid('reload');
+                        }
+                        else {
+                            $.messager.alert("提示", result.Message);
+                        }
+                    }
+                });
+            });
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+            if (mygrid.queryParams) {
+                mygrid.datagrid('load', mygrid.queryParams);
+            }
+            else {
+                mygrid.datagrid('reload');
+            }
+    }
+    function detail() {
+        commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea(window.applicationPath+'/Sjzd/Form?permission=0&id=' + id, {
+                    frame: true,
+                    title: '查看',
+                    parentGrid: mygrid
+                });
+            });
+    }
+	
+
+    //导出Excel
+    function exportExcel() {
+        var url = '@Url.Action("ExportExcel","Sjzd")';
+        var form = $('<form method="post" action="' + url + '"></form>').appendTo('body');
+        var rows = mygrid.datagrid('getSelections');
+        var opts = mygrid.datagrid('options');
+        
+        if (rows.length == 0) {
+            $.ajax({
+                url: opts.url,
+                async: false,
+                data: $.extend({ page: 1, rows: 10000 }, opts.queryParams),
+                success: function (result) {
+                    rows = result.rows;
+                }
+            });
+        }
+        $("<input type='hidden' name='sheetName' />").appendTo(form).val("数据字典");
+        $("<input type='hidden' name='data' />").appendTo(form).val(JSON.stringify(rows));
+        $("<input type='hidden' name='columns' />").appendTo(form).val(JSON.stringify(opts.columns[0]));
+
+        form.submit().remove();
+    }
+</script>

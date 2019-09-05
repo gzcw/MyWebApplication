@@ -1,0 +1,224 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/CSS/print1.css" rel="stylesheet" />
+   <style type="text/css" media="print">
+        .noprint {
+            /*套打打印页面样式设置*/
+            display: none;
+        }
+
+        .pageBreakBefore {
+            /*前分页*/
+            page-break-before: always;
+        }
+
+        .pageBreakAfter {
+            /*后分页*/
+            page-break-after: always;
+        }
+
+        .center {
+            text-align: center;
+        }
+
+        .printTable {
+            /*隐藏表和列的边框*/
+            border-top: none;
+            border-right: none;
+            border-bottom: hidden;
+            border-left: none;
+            padding: 0;
+            margin: 0;
+            word-break: break-all;
+        }
+
+            .printTable td, th {
+                border-left: none;
+                border-right: none;
+                border-top: none;
+                border-bottom: none;
+            }
+
+                .printTable td table {
+                    border: 0;
+                }
+
+                    .printTable td table td {
+                        border: 0;
+                    }
+
+        table th {
+            /*隐藏标签*/
+            visibility: hidden;
+        }
+
+        table td {
+            text-align: left;
+            vertical-align: middle;
+            padding-left: 1mm;
+        }
+
+        .visiblity {
+            /*显示套打内容*/
+            visibility: visible;
+            font-weight: normal;
+        }
+
+        .hidden {
+            /*隐藏套打内容*/
+            visibility: hidden;
+        }
+    </style>
+    <script src="~/Scripts/jquery-1.11.0.min.js"></script>
+    <script src="~/Scripts/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Scripts/EasyUI/jquery-easyui/jquery.easyui.min.js"></script>
+    <script src="~/Scripts/EasyUI/jquery-easyui/locale/easyui-lang-zh_CN.js"></script>
+
+    <link href="~/Scripts/EasyUI/jquery-easyui/themes/default/easyui.css" rel="stylesheet" />
+    <link href="~/Scripts/EasyUI/jquery-easyui/themes/icon.css" rel="stylesheet" />
+</head>
+<body>
+    <div class="noprint" id="btnBar">
+        <label for="txtLeft">
+            左边距(mm)：
+        </label><input type="text" id="txtLeftDistance" style="width: 80px;" onchange="if(isNaN(value)){alert('左边距只能为数字！');this.value='';}" />
+        <label for="txtLeft">
+            上边距(mm)：
+        </label><input type="text" id="txtTopDistance" style="width: 80px;" onchange="if(isNaN(value)){alert('上边距只能为数字！');this.value='';}" />
+        @RenderSection("Button", false)
+        <button onclick="Print();">
+            打印
+        </button>
+        <button onclick="window.close();">
+            关闭
+        </button>
+        <object id="IEWebBrowser" name="IEWebBrowser" width="0" height="0" classid="CLSID:8856F961-340A-11D0-A96B-00C04FD705A2"></object>
+    </div>
+    @RenderBody()
+
+    <script type="text/javascript">
+        window.RootPath = "@Request.ApplicationPath";
+        var picPatch = "";
+        var bdcPrintLeftDistance = 0;//不动产打印左边距
+        var bdcPrintTopDistance = 0;//不动产打印上边距
+        $(document).ready(function () {
+            picPatch=$("#PicPatch").val();
+            var leftDistance = getCookie("bdcPrintLeftDistance");
+            var topDistance = getCookie("bdcPrintTopDistance");
+            if (leftDistance != null) {
+                bdcPrintLeftDistance = leftDistance;
+            }
+            if (topDistance != null) {
+                bdcPrintTopDistance = topDistance;
+            }
+            $("#txtLeftDistance").val(bdcPrintLeftDistance);
+            $("#txtTopDistance").val(bdcPrintTopDistance);
+            if (window.location.href.indexOf("IsView=1") > 0) {
+                $("#btnBar").hide();
+                if (picPatch != "") {
+                    $("#FHTHidden").show();
+                    $("#FHTHidden").removeAttr('class');
+                }
+            }
+            else {
+                $("#btnBar").show();
+                if (picPatch != "") {
+                    $("#FHTHidden").hide();
+                    $("#FHTHidden").attr('class', 'noprint');
+                    }
+              
+            }
+        });
+        function FHTShow() {
+            if ($("#PrintFHT")[0].checked == false) {
+                if (picPatch != "") {
+                    $("#FHTHidden").hide();
+                    $("#FHTHidden").attr('class', 'noprint');
+                }
+            }
+            if ($("#PrintFHT")[0].checked == true) {
+                if (picPatch == "") {
+                    $.messager.alert("提示", "没有上传分户图，请联系相关岗位人员上传分户图！");
+                    $("#PrintFHT")[0].checked = false;
+                    return;
+                }
+                $("#FHTHidden").show();
+                $("#FHTHidden").removeAttr('class');
+            }
+        }
+        //打印
+        function Print() {                          
+            var leftDistance = $.trim($("#txtLeftDistance").val());
+            var topDistance = $.trim($("#txtTopDistance").val());
+            if (leftDistance != "") {
+                bdcPrintLeftDistance = leftDistance;
+                setCookie("bdcPrintLeftDistance", leftDistance, 30);
+            }
+       
+            if (topDistance != "") {
+            bdcPrintTopDistance = topDistance;
+                setCookie("bdcPrintTopDistance", topDistance, 30);
+            }
+            if (PrintInitialSetup())//设置注册表值必须用单独的方法才能有即时效果
+            {
+                window.document.all.IEWebBrowser.ExecWB(6, 1);
+            }
+        }
+        //打印初始化设置
+        function PrintInitialSetup() {
+            var hkey_root, hkey_path, hkey_key;
+            hkey_root = "HKEY_CURRENT_USER";
+            hkey_path = "\\Software\\Microsoft\\Internet Explorer\\PageSetup\\";
+            try {
+                var regScriptShell = new ActiveXObject("WScript.Shell");    
+                hkey_key = "header";                                           //修改页眉注册表
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, ""); //页眉为空
+                hkey_key = "footer";                                           //修改页脚注册表
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, "");//页脚为空
+                hkey_key = "Print_Background";                                //修改打印背景
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, "no"); //打印背景no为不打印，yes打印
+                hkey_key = "margin_left";                                       //左边距
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, parseFloat(bdcPrintLeftDistance) / 25.4);
+                hkey_key = "margin_top";                                        //上边距
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, parseFloat(bdcPrintTopDistance) / 25.4);
+                hkey_key = "margin_right";                                      //右边距
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, "0");
+                hkey_key = "margin_bottom";                                    //下边距
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, "0");
+                hkey_key = "Shrink_To_Fit";                                     //缩放到纸张大小
+                regScriptShell.RegWrite(hkey_root + hkey_path + hkey_key, "no");
+                return true;
+            }
+            catch (e) {
+                alert("请将网站加为可信任站点，再调整信任站点的安全级别(仅支持IE)！");
+                return false;
+            }
+        }
+        //设置cookie
+        function setCookie(c_name, value, expiredays) {
+            var exdate = new Date();
+            exdate.setDate(exdate.getDate() + expiredays);
+            document.cookie = c_name + "=" + escape(value) + ((expiredays == null) ? "" : ";expires=" + exdate.toGMTString());
+        }
+        //获取cookie
+        function getCookie(c_name) {
+            if (document.cookie.length > 0) {
+                var c_start = document.cookie.indexOf(c_name + "=");
+                if (c_start != -1) {
+                    c_start = c_start + c_name.length + 1;
+                    var c_end = document.cookie.indexOf(";", c_start);
+                    if (c_end == -1) {
+                        c_end = document.cookie.length
+                    }
+                    return unescape(document.cookie.substring(c_start, c_end));
+                }
+            }
+            return null;
+        }
+    </script>
+</body>
+</html>

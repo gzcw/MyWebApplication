@@ -1,0 +1,32 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.CommandHeight = ViewBag.CommandHeight ?? "34px";
+    ViewBag.WestTitle = ViewBag.WestTitle ?? "标题";
+    ViewBag.WestWidth = ViewBag.WestWidth ?? "250px";
+}
+<body>
+    <div class="easyui-layout" data-options="fit:true,border:false">
+        <div data-options="region:'west',border:true,title:'@ViewBag.WestTitle'" style="width:@(ViewBag.WestWidth)">
+            @RenderSection("WestPanel", false)
+        </div>
+        <div data-options="region:'center',border:false">
+            <div class="easyui-layout" data-options="fit:true,border:false">
+                <div data-options="region:'north',border:true" style="height: @(ViewBag.CommandHeight);">
+                    @RenderSection("PageCommandBefore", false)
+                    <div class="toolbar panel-header" style="border-left:none;">
+                        <a class="easyui-linkbutton" href="#" data-options="iconCls:'icon-add',plain:true,permission:1" onclick="if(typeof(add) == 'undefined') { $.messager.alert('提示', '此按钮功能未定义', 'info'); } else { add(); }">新增</a>
+                        <a class="easyui-linkbutton" href="#" data-options="iconCls:'icon-edit',plain:true,permission:1" onclick="if(typeof(update) == 'undefined') { $.messager.alert('提示', '此按钮功能未定义', 'info'); } else { update(); }">修改</a>
+                        <a class="easyui-linkbutton" href="#" data-options="iconCls:'icon-search',plain:true,permission:1" onclick="if(typeof(detail) == 'undefined') { $.messager.alert('提示', '此按钮功能未定义', 'info'); } else { detail(); }">查看</a>
+                        <a class="easyui-linkbutton" href="#" data-options="iconCls:'icon-remove',plain:true,permission:1" onclick="if(typeof(del) == 'undefined') { $.messager.alert('提示', '此按钮功能未定义', 'info'); } else { del(); }">删除</a>
+                        <a class="easyui-linkbutton" href="#" data-options="iconCls:'icon-reload',plain:true,permission:1" onclick="if(typeof(refresh) == 'undefined') { $.messager.alert('提示', '此按钮功能未定义', 'info'); } else { refresh(); }">刷新</a>
+                        @Html.Action("Buttons", "Authorize", new { area = "" })
+                    </div>
+                    @RenderSection("PageCommandAfter", false)
+                </div>
+                <div data-options="region:'center',border:false">
+                    @RenderBody()
+                </div>
+            </div>
+        </div>
+    </div>
+</body>

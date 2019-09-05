@@ -1,0 +1,98 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【Sys_BH】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh();">刷新</a>
+}
+
+<table id="Sys_BH_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#Sys_BH_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Workflow/BH/GetPaged',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'Name', title: "编号名称",width:100 },
+			                { field: 'Template', title: "模板",width:227 },
+			                { field: 'NumberLength', title: "编号长度",width:100 },
+			                { field: 'SeriesNumber', title: "当前序列号",width:100 },
+			                { field: 'LastDate', title: "最后生成日期",width:147 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }	    };
+
+        
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'编号名称',value:'Name'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	    if(urlParams.singleSelect){
+            commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+		      if(window.selectCallback){
+			     window.selectCallback([id],[row]);
+			  }
+            });
+		}
+		else{
+		    commonhelper.MultiSelectGrid(mygrid, function (ids, rows) {
+		      if(window.selectCallback){
+			     window.selectCallback(ids,rows);
+			  }
+            });
+		}
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+</script>

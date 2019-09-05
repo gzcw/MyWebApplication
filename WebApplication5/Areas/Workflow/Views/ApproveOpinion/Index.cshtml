@@ -1,0 +1,37 @@
+﻿
+<script src="~/Areas/Workflow/Application/ApproveOpinion/Grid.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section searchform{
+    <form style="padding: 2px">
+        <label>Title：</label>
+        <input />
+        <a class="easyui-linkbutton" href="#" style="margin-top: -5px">搜索</a>
+    </form>
+}
+<table id="ApproveOpinion_Grid">
+</table>
+
+<script>
+    var me = this;
+    var mygrid = $('#ApproveOpinion_Grid');
+
+    $(document).ready(function () {
+        initGrid();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+	    var mygridConfig = $.extend(new ApproveOpinion_GridConfig(mygrid), {
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+    }
+</script>

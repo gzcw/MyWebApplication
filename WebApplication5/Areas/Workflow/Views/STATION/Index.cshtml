@@ -1,0 +1,82 @@
+﻿@*-------------------------------------------------------------------
+    【STATION】Index
+    -------------------------------------------------------------------*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+<script src="~/Areas/Workflow/Application/STATION/Grid.js"></script>
+@section searchform{
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-ok'" onclick="Select()">确定</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'">查询</a>
+}
+<table id="STATION_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#STATION_Grid');
+    var mygridConfig = {};
+    var urlParams = pageCommonJS.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var defaultConfig = new STATION_GridConfig(mygrid, { defaultValues: me.defaultValues || {} });
+
+        mygridConfig = $.extend(defaultConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            pageSize: 100,
+            pageNumber: 1,
+            pageList: [10, 20, 30, 40, 50,100],
+            onLoadSuccess: function (data) {
+                if (urlParams.values) {
+                    $.each(urlParams.values.split(','), function (index, item) {
+                        var index = mygrid.datagrid('getRowIndex', item);
+                        if (index >= 0) {
+                            mygrid.datagrid('checkRow', index);
+                        }
+                    })
+                }
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					    { text: '岗位', value: 'NAME' }
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    function Select() {
+        mygridConfig.Select();
+    }
+    function Search() { }
+</script>

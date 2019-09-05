@@ -1,0 +1,142 @@
+﻿@{
+    Layout = "../Shared/_Layout.cshtml";
+}
+<style>
+    form {
+        width: 350px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    .input {
+        width: 180px;
+        height: 20px;
+    }
+</style>
+<form id="BH_form" method="post">
+    <table id="searchForm" cellpadding="0" cellspacing="0" style="width: 350px" class="formtable"></table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#BH_form');
+
+    initForm();
+    $(window).keydown(function (e) {
+        var keyCode = e.keyCode ? e.keyCode : e.which ? e.which : e.charCode;
+        if (keyCode == 13) {
+            save();
+        }
+    });
+    $(document).ready(function () {
+        $('input')[0].focus();
+    });
+
+    //初始化表单
+    function initForm() {
+        if (me.items) {
+            initFields(me.items)
+        }
+
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: [{
+                iconCls: 'icon-add',
+                text: '确定',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '关闭',
+                handler: cancel
+            }]
+        });
+    }
+
+    function initFields(items) {
+        $.each(items, function (index, item) {
+            if (item.easyType) {
+                var tr = $('<tr></tr>');
+                tr.append('<th width="140">' + item.text + '：</td>');
+                var td = $('<td width="200"></td>');
+                var input = $('<input class="h-text" name="' + item.value + '" />');
+                if (item.id) {
+                    input.attr('id', item.id);
+                }
+                tr.append(td);
+                td.append(input);
+                item.easyConfig = $.extend({ width: 182 }, item.easyConfig);
+                $.each(item.easyConfig, function (property, value) {
+                    if (typeof value == "function") {
+                        item.easyConfig[property] = $.proxy(value, window);
+                    }
+                });
+                input[item.easyType](item.easyConfig || {});
+                $("#searchForm").append(tr);
+                return true;
+            }
+
+            var editor = "easyui-validatebox";
+            if (item.dataType == "date") {
+                editor = "easyui-datebox";
+            }
+            $("#searchForm").append('<tr><th width="140">' + item.text + '：</th><td width="200"><input class="' + editor + ' h-text" name="' + item.value + '" /></td></tr>');
+        })
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","BH")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        if (me.parentGrid) {
+            var queryParams = $.extend(true, {}, me.parentGrid.queryParams || {});
+            var values = myform.serializeArray();
+
+            var filters = JSON.parse(queryParams.filterStr || '[]');
+
+            $.each(values, function (index, filter) {
+
+                var myitems = $.grep(me.items, function (item) {
+                    return item.value == filter.name;
+                });
+                var dataType = myitems.length > 0 && myitems[0].dataType ? myitems[0].dataType : 'varchar';
+
+                if (filter.value) {
+                    filters.push({ property: filter.name, value: filter.value, relation: 'like', dataType: dataType });
+                }
+            })
+
+            queryParams.filterStr = JSON.stringify(filters);
+            
+            if (me.memory == undefined || me.memory == false) {
+                
+                me.parentGrid.datagrid('clearSelections');
+            }
+            me.parentGrid.datagrid('load', queryParams);
+            me.easyWindow.window('close');
+        }
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

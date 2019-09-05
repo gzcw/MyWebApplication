@@ -1,0 +1,72 @@
+﻿@{
+    ViewBag.Title = "WfPanel";
+}
+<div class="easyui-layout" data-options="fit:true,border:false">
+    <div data-options="region:'center',border:false">
+        <div id="wfpanel"></div>
+    </div>
+    <div data-options="region:'south',border:false" style="height: 35px; background-color: #E0ECFF; text-align: right">
+        <a class="easyui-linkbutton" style="margin: 4px;" data-options="iconCls:'icon-ok'" onclick="Send()">发送</a>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    $(document).ready(function () {
+        initPanel();
+    });
+
+    function initPanel() {
+        $("#wfpanel").tabs({
+            border: false,
+            fit: true,
+            onSelect: function (title, index) {
+                var panel = $("#wfpanel").tabs('getTab', index);
+                panel.panel('refresh');
+            }
+        });
+        initTabItems();
+    }
+
+    function initTabItems() {
+        $.ajax({
+            url: RootDirectory + '/Workflow/Page/GetDataByNodeID',
+            data: { nodeID: me.workflowRecord.FK_Node },
+            success: function (result) {
+                $.each(result, function (index, item) {
+                    var url = RootDirectory + "" + item.Url;
+
+                    $("#wfpanel").tabs("add", {
+                        title: item.Name,
+                        content: '<iframe frameborder=0 height="99.3%" width="100%" src="' + url + '"></iframe>',
+                        tools: [{
+                            iconCls: 'icon-mini-refresh',
+                            handler: function (sender) {
+                                var panel = $("#wfpanel").tabs('getTab', item.Name);
+                                panel.panel('refresh');
+                            }
+                        }]
+                    });
+                });
+
+            }
+        });
+    }
+
+    // 发送
+    function Send() {
+        $.messager.progress();
+        $.ajax({
+            url: RootDirectory + '/Workflow/WfFlow/Node_SendWork',
+            data: { fk_flow: me.workflowRecord.FK_Flow, workId: me.workflowRecord.WorkID },
+            success: function (result) {
+                $.messager.progress('close');
+                $.messager.alert('提示', result.message);
+                if (result.success) {
+                    me.easyWindow.window('close');
+                    me.parentGrid.datagrid("reload");
+                }
+            }
+        });
+    }
+</script>

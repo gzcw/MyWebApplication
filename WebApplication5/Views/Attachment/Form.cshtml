@@ -1,0 +1,94 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【Sys_Attachment】Form
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<div class="easyui-layout" data-options="fit:true">
+    <div class="datagrid-toolbar" data-options="region:'north',height:41" style="padding:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 40px;" onclick="save();">保存</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+    </div>
+    <div data-options="region:'center',border:false" style="background-color:#f2f5f7">
+		<form id="Attachment_form" class="myform" method="post">
+			<fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th>名称:</th>	<td><input class='easyui-textbox' name='Name' /></td><th>	文件类型:</th>	<td><input class='easyui-textbox' name='FileType' /></td>	</tr>	<tr>	<th>文件大小:</th>	<td><input class='easyui-numberbox' name='FileSize' /></td><th>	是否目录:</th>	<td><input id='44f7dd5d-6782-4937-a8bf-4f4b442177a4' class='easyui-boolcombobox component' name='IsDirectory' data-componenttype='boolcombobox' data-options='width:230,height:28'/></td>	</tr>	<tr>	<th>引用记录标识:</th>	<td><input class='easyui-textbox' name='RecordID' /></td><th>	父记录标识:</th>	<td><input class='easyui-textbox' name='ParentID' /></td>	</tr>	<tr>	<th>附件类别:</th>	<td><input class='easyui-textbox' name='Category' /></td><th>	附件路径:</th>	<td><input class='easyui-textbox' name='Path' /></td>	</tr>	<tr>	<th>创建人:</th>	<td><input class='easyui-textbox' name='Creator' /></td><th>	创建时间:</th>	<td><input class='easyui-datebox component' id='1991fc0d-d196-4a3c-b0f3-d2dfdd0db823' name='CreateTime' data-componenttype='datebox' data-options='width:230,height:28'/></td>	</tr>	<tr>	<th>排序号:</th>	<td colspan='3'><input class='easyui-numberbox' name='SortNumber' /></td>	</tr>	</table>	<input type='hidden' name='ID' />		</fieldset>	
+		</form>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    var myform = $('#Attachment_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadForm","Attachment")?id=' + me.formId);
+    }
+
+	
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Attachment")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                result = JSON.parse(result);
+                if (result.success) {
+                    if (me.callback) {
+					   me.callback(result.entity);
+                    }
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+                $.messager.alert("提示", result.msg||"保存成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+
+@*----------------------------*@

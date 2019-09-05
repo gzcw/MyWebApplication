@@ -1,0 +1,96 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【WF_Page】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh();">刷新</a>
+}
+
+<table id="WF_Page_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#WF_Page_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Workflow/Page/GetPaged',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'Name', title: "Name",width:100 },
+			                { field: 'Url', title: "Url",width:100 },
+			                { field: 'SortNumber', title: "SortNumber",width:100 },
+			                { field: 'FK_Flow', title: "FK_Flow",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }	    };
+
+        
+
+				mygrid.datagrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+						],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	    if(urlParams.singleSelect){
+            commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+		      if(window.selectCallback){
+			     window.selectCallback([id],[row]);
+			  }
+            });
+		}
+		else{
+		    commonhelper.MultiSelectGrid(mygrid, function (ids, rows) {
+		      if(window.selectCallback){
+			     window.selectCallback(ids,rows);
+			  }
+            });
+		}
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+</script>

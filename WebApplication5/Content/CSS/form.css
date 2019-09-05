@@ -1,0 +1,87 @@
+﻿
+body {
+    background-color: #f2f5f7;
+    overflow: auto;
+}
+
+.myform {
+    margin: 10px auto 5px auto;
+    width: 780px;
+}
+
+    .myform fieldset {
+        margin-top: 5px;
+        border-color: gray;
+        border-width: thin;
+        border-style: solid;
+    }
+
+        .myform fieldset legend {
+            font-size: large;
+        }
+
+.easyui-tabs .panel-body {
+    background-color: rgba(232, 241, 246, 0);;
+}
+
+/* 表单样式 */
+.mytable {
+    border-collapse: collapse;
+    border-spacing: 0;
+    border-width: 1px;
+    border-style: solid;
+    margin: 10px auto 5px auto;
+    width: 750px;
+}
+
+    .mytable caption {
+        border-collapse: collapse;
+        height: 23px;
+        line-height: 23px;
+        font-weight: bold;
+        border-width: 1px;
+        border-style: solid;
+        font-size: 14px;
+    }
+
+    .mytable td, .mytable th {
+        padding: 3px;
+        border-style: solid;
+        border-collapse: collapse;
+        height: 23px;
+        line-height: 15px;
+        border-color: lightgray;
+        border-width: thin;
+    }
+
+    .mytable .title {
+        font-weight: bold;
+        padding-left: 15px;
+        font-size: 12px;
+    }
+
+    .mytable th {
+        text-align: right;
+        padding-right: 5px;
+        font-size:14px;
+        width: 120px;
+    }
+
+        .mytable th span {
+            color: #8400FF;
+            font-weight: bold;
+        }
+
+    .mytable span.x {
+        color: red;
+        padding: 0px 2px 0px 0px;
+        vertical-align: middle;
+    }
+
+    .mytable input[type=radio], .mytable input[type=checkbox] {
+        vertical-align: middle;
+    }
+
+    .mytable td {
+        width: 238px;
+    }

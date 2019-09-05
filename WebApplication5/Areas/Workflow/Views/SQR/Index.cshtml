@@ -1,0 +1,91 @@
+﻿@*-------------------------------------------------------------------
+    【申请人】页面
+    ---------------------------------------------------------------------*@
+<script src="~/Areas/Workflow/Application/SQR/Grid.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+
+@section searchform{
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-ok'" onclick="Select()">确定</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'">搜索</a>
+}
+<table id="SQR_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#SQR_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        mygridConfig = $.extend(new SQR_GridConfig(mygrid, { showSelection: true }), {
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SORTORDER ASC,CREATEDATE DESC"
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: "SORTORDER ASC,CREATEDATE DESC"
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [{
+                text: '申请人名称',
+                value: 'SQRMC'
+            }, {
+                text: '申请人证件号',
+                value: 'SQRZJH'
+            }, {
+                text: '主管部门',
+                value: 'ZGBM'
+            }, {
+                text: '单位性质',
+                value: 'DWXZ'
+            }, {
+                text: '法人代表姓名',
+                value: 'FRDBXM'
+            }, {
+                text: '法人代表证件号',
+                value: 'FRDBZJH'
+            }, {
+                text: '法人代表电话号码',
+                value: 'FRDBDHHM'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    function Select() {
+        mygridConfig.Select();
+    }
+</script>

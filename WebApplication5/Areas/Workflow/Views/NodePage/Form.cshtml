@@ -1,0 +1,154 @@
+﻿@*-------------------------------------------------------------------
+    【办文类型】表单
+    ---------------------------------------------------------------------*@
+@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 400px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+<form id="NodePage_form" method="post">
+    <input type="hidden" name="ID" />
+    <table cellpadding="0" cellspacing="0" style="width: 400px" class="formtable">
+        <tr>
+            <th class="labelTd">流程节点：</th>
+            <td class="fieldTd">
+                <input class="input" name="Node_id" data-options="valueField: 'NODEID',textField: 'NAME',url:'@Url.Action("GetData", "Node")'" />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd"><span class="x">*</span>页签：</th>
+            <td class="fieldTd">
+                <input class="input" name="Page_id" data-options="valueField: 'ID',textField: 'Name',required:true,url:'@Url.Action("GetData", "Page")',editable:false" />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd">权限：</th>
+            <td class="fieldTd">
+                <input class="easyui-combobox" data-options="data:[{id:1,text:'读写'},{id:0,text:'只读'}],valueField:'id',editable:false" name="Permission" value=1 />
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd">自定义参数：</th>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" name="Params" />
+                <br />
+                示例:{name:value}
+            </td>
+        </tr>
+        <tr>
+            <th class="labelTd"><span class="x">*</span>排序号：</th>
+            <td class="fieldTd">
+                <input class="easyui-validatebox input" data-options="required:true" name="Sortnumber" />
+            </td>
+        </tr>
+
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#NodePage_form');
+
+    initForm();
+    $(document).ready(function () {
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+    //region个性化代码
+
+    //个性化入口
+    function Personalize() {
+        initFields();
+    }
+
+    //初始化字段
+    function initFields() {
+
+        var nodeField = $("input[name=Node_id]");
+        var pageField = $("input[name=Page_id]");
+
+        nodeField.combobox({
+            readonly: true,
+            value: me.nodeID
+        });
+
+        pageField.combobox({
+            url: '@Url.Action("GetValidPageByNodeID", "Page")?nodeID=' + me.nodeID
+        });
+    }
+
+    //endregion
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            },
+            buttons: [{
+                iconCls: 'icon-add',
+                text: '保存',
+                handler: save
+            }, '-', {
+                iconCls: 'icon-edit',
+                text: '重置',
+                handler: reset
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '取消',
+                handler: cancel
+            }]
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm", "NodePage")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        myform.form('submit', {
+            url: '@Url.Action("Save", "NodePage")',
+            success: function (result) {
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

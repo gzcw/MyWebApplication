@@ -1,0 +1,68 @@
+﻿@*-------------------------------------------------------------------
+【NODESTATION】Index
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+<script src="~/Application/NODESTATION/Grid.js"></script>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'">查询</a>
+<table id="NODESTATION_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#NODESTATION_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var defaultConfig=new NODESTATION_GridConfig(mygrid, { defaultValues: me.defaultValues || {} });
+
+        mygridConfig = $.extend(defaultConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					    {text:'岗位',value:'STATIONNAME'}
+		     			,		    {text:'节点',value:'NODENAME'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    function Select() {
+        mygridConfig.Select();
+    }
+    function Search() {}
+</script>

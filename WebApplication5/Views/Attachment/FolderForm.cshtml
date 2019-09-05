@@ -1,0 +1,71 @@
+﻿@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<div style="padding: 5px;">
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="Save()">保存</a>
+    <a class="easyui-linkbutton" data-options="iconCls:'icon-remove'" onclick="Close()">关闭</a>
+</div>
+<form id="folderForm" method="post" style="width: 400px" class="myform">
+    <input type="hidden" name="ID" />
+    <input type="hidden" name="IsDirectory" value=true />
+    <input type="hidden" name="RecordID" />
+    <input type="hidden" name="Category" />
+    <table style="width: 350px" class="mytable">
+        <tr>
+            <th>上级目录：</th>
+            <td>
+                <input id="ParentID" name="ParentID" data-options="editable:false,width:250" />
+            </td>
+        </tr>
+        <tr>
+            <th>目录名称：</th>
+            <td>
+                <input class="easyui-textbox" name="Name" data-options="required:true" style="width: 250px" />
+            </td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $("#folderForm");
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initForm();
+        if (urlParams.id) {
+            myform.form('load', applicationPath + '/Attachment/LoadForm?id=' + urlParams.id);
+        }
+        else {
+            myform.form('load', { RecordID: urlParams.recordID, Category: urlParams.category });
+        }
+    });
+
+    //初始化表单
+    function initForm() {
+        $("#ParentID").combotree({
+            url: applicationPath + '/Attachment/GetFolderList?recordID=' + urlParams.recordID + "&category=" + urlParams.category
+        });
+    }
+
+    //保存
+    function Save() {
+        myform.form('submit', {
+            url: applicationPath + '/Attachment/SaveEntity',
+            success: function (result) {
+                result = JSON.parse(result);
+                if (result.success) {
+                    window.callback(result);
+                }
+                $.messager.alert('提示', result.msg||'保存成功！');
+            }
+        })
+    }
+
+    //关闭
+    function Close() {
+        if (me.easyWindow) {
+            me.easyWindow.window('close');
+        }
+    }
+</script>

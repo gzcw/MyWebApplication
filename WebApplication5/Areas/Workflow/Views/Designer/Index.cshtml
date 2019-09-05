@@ -1,0 +1,247 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "宏融工作流平台";
+}
+<style>
+    .north {
+        background: -ms-linear-gradient(bottom, white, lightBlue);
+        background: -webkit-gradient(linear, 0 0, 0 100%, from(lightBlue), to(white));
+    }
+
+    .topButtonDiv {
+        float: right;
+        height: 40px;
+        padding: 10px 10px 0px 0px;
+    }
+
+        .topButtonDiv img {
+            cursor: pointer;
+            margin: 5px;
+        }
+
+    #eastPanel {
+        border-width:0px 1px 0px 0px;
+    }
+    .layout-panel-west .panel-header {
+        border-left-width: 0px;
+    }
+
+        .title {
+            text-align: center;
+            font-size: large;
+            font-weight: bold;
+            padding: 8px;
+        }
+
+    .button {
+        margin-top: 6px;
+    }
+
+    .selected {
+        background: rgba(149, 184, 231, 0.33);
+    }
+
+    .tree-node-selected {
+        background: rgba(149, 184, 231, 0.33);
+    }
+</style>
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north',height:5" style="max-height:1px;border-width:0px 0px 1px 0px;"></div>
+    <div id="eastPanel" data-options="region:'west',split:true,width:200" title="流程列表">
+        <ul style="margin-top:8px;" id="wfList"></ul>
+    </div>
+    <div data-options="region:'center'" style="border-bottom-width:0px;">
+        <div class="easyui-layout" data-options="fit:true">
+            <div data-options="region:'north'" class="datagrid-toolbar">
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-add',disabled:true" plain="true" onclick="$('iframe')[0].contentWindow.addNode()">添加节点</a>
+                <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',disabled:true" plain="true" onclick="$('iframe')[0].contentWindow.reomve()">删除节点/连接线</a>
+                <a class="easyui-linkbutton" data-options="iconCls:'publish_16',disabled:true" plain="true" onclick="$('iframe')[0].contentWindow.check()">检查并发布</a>
+            </div>
+            <div id="mainPanel" data-options="region:'center',border:false" style="background: #eee;">
+                <iframe style="height:99.3%;width:100%" frameborder="0" src="@Url.Action("Designer", "Designer")"></iframe>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div id="mm" class="easyui-menu" style="width:120px;">
+    <div>新建流程</div>
+    <div class="menu-sep"></div>
+    <div>新建类别</div>
+    <div class="menu-sep"></div>
+    <div>修改</div>
+    <div class="menu-sep"></div>
+    <div>删除</div>
+    <div class="menu-sep"></div>
+    <div>复制</div>
+</div>
+
+<script>
+    var wfTree = $('#wfList');
+    var tabs = $('#tabs');
+    var me = this;
+    var chartWin = $("iframe")[0].contentWindow;
+
+    $(document).ready(function () {
+        initWfList();
+        initBtn();
+        initMenu();
+    });
+
+    //初始化流程树
+    function initWfList() {
+        wfTree.tree({
+            url: '@Url.Action("GetTreeData", "FlowSort")',
+            valueField: 'NO',
+            textField: 'NAME',
+            //parentField: 'FK_FLOWSORT',
+            onClick: function (node) {
+                $('.easyui-linkbutton').linkbutton('enable');
+                if (!node.ISSORT) {
+                    var url = "@Url.Action("Designer","Designer")?workflowNo=" + node.id + "&workflowName=" + node.NAME;
+                    $("iframe")[0].contentWindow.location.href = url;
+                    $("iframe").css('width', '100%');
+                    if ($("iframe")[0].contentWindow.innerWidth < node.X + 100) {
+                        //$(chartWin).css('width', node.X + 100);
+                    }
+                }
+            },
+            onContextMenu: function (e, node) {
+                e.preventDefault();
+                // 查找节点
+                wfTree.tree('select', node.target);
+                // 显示快捷菜单
+                $('#mm').menu('show', {
+                    left: e.pageX,
+                    top: e.pageY
+                });
+            },
+            onLoadSuccess: function () {
+                $(".tree-node", $("#wfList")).hover(function (sender) {
+                    $(this).addClass('selected');
+                }, function () {
+                    $(this).removeClass('selected');
+                });
+            }
+        });
+    }
+
+    //初始化按钮
+    function initBtn() {
+    }
+    function initMenu() {
+        $('#mm').menu({
+            onClick: function (item) {
+                switch (item.text) {
+                    case "新建流程": create(); break;
+                    case "新建类别": createSort(); break;
+                    case "修改": update(); break;
+                    case "删除": remove(); break;
+                    case "复制": copyFlow(); break;
+                }
+            }
+        });
+    }
+
+    //新建流程
+    function create() {
+         commonhelper.openWindowInWorkArea('@Url.Action("Form","Flow")', {
+            title: '新建流程',
+            mycallback: function () {
+                wfTree.tree('reload');
+            }
+        });
+    }
+
+    //新建流程类别
+    function createSort(node) {
+        commonhelper.openWindowInWorkArea('@Url.Action("Form","FlowSort")', {
+            title: '新建流程类型',
+            mycallback: function () {
+                wfTree.tree('reload');
+            }
+        });
+    }
+
+    //修改
+    function update() {
+        var node = wfTree.tree('getSelected');
+        if (node.ISSORT) {
+            updateSort(node.id);
+        }
+        else {
+            updateFlow(node.id);
+        }
+    }
+
+    //修改流程类别
+    function updateSort(id) {
+        commonhelper.openWindowInWorkArea('@Url.Action("Form","FLOWSORT")?id=' + id, {
+            title: '修改流程类型'
+        });
+    }
+
+    //修改流程
+    function updateFlow(id) {
+        commonhelper.openWindowInWorkArea( '@Url.Action("Form","FLOW")?id=' + id, {
+            title: '修改流程',
+            width: 800,
+            height: 300
+        });
+    }
+
+    //删除流程或流程类别
+    function remove() {
+        var node = wfTree.tree('getSelected');
+        if (node.ISSORT) {
+            removeFlowSort(node);
+        }
+        else {
+            removeFlow(node);
+        }
+    }
+
+    //删除流程
+    function removeFlow(node) {
+        $.messager.confirm('确认信息', '您确认删除流程【' + node.text + '】吗？', function (r) {
+            if (r) {
+                $.messager.progress();
+                $.post('@Url.Action("DeleteFlow","FLOW")', { workflowNo: node.NO }, function (result) {
+                    $.messager.progress('close');
+                    if (result.success) {
+                        wfTree.tree('reload');
+                    }
+                    $.messager.alert('提示', result.msg);
+                });
+            }
+        });
+    }
+    //删除流程类别
+    function removeFlowSort(node) {
+        $.messager.progress();
+        $.post('@Url.Action("DeleteEntities", "FLOWSORT")', { ids: JSON.stringify([node.id]) }, function (result) {
+            $.messager.progress('close');
+            if (result.success) {
+                wfTree.tree('reload');
+            }
+            $.messager.alert('提示', result.msg||'删除成功！');
+        });
+    }
+
+    //复制流程
+    function copyFlow() {
+        var node = wfTree.tree('getSelected');
+        $.messager.confirm('确认', '您确认复制此流程吗？', function (r) {
+            if (r) {
+                $.messager.progress();
+                $.get('@Url.Action("ExportFlow", "WfFlow")', { flowNo: node.NO }, function (result) {
+                    $.messager.progress('close');
+                    if (result.success) {
+                        wfTree.tree('reload');
+                    }
+                    $.messager.alert('提示', result.msg);
+                })
+            }
+        });
+    }
+</script>

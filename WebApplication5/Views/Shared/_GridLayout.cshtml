@@ -1,0 +1,33 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<body>
+    <div class="easyui-layout" id="main_layout" data-options="fit:true,border:false">
+        <div data-options="region:'north',border:false" id="_north_panel" style="height: 74px;">
+            @RenderSection("PageCommandBefore", false)
+            <div class="datagrid-toolbar" style="margin: 0px; border-width: 1px 0 1px 0;">
+                @Html.Action("Buttons", "Authorization", new { area = "" })
+                @RenderSection("Buttons", false)
+            </div>
+            @RenderSection("PageCommandAfter", false)
+        </div>
+        <div data-options="region:'center',border:false">
+            @RenderBody()
+        </div>
+    </div>
+</body>
+<script>
+    $(document).ready(function () {
+        setTimeout(function () {
+            $('#_north_panel').panel('resize', { height: $('#_north_panel')[0].scrollHeight });
+            $('#main_layout').layout('resize');
+            if (this.buttons) {
+                $(".toolbar").empty();
+                $(this.buttons).each(function (index, item) {
+                    var btn = $("<a href='#'></a>").linkbutton($.extend({ plain: true }, item));
+                    $(".toolbar").append(btn);
+                });
+            }
+        });
+    });
+</script>

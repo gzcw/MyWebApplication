@@ -1,0 +1,101 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【UM_USER】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="close();">刷新</a>
+}
+<table id="UM_USER_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#UM_USER_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Authorize/Department/GetPaged_User_ALL',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+			columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'NAME', title: "用户名",width:100 },
+			                { field: 'PASSWORD', title: "密码",width:100 },
+			                { field: 'REALNAME', title: "真实姓名",width:100 },
+			                { field: 'SEX', title: "性别",width:100 },
+			                { field: 'OFFICEPHONE', title: "办公电话",width:100 },
+			                { field: 'EMAIL', title: "电子邮件",width:100 },
+			                { field: 'DESCRIPTION', title: "描述",width:100 },
+			                { field: 'ERRORTIME', title: "登陆错误次数",width:100 },
+			                { field: 'LOCKED', title: "是否锁定",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }
+	    };
+
+		mygrid.datagrid(opts);
+        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+						],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	   commonhelper.MultiSelectGrid(mygrid, function (ids) {
+          var url=window.applicationPath+'/Authorize/Department/SaveRelation_User';
+          $.ajax({
+		        url:url,
+		        data:{DEPARTMENTID:urlParams.id,S:JSON.stringify(ids)},
+		        type:'post',
+		        success:function(result){
+		            $.messager.alert('提示',result.msg||'保存成功！');
+					if(me.parentGrid){
+					   me.parentGrid.datagrid('reload');
+					}
+		        }
+		 });
+       });  
+    }
+   
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+            if (mygrid.queryParams) {
+                mygrid.datagrid('load', mygrid.queryParams);
+            }
+            else {
+                mygrid.datagrid('reload');
+            }
+    }
+  
+</script>

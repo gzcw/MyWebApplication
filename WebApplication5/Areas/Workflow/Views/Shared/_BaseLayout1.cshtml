@@ -1,0 +1,61 @@
+﻿@{
+    Layout = null;
+    var test = ViewBag.WorkflowPath;
+
+    var Theme = CookieHelper.ReadCookie("HR.Registration.Theme.Cookie");
+    if (String.IsNullOrWhiteSpace(Theme)) { Theme = "default"; }
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width" />
+    <link rel="shortcut icon" type="image/x-icon" href="../Scripts/images/shutcut.png" />
+    <title>@ViewBag.Title</title>
+    <link href="~/Content/easyui/themes/@Theme/easyui.css" rel="stylesheet" />
+    <link href="~/Content/css/main.css" rel="stylesheet" />
+    @Styles.Render("~/Content/css/" + Theme)
+
+
+    <script src="~/Scripts/jquery-1.11.1.min.js"></script>
+    <script src="~/Scripts/jquery-migrate-1.2.1.min.js"></script>
+    <script src="~/Scripts/jquery.easyui.min.js"></script>
+
+    <script src="~/Scripts/easyui-lang-zh_CN.js"></script>
+    <script src="~/@(ViewBag.WorkflowPath)Scripts/Common/UserComponent.js"></script>
+    <script src="~/@(ViewBag.WorkflowPath)Scripts/Common/PageCommon.js"></script>
+    <script src="~/@(ViewBag.WorkflowPath)Scripts/Common/easyui-extension.js"></script>
+</head>
+<body id="workPageLayout">
+    @RenderBody()
+
+    <link href="~/Content/easyui/themes/icon.css" rel="stylesheet" />
+</body>
+</html>
+<script>
+    RootDirectory = "@Request.ApplicationPath";
+    Array.prototype.indexOf = Array.prototype.indexOf || function (searchElement, fromIndex) {
+        if (this === undefined || this === null) {
+            throw new TypeError('"this" is null or not defined');
+        }
+        var length = this.length >>> 0; // Hack to convert object.length to a UInt32
+        fromIndex = +fromIndex || 0;
+        if (Math.abs(fromIndex) === Infinity) {
+            fromIndex = 0;
+        }
+        if (fromIndex < 0) {
+            fromIndex += length;
+
+            if (fromIndex < 0) {
+                fromIndex = 0;
+            }
+        }
+        for (; fromIndex < length; fromIndex++) {
+            if (this[fromIndex] === searchElement) {
+                return fromIndex;
+            }
+        }
+        return -1;
+    };
+    window.console = window.console || { log: function () { } };
+</script>

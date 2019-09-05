@@ -1,0 +1,72 @@
+﻿@*-------------------------------------------------------------------
+【TJXX】Index
+-------------------------------------------------------------------*@
+<script src="~/Areas/Workflow/Application/TJXX/Grid.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+
+@section searchform{
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'" plain="true">搜索</a>
+</div>
+}
+<table id="TJXX_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#TJXX_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+        mygridConfig = $.extend(new TJXX_GridConfig(mygrid), {
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            border:true
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+					    {text:'受理编号',value:'SLBH'},
+		     			,		    {text:'业务分组',value:'YWFZ'},
+		     			,		    {text:'业务类型',value:'YWLX'},
+		     			,		    {text:'退件原因',value:'TJYY'},
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+</script>

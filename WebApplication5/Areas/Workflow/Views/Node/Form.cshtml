@@ -1,0 +1,431 @@
+﻿  
+
+@*-------------------------------------------------------------------
+【WF_Node】Form
+-------------------------------------------------------------------*@
+@{
+    Layout = "~/Views/Shared/_FormLayout.cshtml";
+}
+<div class="easyui-layout" data-options="fit:true">
+    <div class="datagrid-toolbar" data-options="region:'north',height:41" style="padding:5px;">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" style="margin-left: 40px;" onclick="save();">保存</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-undo'" onclick="reset();">重置</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-remove',permission:0" onclick="cancel();">关闭</a>
+    </div>
+    <div data-options="region:'center',border:false" style="background-color:#f2f5f7">
+		<form id="Node_form" class="myform" method="post">
+			<fieldset>	<legend>基本信息</legend>	<table class='mytable'>	<tr>	<th>节点ID:</th>	<td><input class='easyui-textbox' name='NodeID' data-options='readonly:true'/></td><th>	节点名称:</th>	<td><input class='easyui-textbox' name='Name' /></td>	</tr>	<tr>	<th>节点类型:</th>	<td><input class="easyui-combobox" name="RunModel" data-options="width:230,height:28,data:[{value:'0',text:'普通'},{value:'1',text:'合流'}],textField:'text',valueField:'value'"/></td><th>	方向条件控制规则:</th>	<td><input class="easyui-combobox" name="CondModel" data-options="width:230,height:28,data:[{value:0,text:'由连接线条件控制'},{value:1,text:'按照用户选择计算'}],textField:'text',valueField:'value'"/></td>	</tr>	<tr>	<th>访问规则:</th>	<td colspan='3'><input class="easyui-combobox" name="DeliveryWay" data-options="width:604,height:28,data:[{value:'1',text:'按部门'},{value:'0',text:'按岗位'},{value:'3',text:'按用户'},{value:'19',text:'本部门人员'},{value:'7',text:'发起人'}],textField:'text',valueField:'value'"/></td>	</tr>	</table>	<input type='hidden' name='Step' />	<input type='hidden' name='FK_Flow' />	<input type='hidden' name='FlowName' />	<input type='hidden' name='Tip' />	<input type='hidden' name='WhoExeIt' />	<input type='hidden' name='ReadReceipts' />	<input type='hidden' name='CancelRole' />	<input type='hidden' name='CancelDisWhenRead' />	<input type='hidden' name='IsTask' />	<input type='hidden' name='IsExpSender' />	<input type='hidden' name='IsRM' />	<input type='hidden' name='IsGuestNode' />	<input type='hidden' name='DTFrom' />	<input type='hidden' name='DTTo' />	<input type='hidden' name='IsBUnit' />	<input type='hidden' name='FocusField' />	<input type='hidden' name='NodeAppType' />	<input type='hidden' name='FWCSta' />	<input type='hidden' name='SelfParas' />	<input type='hidden' name='SubThreadType' />	<input type='hidden' name='PassRate' />	<input type='hidden' name='SubFlowStartWay' />	<input type='hidden' name='SubFlowStartParas' />	<input type='hidden' name='ThreadIsCanDel' />	<input type='hidden' name='ThreadIsCanShift' />	<input type='hidden' name='IsAllowRepeatEmps' />	<input type='hidden' name='AutoRunEnable' />	<input type='hidden' name='AutoRunParas' />	<input type='hidden' name='AutoJumpRole0' />	<input type='hidden' name='AutoJumpRole1' />	<input type='hidden' name='AutoJumpRole2' />	<input type='hidden' name='WhenNoWorker' />	<input type='hidden' name='SendLab' />	<input type='hidden' name='SendJS' />	<input type='hidden' name='SaveLab' />	<input type='hidden' name='SaveEnable' />	<input type='hidden' name='ThreadLab' />	<input type='hidden' name='ThreadEnable' />	<input type='hidden' name='ThreadKillRole' />	<input type='hidden' name='JumpWayLab' />	<input type='hidden' name='JumpWay' />	<input type='hidden' name='JumpToNodes' />	<input type='hidden' name='ReturnLab' />	<input type='hidden' name='ReturnRole' />	<input type='hidden' name='ReturnAlert' />	<input type='hidden' name='IsBackTracking' />	<input type='hidden' name='ReturnField' />	<input type='hidden' name='ReturnReasonsItems' />	<input type='hidden' name='ReturnOneNodeRole' />	<input type='hidden' name='CCLab' />	<input type='hidden' name='CCRole' />	<input type='hidden' name='CCWriteTo' />	<input type='hidden' name='DoOutTime' />	<input type='hidden' name='DoOutTimeCond' />	<input type='hidden' name='ShiftLab' />	<input type='hidden' name='ShiftEnable' />	<input type='hidden' name='DelLab' />	<input type='hidden' name='DelEnable' />	<input type='hidden' name='EndFlowLab' />	<input type='hidden' name='EndFlowEnable' />	<input type='hidden' name='ShowParentFormLab' />	<input type='hidden' name='ShowParentFormEnable' />	<input type='hidden' name='OfficeBtnLab' />	<input type='hidden' name='OfficeBtnEnable' />	<input type='hidden' name='PrintHtmlLab' />	<input type='hidden' name='PrintHtmlEnable' />	<input type='hidden' name='PrintPDFLab' />	<input type='hidden' name='PrintPDFEnable' />	<input type='hidden' name='PrintPDFModle' />	<input type='hidden' name='PrintZipLab' />	<input type='hidden' name='PrintZipEnable' />	<input type='hidden' name='PrintDocLab' />	<input type='hidden' name='PrintDocEnable' />	<input type='hidden' name='TrackLab' />	<input type='hidden' name='TrackEnable' />	<input type='hidden' name='HungLab' />	<input type='hidden' name='HungEnable' />	<input type='hidden' name='SearchLab' />	<input type='hidden' name='SearchEnable' />	<input type='hidden' name='WorkCheckLab' />	<input type='hidden' name='WorkCheckEnable' />	<input type='hidden' name='AskforLab' />	<input type='hidden' name='AskforEnable' />	<input type='hidden' name='HuiQianLab' />	<input type='hidden' name='HuiQianRole' />	<input type='hidden' name='TCLab' />	<input type='hidden' name='TCEnable' />	<input type='hidden' name='WebOffice' />	<input type='hidden' name='WebOfficeEnable' />	<input type='hidden' name='PRILab' />	<input type='hidden' name='PRIEnable' />	<input type='hidden' name='AllotLab' />	<input type='hidden' name='AllotEnable' />	<input type='hidden' name='FocusLab' />	<input type='hidden' name='FocusEnable' />	<input type='hidden' name='ConfirmLab' />	<input type='hidden' name='ConfirmEnable' />	<input type='hidden' name='ListLab' />	<input type='hidden' name='ListEnable' />	<input type='hidden' name='BatchLab' />	<input type='hidden' name='BatchEnable' />	<input type='hidden' name='TimeLimit' />	<input type='hidden' name='TWay' />	<input type='hidden' name='TAlertRole' />	<input type='hidden' name='TAlertWay' />	<input type='hidden' name='WarningDay' />	<input type='hidden' name='WAlertRole' />	<input type='hidden' name='WAlertWay' />	<input type='hidden' name='TCent' />	<input type='hidden' name='CHWay' />	<input type='hidden' name='IsEval' />	<input type='hidden' name='OutTimeDeal' />	<input type='hidden' name='CCIsAttr' />	<input type='hidden' name='CCFormAttr' />	<input type='hidden' name='CCIsStations' />	<input type='hidden' name='CCStaWay' />	<input type='hidden' name='CCIsDepts' />	<input type='hidden' name='CCIsEmps' />	<input type='hidden' name='CCIsSQLs' />	<input type='hidden' name='CCSQL' />	<input type='hidden' name='CCTitle' />	<input type='hidden' name='CCDoc' />	<input type='hidden' name='FWCLab' />	<input type='hidden' name='FWCShowModel' />	<input type='hidden' name='FWCType' />	<input type='hidden' name='FWCNodeName' />	<input type='hidden' name='FWCAth' />	<input type='hidden' name='FWCTrackEnable' />	<input type='hidden' name='FWCListEnable' />	<input type='hidden' name='FWCIsShowAllStep' />	<input type='hidden' name='FWCOpLabel' />	<input type='hidden' name='FWCDefInfo' />	<input type='hidden' name='SigantureEnabel' />	<input type='hidden' name='FWCIsFullInfo' />	<input type='hidden' name='FWC_X' />	<input type='hidden' name='FWC_Y' />	<input type='hidden' name='FWC_H' />	<input type='hidden' name='FWC_W' />	<input type='hidden' name='FWCFields' />	<input type='hidden' name='FWCIsShowTruck' />	<input type='hidden' name='FWCIsShowReturnMsg' />	<input type='hidden' name='FWCOrderModel' />	<input type='hidden' name='FWCMsgShow' />	<input type='hidden' name='ICON' />	<input type='hidden' name='NodeWorkType' />	<input type='hidden' name='Doc' />	<input type='hidden' name='DeliveryParas' />	<input type='hidden' name='NodeFrmID' />	<input type='hidden' name='SaveModel' />	<input type='hidden' name='IsCanDelFlow' />	<input type='hidden' name='TodolistModel' />	<input type='hidden' name='TeamLeaderConfirmRole' />	<input type='hidden' name='TeamLeaderConfirmDoc' />	<input type='hidden' name='IsHandOver' />	<input type='hidden' name='BlockModel' />	<input type='hidden' name='BlockExp' />	<input type='hidden' name='BlockAlert' />	<input type='hidden' name='SFActiveFlows' />	<input type='hidden' name='BatchRole' />	<input type='hidden' name='BatchListCount' />	<input type='hidden' name='BatchParas' />	<input type='hidden' name='FormType' />	<input type='hidden' name='FormUrl' />	<input type='hidden' name='TurnToDeal' />	<input type='hidden' name='TurnToDealDoc' />	<input type='hidden' name='NodePosType' />	<input type='hidden' name='IsCCFlow' />	<input type='hidden' name='HisStas' />	<input type='hidden' name='HisDeptStrs' />	<input type='hidden' name='HisToNDs' />	<input type='hidden' name='HisBillIDs' />	<input type='hidden' name='PTable' />	<input type='hidden' name='GroupStaNDs' />	<input type='hidden' name='X' />	<input type='hidden' name='Y' />	<input type='hidden' name='RefOneFrmTreeType' />	<input type='hidden' name='CheckNodes' />	<input type='hidden' name='FrmTrackLab' />	<input type='hidden' name='FrmTrackSta' />	<input type='hidden' name='FrmTrack_X' />	<input type='hidden' name='FrmTrack_Y' />	<input type='hidden' name='FrmTrack_H' />	<input type='hidden' name='FrmTrack_W' />	<input type='hidden' name='FrmThreadLab' />	<input type='hidden' name='FrmThreadSta' />	<input type='hidden' name='FrmThread_X' />	<input type='hidden' name='FrmThread_Y' />	<input type='hidden' name='FrmThread_H' />	<input type='hidden' name='FrmThread_W' />	<input type='hidden' name='SFLab' />	<input type='hidden' name='SFSta' />	<input type='hidden' name='SFShowModel' />	<input type='hidden' name='SFCaption' />	<input type='hidden' name='SFDefInfo' />	<input type='hidden' name='SF_X' />	<input type='hidden' name='SF_Y' />	<input type='hidden' name='SF_H' />	<input type='hidden' name='SF_W' />	<input type='hidden' name='SFFields' />	<input type='hidden' name='SFShowCtrl' />	<input type='hidden' name='SFOpenType' />	<input type='hidden' name='FTCLab' />	<input type='hidden' name='FTCSta' />	<input type='hidden' name='FTCWorkModel' />	<input type='hidden' name='FTC_X' />	<input type='hidden' name='FTC_Y' />	<input type='hidden' name='FTC_H' />	<input type='hidden' name='FTC_W' />	<input type='hidden' name='OfficeOpen' />	<input type='hidden' name='OfficeOpenEnable' />	<input type='hidden' name='OfficeOpenTemplate' />	<input type='hidden' name='OfficeOpenTemplateEnable' />	<input type='hidden' name='OfficeSave' />	<input type='hidden' name='OfficeSaveEnable' />	<input type='hidden' name='OfficeAccept' />	<input type='hidden' name='OfficeAcceptEnable' />	<input type='hidden' name='OfficeRefuse' />	<input type='hidden' name='OfficeRefuseEnable' />	<input type='hidden' name='OfficeOver' />	<input type='hidden' name='OfficeOverEnable' />	<input type='hidden' name='OfficeMarks' />	<input type='hidden' name='OfficeReadOnly' />	<input type='hidden' name='OfficePrint' />	<input type='hidden' name='OfficePrintEnable' />	<input type='hidden' name='OfficeSeal' />	<input type='hidden' name='OfficeSealEnable' />	<input type='hidden' name='OfficeInsertFlow' />	<input type='hidden' name='OfficeInsertFlowEnable' />	<input type='hidden' name='OfficeNodeInfo' />	<input type='hidden' name='OfficeReSavePDF' />	<input type='hidden' name='OfficeDownLab' />	<input type='hidden' name='OfficeDownEnable' />	<input type='hidden' name='OfficeIsMarks' />	<input type='hidden' name='OfficeTemplate' />	<input type='hidden' name='OfficeIsParent' />	<input type='hidden' name='OfficeIsTrueTH' />	<input type='hidden' name='OfficeTHTemplate' />	<input type='hidden' name='WebOfficeFrmModel' />	<input type='hidden' name='SelectorModel' />	<input type='hidden' name='FK_SQLTemplate' />	<input type='hidden' name='FK_SQLTemplateText' />	<input type='hidden' name='IsAutoLoadEmps' />	<input type='hidden' name='IsSimpleSelector' />	<input type='hidden' name='IsEnableDeptRange' />	<input type='hidden' name='IsEnableStaRange' />	<input type='hidden' name='SelectorP1' />	<input type='hidden' name='SelectorP2' />	<input type='hidden' name='SelectorP3' />	<input type='hidden' name='SelectorP4' />	<input type='hidden' name='SelectAccepterLab' />	<input type='hidden' name='SelectAccepterEnable' />	<input type='hidden' name='CHLab' />	<input type='hidden' name='CHEnable' />	<input type='hidden' name='OfficeOpenLab' />	<input type='hidden' name='OfficeOpenTemplateLab' />	<input type='hidden' name='OfficeSaveLab' />	<input type='hidden' name='OfficeAcceptLab' />	<input type='hidden' name='OfficeRefuseLab' />	<input type='hidden' name='OfficeOverLab' />	<input type='hidden' name='OfficeMarksEnable' />	<input type='hidden' name='OfficePrintLab' />	<input type='hidden' name='OfficeSealLab' />	<input type='hidden' name='OfficeInsertFlowLab' />	<input type='hidden' name='OfficeTHEnable' />	<input type='hidden' name='AtPara' />	<input type='hidden' name='FrmAttr' />	<input type='hidden' name='HisSubFlows' />		</fieldset>	<fieldset>	<legend>部门列表</legend>	<table id='NodeDept1' style='width: 753px; height: 300px;'></table>		</fieldset>	<fieldset>	<legend>岗位列表</legend>	<table id='NodeStation1' style='width: 753px; height: 300px;'></table>		</fieldset>	<fieldset>	<legend>用户列表</legend>	<table id='NodeEmp1' style='width: 753px; height: 300px;'></table>		</fieldset>	<fieldset>	<legend>流程页面列表</legend>	<table id='NodePage1' style='width: 753px; height: 300px;'></table>		</fieldset>	
+		</form>
+    </div>
+</div>
+
+<script>
+    var me = this;
+    var myform = $('#Node_form');
+    var urlParams = commonhelper.getUrlParams();
+    me.formId = urlParams.id||"";
+
+    $(document).ready(function () {
+	    initForm();
+		loadForm();
+
+		initGrid_NodeDept1();initGrid_NodeStation1();initGrid_NodeEmp1();initGrid_NodePage1();
+    });
+
+	//初始化表单
+    function initForm() {
+      myform.form({
+        onLoadSuccess: function (data) {
+            $.messager.progress('close');
+        }
+      });
+	}
+
+    //加载表单
+    function loadForm() {
+		$.messager.progress();
+        myform.form('load', '@Url.Action("LoadForm","Node")?id=' + me.formId);
+    }
+
+	function initGrid_NodeDept1(){
+	     var target=$('#NodeDept1');
+	     var opts={
+            url: window.applicationPath+'/Workflow/Node/GetPaged_NodeDept?FK_Node=' + me.formId,
+            border: true,
+            height: 300,
+            fit:false,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            idField:'ID',
+						columns:[[
+			{ field: 'ck', checkbox: true },
+			{field:'DepartmentName',title:'部门名称',width:100,editor:'textbox'}
+			]],
+            queryParams: {
+                filters: JSON.stringify([]),
+				orders:''
+            },
+			            toolbar: [{
+                iconCls: 'icon-add',
+                text: '选择',
+                handler: function () { 
+                    if (!me.formId) {
+                        $.messager.alert('提示', '请先保存表单', 'info');
+                        return;
+                    }
+				   commonhelper.openWindowInWorkArea(window.applicationPath +'/Workflow/Node/Select_Department?id=' + me.formId, {
+		                title:'选择',
+                        selectCallback: function (ids, rows) {
+                             target.datagrid('reload');
+                        }
+                    });
+				}
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '移除',
+                handler: function () { 
+				  commonhelper.RemoveDatagridSelected(target, function (ids, rows) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: window.applicationPath +'/Workflow/Node/DeleteRelation_NodeDept',
+                            data: { ids: JSON.stringify(ids) },
+                            //traditional: true,
+                            method: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                if (result.success) {
+                                    target.datagrid('clearSelections');
+                                    target.datagrid('reload');
+                                }
+                                else {
+                                    $.messager.alert("提示", result.Message);
+                                }
+                            }
+                        });
+                    });
+				 }
+            }
+			, '-', {
+                iconCls: 'icon-reload',
+                text: '刷新',
+                handler: function () { 
+				  target.datagrid('reload');
+				}
+            }
+			]
+        };
+        target.datagrid(opts);
+	   }
+function initGrid_NodeStation1(){
+	     var target=$('#NodeStation1');
+	     var opts={
+            url: window.applicationPath+'/Workflow/Node/GetPaged_NodeStation?FK_Node=' + me.formId,
+            border: true,
+            height: 300,
+            fit:false,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            idField:'ID',
+						columns:[[
+			{ field: 'ck', checkbox: true },
+			{field:'StationName',title:'岗位列表',width:100,editor:'textbox'}
+			]],
+            queryParams: {
+                filters: JSON.stringify([]),
+				orders:''
+            },
+			            toolbar: [{
+                iconCls: 'icon-add',
+                text: '选择',
+                handler: function () { 
+                    if (!me.formId) {
+                        $.messager.alert('提示', '请先保存表单', 'info');
+                        return;
+                    }
+				   commonhelper.openWindowInWorkArea(window.applicationPath +'/Workflow/Node/Select_Station?id=' + me.formId, {
+		                title:'选择',
+                        selectCallback: function (ids, rows) {
+                             target.datagrid('reload');
+                        }
+                    });
+				}
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '移除',
+                handler: function () { 
+				  commonhelper.RemoveDatagridSelected(target, function (ids, rows) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: window.applicationPath +'/Workflow/Node/DeleteRelation_NodeStation',
+                            data: { ids: JSON.stringify(ids) },
+                            //traditional: true,
+                            method: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                if (result.success) {
+                                    target.datagrid('clearSelections');
+                                    target.datagrid('reload');
+                                }
+                                else {
+                                    $.messager.alert("提示", result.Message);
+                                }
+                            }
+                        });
+                    });
+				 }
+            }
+			, '-', {
+                iconCls: 'icon-reload',
+                text: '刷新',
+                handler: function () { 
+				  target.datagrid('reload');
+				}
+            }
+			]
+        };
+        target.datagrid(opts);
+	   }
+function initGrid_NodeEmp1(){
+	     var target=$('#NodeEmp1');
+	     var opts={
+            url: window.applicationPath+'/Workflow/Node/GetPaged_NodeEmp?FK_Node=' + me.formId,
+            border: true,
+            height: 300,
+            fit:false,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            idField:'ID',
+						columns:[[
+			{ field: 'ck', checkbox: true },
+			{field:'RealName',title:'姓名',width:100,editor:'textbox'}
+			]],
+            queryParams: {
+                filters: JSON.stringify([]),
+				orders:''
+            },
+			            toolbar: [{
+                iconCls: 'icon-add',
+                text: '选择',
+                handler: function () { 
+                    if (!me.formId) {
+                        $.messager.alert('提示', '请先保存表单', 'info');
+                        return;
+                    }
+				   commonhelper.openWindowInWorkArea(window.applicationPath +'/Workflow/Node/Select_User?id=' + me.formId, {
+		                title:'选择',
+                        selectCallback: function (ids, rows) {
+                             target.datagrid('reload');
+                        }
+                    });
+				}
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '移除',
+                handler: function () { 
+				  commonhelper.RemoveDatagridSelected(target, function (ids, rows) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: window.applicationPath +'/Workflow/Node/DeleteRelation_NodeEmp',
+                            data: { ids: JSON.stringify(ids) },
+                            //traditional: true,
+                            method: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                if (result.success) {
+                                    target.datagrid('clearSelections');
+                                    target.datagrid('reload');
+                                }
+                                else {
+                                    $.messager.alert("提示", result.Message);
+                                }
+                            }
+                        });
+                    });
+				 }
+            }
+			, '-', {
+                iconCls: 'icon-reload',
+                text: '刷新',
+                handler: function () { 
+				  target.datagrid('reload');
+				}
+            }
+			]
+        };
+        target.datagrid(opts);
+	   }
+function initGrid_NodePage1(){
+	     var target=$('#NodePage1');
+	     var opts={
+            url: window.applicationPath+'/Workflow/Node/GetPaged_NodePage?NodeID=' + me.formId,
+            border: true,
+            height: 300,
+            fit:false,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+            idField:'ID',
+						columns:[[
+			{ field: 'ck', checkbox: true },
+			{field:'PageName',title:'页面名称',width:100,editor:'textbox'},{field:'Url',title:'路径',width:100,editor:'textbox'},{field:'Permission',title:'权限',width:100,editor:'numberbox'},{field:'Params',title:'流程参数',width:100,editor:'textbox'},{field:'SortNumber',title:'排序号',width:100,editor:'numberbox'}
+			]],
+            queryParams: {
+                filters: JSON.stringify([]),
+				orders:''
+            },
+						onDblClickRow: function (index, row) {
+                 target.datagrid('beginEdit',index);
+             },
+			            toolbar: [{
+                iconCls: 'icon-add',
+                text: '选择',
+                handler: function () { 
+                    if (!me.formId) {
+                        $.messager.alert('提示', '请先保存表单', 'info');
+                        return;
+                    }
+				   commonhelper.openWindowInWorkArea(window.applicationPath +'/Workflow/Node/Select_Page?id=' + me.formId, {
+		                title:'选择',
+                        selectCallback: function (ids, rows) {
+                             target.datagrid('reload');
+                        }
+                    });
+				}
+            }, '-', {
+                iconCls: 'icon-remove',
+                text: '移除',
+                handler: function () { 
+				  commonhelper.RemoveDatagridSelected(target, function (ids, rows) {
+                        $.messager.progress();
+                        $.ajax({
+                            url: window.applicationPath +'/Workflow/Node/DeleteRelation_NodePage',
+                            data: { ids: JSON.stringify(ids) },
+                            //traditional: true,
+                            method: 'post',
+                            success: function (result) {
+                                $.messager.progress('close');
+                                if (result.success) {
+                                    target.datagrid('clearSelections');
+                                    target.datagrid('reload');
+                                }
+                                else {
+                                    $.messager.alert("提示", result.Message);
+                                }
+                            }
+                        });
+                    });
+				 }
+            }
+						, '-', {
+                iconCls: 'icon-edit',
+                text: '修改',
+                handler: function () { 
+                        commonhelper.SingleSelectGrid(target, function (id, row) {
+                            var index = target.datagrid('getRowIndex',id);
+                            target.datagrid('beginEdit', index);
+                        })
+				}
+            }, '-', {
+                    iconCls: 'icon-save',
+                    text: '保存',
+                    handler: function () {
+                        var indexs = target.datagrid('getEditingRowIndexs');
+                        $.each(indexs, function (index,item) {
+                            target.datagrid('endEdit', item);
+                        })
+                        var rows = target.datagrid('getChanges');
+                        $.post(window.applicationPath +'/Workflow/Node/UpdateRelation_NodePage',{
+                            list: JSON.stringify(rows)
+                            },
+                            function (result) {
+                                $.messager.alert('提示', result.msg || '保存成功！', 'info')
+                        });
+                    }
+                }
+			, '-', {
+                iconCls: 'icon-reload',
+                text: '刷新',
+                handler: function () { 
+				  target.datagrid('reload');
+				}
+            }
+						, '-', {
+                iconCls: 'settings_16',
+                text: '流程页面管理',
+                handler: function () { 
+				   commonhelper.openWindowInWorkArea(window.applicationPath+'/Workflow/Page/Index', {
+                            title:'流程页面管理'
+                        })
+				}
+            }
+			]
+        };
+        target.datagrid(opts);
+	   }
+
+    //保存
+    function save() {
+	    $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("SaveEntity","Node")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                result = JSON.parse(result);
+                if (result.success) {
+                    if (me.callback) {
+					   me.callback(result.entity);
+                    }
+                    me.formId = result.entity.ID;
+					myform.form('load',{ID:me.formId});
+                }
+                $.messager.alert("提示", result.msg||"保存成功！");
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+        }
+        else {
+            myform.form('reset');
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
+
+@*----------------------------*@
+<script>
+    $("[name=DeliveryWay]").combobox({
+        onSelect: function (record) {
+            $('#NodeDept1').parentsUntil('form').last().css('display', record.value == 1 ? 'inline' : 'none');
+            $('#NodeStation1').parentsUntil('form').last().css('display', record.value == 0 ? 'inline' : 'none');
+            $('#NodeEmp1').parentsUntil('form').last().css('display', record.value == 3 ? 'inline' : 'none');
+        }
+    });
+</script>
+
+
+
+
+
+
+
+
+
+

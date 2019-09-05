@@ -1,0 +1,266 @@
+﻿@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+@*<link rel="stylesheet" type="text/css" href="@Url.Content("~/Scripts/prettyPhoto/css/prettyPhoto.css")" media="screen" charset="utf-8"  />*@
+<link href="~/Areas/Workflow/Scripts/plupload/css/plupload.queue.css" rel="stylesheet" />
+
+<script type="text/javascript" src="@Url.Content("~/Areas/Workflow/Scripts/plupload/jquery.plupload.queue.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Areas/Workflow/Scripts/plupload/plupload.min.js")"></script>
+<script type="text/javascript" src="@Url.Content("~/Areas/Workflow/Scripts/plupload/plupload.flash.min.js")"></script>
+@*<script type="text/javascript" src="@Url.Content("~/Scripts/smoothZoom/jquery.smoothZoom.js")"></script>*@
+
+<style>
+
+    .smooth_zoom_preloader {
+        background-image: url(@Url.Content("~/Areas/Workflow/Scripts/smoothZoom/preloader.gif"));
+    }
+    .smooth_zoom_icons {
+        background-image: url(@Url.Content("~/Areas/Workflow/Scripts/smoothZoom/icons.png"))
+    }
+    html, body {
+        padding: 0px;
+        border: none;
+        margin: 0px;
+    }
+</style>
+<div id="flash_uploader" style="width: 100%; height: 100%; text-align: center;">
+    <img id="ImgAnalyse" src="~/Content/JQueryEasyUI/themes/default/images/loading.gif" style="left: 50%; top: 50%; position: absolute;" />
+</div>
+
+<script type="text/javascript">
+    var me = this;
+    var uniqueArr = [];
+
+
+
+    me.parentId = me.parentId || "";
+
+    $(document).ready(function () {
+        InitUpload();
+    });
+
+    function onSelect() {
+        InitUpload();
+    }
+
+    onunload = function () {
+        $("#flash_uploader").remove();
+    };
+
+    function InitUpload() {
+        var tableId = getTableId();
+
+        if (!tableId) {
+            $.messager.alert("提示", "请先保存表单信息！", "info", function () {
+                me.fujianTab.tabs('select', 0);
+            });
+            return;
+        }
+
+        //更新删除后的目录
+        @*$.get("@Url.Action("GetFJTree")", {
+            id: tableId,
+            tablename: me.tableName,
+            wjlxxf: me.wjlxxf || ""
+        }, function (result) {
+            var data = eval("(" + result + ")");
+            data = $.grep(data, function (item) {
+                return item.id != tableId
+            });
+            $("#grdAnJian").treegrid("loadData", data);
+        });*@
+        // 初始化Flash上传插件
+        $("#flash_uploader").pluploadQueue({
+            runtimes: 'flash', 	//使用Flash插件
+            url: "@Url.Action("Upload")" + '?parentId=' + me.parentId + '&recordId=' + me.recordId, //服务器端响应页面
+            max_file_size: '1000mb', //最大文件限制
+            chunk_size: '200mb', 	//一次上传数据大小
+            unique_names: true, 	//是否自动生成唯一名称
+            //filters: [				//文件类型限制
+            //    { title: "图片", extensions: "jpg,gif,png,jpeg" },
+            //    { title: "文档", extensions: "doc,docx,ppt,pptx,xls,xlsx,shp,pdf" }
+            //],
+            // 缩放图片
+            //resize: { width: 320, height: 240, quality: 80 },
+            flash_swf_url: '@Url.Content("~/Areas/Workflow/Scripts/plupload/plupload.flash.swf")',
+            init: {
+                FileUploaded: function (up, file, info) {
+                    var result = JSON.parse(info.response);
+                    if (result.success) {
+                        if (me.parentGridType == "datagrid") {
+                            me.parentGrid.datagrid('reload');
+                        }
+                        else {
+                            me.parentGrid.treegrid('reload');
+                        }
+                        if (me.callBack && typeof (me.callBack) == "function") {
+                            me.callBack();
+                        }
+                    }
+                    else {
+                        $.messager.alert("提示", result.message || "上传失败");
+                    }
+                },
+                Error: function (up, args) {
+                    //发生错误
+                    if (args.file) {
+                        alert('[上传错误] 文件:请先保存业务数据');
+                    } else {
+                        alert('[上传错误]' + args);
+                    }
+                }
+            }
+        }); //end 初始化jquery
+    }
+
+    //获取当前目录值
+    function getAnJianPeiZhi(rowData) {
+        if (rowData.text != "无数据") {
+            $("#Wjparent").val(rowData.text);
+            $("#Wjparentid").val(rowData.id);
+        }
+    }
+    //清空所属的目录
+    function Clear() {
+        $("#Wjparent").val("");
+        $("#Wjparentid").val("");
+    }
+
+    //end初始化Flash上传插件
+
+
+
+    //更新目录
+    function append() {
+        var node = $('#tdgFuJian').treegrid('getSelected');
+        if (node.children.length > 0) {
+            $.messager.alert("提示", "只有选择文件才能操作");
+            return;
+        }
+        var wjid = node.id;
+        var comParentid = $('#Wjparents').combotree('getValue')
+        $.get("@Url.Action("UpdateMuLu")", {
+            wjid: wjid,
+            comParentid: comParentid
+        }, function (result) {
+            if (result.success) {
+                var id = $("#Id").val();
+                if (id != undefined && id != "") {
+                    fujianjs.seracher(id);
+                }
+            } else {
+                $.messager.alert("提示", result.Message);
+            }
+        });
+    }
+
+    //保存附件
+    function SaveFujian() {
+        if (uniqueArr.length <= 0) {
+            $.messager.confirm("提示", "还没上传文件哦，您确定保存数据吗?", function (r) {
+                if (r) {
+                    //saveFile();
+                    save();
+                }
+                else {
+                    $.messager.alert("提示", "取消操作");
+                    return;
+                }
+            });
+        } else {
+            //saveFile();
+            save();
+        }
+    }
+    //end保存附件
+    function save() {
+        var tableId = getTableId();
+        var folder = $("#grdAnJian").treegrid('getSelected')
+        var folderId = folder ? folder.id : tableId;
+
+        $.get("@Url.Action("SaveUploadFile")", {
+            fileIds: uniqueArr,
+            fjId: folderId,
+            wjlxxf: me.wjlxxf.split(',')[0],
+            tableName: me.tableName
+        }, function (result) {
+            if (result.success) {
+                uniqueArr.length = 0; //清空数组
+                if (me.parentGrid) {
+                    me.parentGrid.treegrid('reload');
+                }
+                if (me.easyWindow) {
+                    me.easyWindow.window('close');
+                }
+            } else {
+                $.messager.alert("提示", result.Message);
+            }
+        });
+    }
+    function closeWindow() {
+        if (uniqueArr.length > 0) {
+            $.messager.confirm("提示", "上传了文件但未保存，确定关闭吗？", function (r) {
+                if (r && me.easyWindow) {
+                    me.easyWindow.window('close');
+                }
+            });
+        }
+        else if (me.easyWindow) {
+            me.easyWindow.window('close');
+        }
+    }
+    function saveFile() {
+        var tableId = getTableId();
+        if (!tableId) {
+            $.messager.alert("提示", "请先保存表单！");
+        }
+        //var wjlxxf = $("#wjlxxf").val();
+
+        var objWjml = $("#Wjml");
+        var objobjWjmlVal = objWjml.val();
+        if (objobjWjmlVal.length <= 0) {
+            $.messager.alert("提示", "目录不能为空");
+            return;
+        }
+        var val = $('#Wjparentid').val();
+        $.get("@Url.Action("SaveFuJian")", {
+            fileIds: uniqueArr,
+            wjml: objobjWjmlVal,
+            fjparent: val,
+            id: tableId,
+            tablename: me.tableName,
+            wjlxxf: me.wjlxxf
+        }, function (result) {
+            if (result.success) {
+                uniqueArr.length = 0; //清空数组
+                //清空值
+                $("#Wjml").val("");
+                $("#Wjparent").val("");
+                $("#Wjparentid").val("");
+
+                //me.fujianTab.tabs('select', 0);
+                if (me.parentGrid) {
+                    me.parentGrid.treegrid('reload');
+                }
+                if (me.easyWindow) {
+                    me.easyWindow.window('close');
+                }
+
+                return;
+                fujianjs.seracher(tableId);
+                //跳到第一个选项卡
+                $('#tt').tabs('select', 0);
+            } else {
+                $.messager.alert("提示", result.Message);
+            }
+        });
+    }
+
+    function getTableId() {
+        return "id123";
+        var idFields = me.formWindow.document.getElementsByName("Id");
+        if (idFields.length > 0) {
+            return $(idFields[0]).val();
+        }
+    }
+</script>

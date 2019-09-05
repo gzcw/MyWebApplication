@@ -1,0 +1,163 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【SYS_MODEL】Index
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+    ViewBag.CommandHeight = "108px";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section PageCommandAfter{
+
+}
+<table id="SYS_MODEL_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#SYS_MODEL_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		
+		var opts={
+            url: '@Url.Action("GetPaged","Model")',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+            checkbox: true,
+		    singleSelect:true,
+			columns:[[{ field: 'ck', checkbox: true },{ field: 'MODELNAME', title: '模型名称',width:200 },
+{ field: 'CONTROLLERNAME', title: '控制器名称',width:200 },
+{ field: 'AREANAME', title: '区域名称',width:200 },
+{ field: 'MENUNAME', title: '导航菜单名称',width:200 },
+{ field: 'PROJECTID', title: '项目标识',width:100 },
+{ field: 'SORTNUMBER', title: '排序号',width:100 }]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            }
+	    };
+		
+        mygrid.datagrid(opts);
+		
+        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'模型名称',value:'MODELNAME'}
+		     			,		    {text:'控制器名称',value:'CONTROLLERNAME'}
+		     			,		    {text:'区域名称',value:'AREANAME'}
+		     			,		    {text:'导航菜单名称',value:'MENUNAME'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function create() {
+        var url='@Url.Action("Form","Model")';
+        commonhelper.openWindowInWorkArea(url, {
+            frame: true,
+            title: '新增',
+            parentGrid: mygrid
+        });
+    }
+    function update() {
+        var url='@Url.Action("Form","Model")';
+        commonhelper.SingleSelectGrid(mygrid, function (id) {
+            commonhelper.openWindowInWorkArea(url+'?id=' + id, {
+                frame: true,
+                title: '修改',
+                parentGrid: mygrid
+            });
+        });
+    }
+    function del() {
+        commonhelper.RemoveDatagridSelected(mygrid, function (ids, rows) {
+            $.messager.progress();
+            $.ajax({
+                url:'@Url.Action("DeleteEntities","Model")',
+                data: { ids: ids },
+                traditional: true,
+                method: 'post',
+                success: function (result) {
+                    $.messager.progress('close');
+                    if (result.success) {
+                        mygrid.datagrid('clearSelections');
+                        mygrid.datagrid('reload');
+                    }
+                    $.messager.alert("提示", result.msg || "删除成功！");
+                }
+            });
+        });
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+    function select() {
+        commonhelper.MultiSelectGrid(mygrid, function (ids, rows) {
+            if (window.selectCallback) {
+                window.selectCallback(ids, rows);
+                window.easyWindow.window('close')
+            }
+        });
+    }
+    function save() {
+        
+    }
+    function detail() {
+         commonhelper.SingleSelectGrid(mygrid, function (id) {
+                commonhelper.openWindowInWorkArea('@Url.Action("Form","Model")'+'?permission=0&id=' + id, {
+                    frame: true,
+                    title: '查看',
+                    parentGrid: mygrid
+                });
+            });
+    }
+
+    //导出Excel
+    function exportExcel() {
+        var url = '@Url.Action("ExportExcel","Model")';
+        var form = $('<form method="post" action="' + url + '"></form>').appendTo('body');
+        var rows = mygrid.datagrid('getSelections');
+        var opts = mygrid.datagrid('options');
+        
+        if (rows.length == 0) {
+            $.ajax({
+                url: opts.url,
+                async: false,
+                data: $.extend({ page: 1, rows: 10000 }, opts.queryParams),
+                success: function (result) {
+                    rows = result.rows;
+                }
+            });
+        }
+        $("<input type='hidden' name='sheetName' />").appendTo(form).val("模型实体");
+        $("<input type='hidden' name='data' />").appendTo(form).val(JSON.stringify(rows));
+        $("<input type='hidden' name='columns' />").appendTo(form).val(JSON.stringify(opts.columns[0]));
+
+        form.submit().remove();
+    }
+</script>

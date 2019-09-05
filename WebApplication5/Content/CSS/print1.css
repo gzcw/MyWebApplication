@@ -1,0 +1,87 @@
+﻿/*****HTML打印通用******/
+.Noprint{visibility:hidden;}
+.pageBrekAfter{page-break-after: always; /*在标签后换页*/}
+.pageBrekBefore{page-break-before: always; /*在标签前换页*/}
+body{background-color: #FFFFFF !important;}
+/*打印内容样式*/
+.divHorizontal{width:1125px;padding:0;margin:0px auto;font-family: '宋体';line-height:24px;font-size:12pt;}/*横向*/
+.divLongitudinal{width:800px;padding:0;margin:0px auto;font-family: '宋体';line-height:24px;font-size:12pt;}/*纵向*/
+
+/*****实线表格Begin******/
+/*打印表格样式*/
+.printTable {border-collapse: collapse;border-spacing: 0;border-top:1px solid #000000;border-left:1px solid #000000;margin: auto;text-align: center;word-break: break-all;}
+/*tr宽度*/
+.printTable tr {height: 35px;}
+/*打印表格单元格样式*/
+.printTable td, th {border-bottom: 1px solid #000000;border-right: 1px solid #000000;padding: 3px 2px;color:#000000;font-size:12pt;}
+/*红色标记*/
+.printTable span.x {color: red;padding: 0px 5px;vertical-align: middle;}
+/*表单下的文本框*/
+.printTable input{border:0px;padding: 0px 1px;font-family:宋体;font-size:12pt;}
+.printTable textarea {border: 0px;overflow-y: hidden;width: 98%; padding: 0px 1px;font-family:宋体;font-size:12pt;}
+/*****实线表格End******/
+
+/*****无边表格Begin******/
+/*表格样式*/
+.noBorderTable {border:0px;margin-left: auto; margin-right: auto;text-align:left;}
+/*表格单元格样式*/
+.noBorderTable td, th {padding: 3px 2px;color:#000000;font-size:12pt;}
+/*****无边表格End******/
+
+/*from表单*/
+#myfrom td th {text-align: left;}
+/*汇总表单*/
+#divAppend td, th{text-align: center;line-height: 23px;}
+
+
+/*****单个样式Begin******/
+.divLeft{float: left;}
+.divRight{float: right;}
+/*边框优先*/
+.impTable td{border: 0 !important;}
+/*标题*/
+.caption{text-align:center;font-size:x-large;font-weight:800;letter-spacing:2px;padding:3px 0px;}
+/*描述文字*/
+.lblDescribe{padding-top:5px;}
+/*字体大小*/
+.Size10px{font-size:10px;}
+.Size12px{font-size:12px;}
+.Size14px{font-size:14px;}
+.Size16px{font-size:16px;}
+.Size18px{font-size:18px;}
+.Size20px{font-size:20px;}
+.Size22px{font-size:22px;}
+.Size24px{font-size:24px;}
+.Size4pt{font-size:4pt;}
+.Size6pt{font-size:6pt;}
+.Size8pt{font-size:8pt;}
+.Size10pt{font-size:10pt;}
+.Size12pt{font-size:12pt;}
+.Size14pt{font-size:14pt;}
+.Size16pt{font-size:16pt;}
+.Size18pt{font-size:18pt;}
+.Size20pt{font-size:20pt;}
+.Size22pt{font-size:22pt;}
+.Size24pt{font-size:24pt;}
+.Size26pt{font-size:26pt;}
+.Size28pt{font-size:28pt;}
+.Size38pt{font-size:38pt;}
+.xx-small{font-size:xx-small;}
+.x-small{font-size:x-small;}
+.small {font-size:small;}
+.large{font-size:large;}
+.larger{font-size:larger;}
+.x-large{font-size:x-large;}
+.xx-large{font-size:xx-large;}
+/*行间距*/
+.lineH12{line-height:12pt;}
+.lineH14{line-height:14pt;}
+.lineH16{line-height:16pt;}
+.lineH18{line-height:18pt;}
+.lineH20{line-height:20pt;}
+.lineH22{line-height:22pt;}
+.lineH24{line-height:24pt;}
+.lineH26{line-height:26pt;}
+.lineHs {line-height:90%}
+.lineHb {line-height:200%}
+/*****单个样式End******/

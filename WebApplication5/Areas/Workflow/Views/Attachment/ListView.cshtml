@@ -1,0 +1,44 @@
+﻿@{
+    ViewBag.Title = "ListView";
+    Layout = "../Shared/_Layout.cshtml";
+}
+
+<div id="mainPanel" style="width:700px;margin-left:auto;margin-right:auto">
+</div>
+
+@section Scripts{
+    <script>
+        var me = this;
+        me.urlParams = pageCommonJS.getUrlParams();
+        $(document).ready(function () {
+            $.get('@Url.Action("GetAttachmentList", "Attachment")', { recordId: me.urlParams.bwaID }, function (result) {
+                $.each(result.rows, function (index, row) {
+                    $("#mainPanel").append("<img src='" + row.Path + "' style='margin-top:50px' />");
+                    $("#mainPanel").append($("<a href='#' style='margin-left:5px'>删除</a>").linkbutton({
+                        iconCls: 'icon-remove',
+                        onClick: function () {
+                            $.messager.progress();
+                            $.ajax({
+                                url: '@Url.Action("Delete", "Attachment")',
+                                data: { ids: [row.ID] },
+                                traditional: true,
+                                type: 'post',
+                                success: function (result) {
+                                    $.messager.progress('close');
+                                    if (result.success) {
+                                        window.location.reload();
+                                    }
+                                    else {
+                                        $.messager.alert("提示", result.message || "删除失败");
+                                    }
+                                }
+                            });
+                        }
+                    }));
+                    $("#mainPanel").append("<hr/>");
+                })
+            })
+            $.parser.parse();
+        })
+    </script>
+}

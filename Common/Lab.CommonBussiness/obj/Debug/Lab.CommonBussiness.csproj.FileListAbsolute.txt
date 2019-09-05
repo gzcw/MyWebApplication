@@ -1,0 +1,12 @@
+E:\Projects\HR.Web\Common\Lab.CommonBussiness\bin\Debug\Lab.CommonBussiness.dll
+E:\Projects\HR.Web\Common\Lab.CommonBussiness\bin\Debug\Lab.CommonBussiness.pdb
+E:\Projects\HR.Web\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.csproj.CoreCompileInputs.cache
+E:\Projects\HR.Web\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.dll
+E:\Projects\HR.Web\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.pdb
+E:\Projects\HR.Web\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.csprojAssemblyReference.cache
+E:\Projects\SqlServers\WebApplication\Common\Lab.CommonBussiness\bin\Debug\Lab.CommonBussiness.dll
+E:\Projects\SqlServers\WebApplication\Common\Lab.CommonBussiness\bin\Debug\Lab.CommonBussiness.pdb
+E:\Projects\SqlServers\WebApplication\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.csproj.CoreCompileInputs.cache
+E:\Projects\SqlServers\WebApplication\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.dll
+E:\Projects\SqlServers\WebApplication\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.pdb
+E:\Projects\SqlServers\WebApplication\Common\Lab.CommonBussiness\obj\Debug\Lab.CommonBussiness.csprojAssemblyReference.cache

@@ -1,0 +1,109 @@
+﻿@{
+    Layout = "";
+}
+<!DOCTYPE html>
+<html>
+<head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    <meta charset="utf-8" />
+    <title>广东省梅州市不动产登记信息系统</title>
+    @Styles.Render("~/Content/JQueryEasyUI/themes/Style")
+    @Styles.Render("~/Content/JQueryEasyUI/themes/default/Style")
+    @Styles.Render("~/Content/CustomCss/Style")
+    @Scripts.Render("~/JQuery/Script")
+    <script src="http://localhost/ZSGT.WebUI/Scripts/JQueryEasyUI/jquery.easyui.min.js"></script>
+    @Scripts.Render("~/JQueryEasyUI/Script")
+</head>
+<body>
+    <form id="BWA_form" method="post">
+        <table style="width: 90%">
+            <tr>
+                <td colspan="4">
+                    <input type="hidden" name="ID" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">受理编号：</td>
+                <td class="fieldTd">
+                    <input class="easyui-validatebox" name="SLBH" />
+                </td>
+                <td class="labelTd">计划完成时间：</td>
+                <td class="fieldTd">
+                    <input class="easyui-datetimebox" data-options="required:true" name="SHJHWCRQ" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">分组名称：</td>
+                <td class="fieldTd">
+                    <input class="easyui-validatebox" name="FZMC" readonly="readonly" />
+                </td>
+                <td class="labelTd">申请类型：</td>
+                <td class="fieldTd">
+                    <input class="easyui-validatebox" name="BWLXMC" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">申请人：</td>
+                <td class="fieldTd">
+                    <input name="SQRID" />
+                </td>
+                <td class="labelTd">联系电话：</td>
+                <td class="fieldTd">
+                    <input class="easyui-validatebox" name="LXDH" readonly="readonly" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">通讯地址：</td>
+                <td class="fieldTd colspanFieldTd" colspan="3">
+                    <input class="easyui-validatebox" name="TXDZ" readonly="readonly" style="width:100%" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">图件号：</td>
+                <td class="fieldTd">
+                    <input class="easyui-validatebox" name="TJH" />
+                </td>
+                <td class="labelTd">立案时间：</td>
+                <td class="fieldTd">
+                    <input class="easyui-datetimebox" data-options="required:true" name="REGISTERDATE" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">坐落：</td>
+                <td class="fieldTd colspanFieldTd" colspan="3">
+                    <input class="easyui-validatebox" name="ZL" style="width:100%" />
+                </td>
+            </tr>
+            <tr>
+                <td class="labelTd">备注：</td>
+                <td class="fieldTd colspanFieldTd" colspan="3">
+                    <textarea name="BZ" style="width:100%"></textarea>
+                </td>
+            </tr>
+        </table>
+    </form>
+    <button onclick="save()">save</button>
+</body>
+</html>
+<script>
+    var myform = $('#BWA_form');
+    $(document).ready(function () {
+
+    });
+    function save() {
+        //$.ajax({
+        //    url: '/Workflow/SJCLMX/Save',
+        //    method: 'post',
+        //    success: function () {
+        //        alert(0);
+        //    }
+        //})
+        myform.form('submit', {
+            url: '/Workflow/SJCLMX/Save',
+            success: function (result) {
+                $.messager.alert('tip', 1);
+            }
+        })
+    }
+</script>
+

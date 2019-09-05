@@ -1,0 +1,228 @@
+﻿@{
+    ViewBag.Title = "业务查询";
+    Layout = "../Shared/_Layout.cshtml";
+    ViewBag.searchHeight = 106;
+}
+@section HardCodePageButtons{
+    <div id="searchPanel"></div>
+    <div class="toolbar panel-header">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'information_16'" plain="true" onclick="View()">查看</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-process'" plain="true" onclick="FlowChart()">进度情况</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    </div>
+}
+<script src="~/Areas/Workflow/Scripts/WorkflowHelper.js"></script>
+<script src="~/Areas/Workflow/Application/BWA/Grid.js"></script>
+<table id="wfApplying"></table>
+<style>
+    .window > .panel-body {
+        padding: 2px 2px;
+    }
+</style>
+
+<script>
+    var me = this;
+    var mygrid = $('#wfApplying');
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var ywfz = pageCommonJS.getUrlParam('YWFZID');
+        if (ywfz) {
+            $.each(ywfz.split(','), function (index, item) {
+                var isLast = index == (ywfz.split(',').length - 1);
+                filters.push({
+                    left: index == 0 ? '(' : '',
+                    property: 'YWFZID',
+                    value: item,
+                    relation: '=',
+                    right: isLast ? ')' : '',
+                    connect: index == 0 ? 'AND' : 'OR'
+                });
+            })
+        }
+
+        mygridConfig = $.extend(new BWA_GridConfig(mygrid, { isYWCX: true }), {
+            border: false,
+            url: '@Url.Action("GetPagedOfChaoSong", "BWA")',
+            singleSelect: true,
+            queryParams: {
+                filterStr: JSON.stringify(filters)
+            },
+            onDblClickRow: function (index, row) {
+                var workflowParams = {
+                    workflowNo: row.FK_FLOW,
+                    workID: row.WORKID,
+                    nodeID: row.FK_NODE,
+                    nodeName: row.NODENAME,
+                    wfState: row.WFSTATE,
+                    bwaID: row.ID,
+                    privilege: "read",
+                    permission: 0,
+                    SLBH: row.SLBH
+                };
+                var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+                pageCommonJS.openWindowAsRedirect(url); // 在用户点双击节点的时候查看
+            }
+        });
+        pageCommonJS.showDataGrid(mygrid, mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify([])
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchPanel").searchpanel({
+            border: false,
+            items: [{
+                text: '业务编号',
+                value: 'SLBH'
+            }, {
+                text: '业务名称',
+                value: 'BWLXID',
+                easyType: 'mycombotree',
+                easyConfig: {
+                    valueField: 'ID',
+                    textField: 'BWLXMC',
+                    url: '@Url.Action("GetTreeData", "BWLX")',
+                    parentId: 'YWFZID',
+                    state: 'closed'
+                }
+            }
+            //, {
+            //    text: '节点名称',
+            //    value: 'NODENAME'
+            //}
+            , {
+                text: '发起用户',
+                value: 'SJR'
+            }, {
+                text: '呈批内容',
+                value: 'ZL'
+            }, {
+                text: '承办部门',
+                value: 'ORGANIZATIONID',
+                easyType: 'combobox',
+                easyConfig: {
+                    valueField: 'NO',
+                    textField: 'NAME',
+                    url: '@Url.Action("GetDepartmentData", "CommonBussiness")'
+                }
+            }, {
+                text: '当前审批部门',
+                value: 'JBR_ORGANIZATIONID',
+                easyType: 'combobox',
+                easyConfig: {
+                    valueField: 'NO',
+                    textField: 'NAME',
+                    url: '@Url.Action("GetDepartmentData", "CommonBussiness")'
+                }
+            },
+            {
+                text: '环节状态',
+                value: 'HJZT1',
+                easyType: 'combobox',
+                easyConfig: {
+                    data: [{ value: '办理中(派件中)', text: '办理中(派件中)' }, { value: '已完成', text: '已完成' }, { value: '已作废', text: '已作废' }]
+                }
+            },
+            {
+                text: '收件日期',
+                value: 'SJRQ',
+                easyType: 'datebox',
+                dataType:'datetime',
+                relation:'>='
+            },
+            {
+                text: '至',
+                value: 'SJRQ',
+                easyType: 'datebox',
+                dataType: 'datetime',
+                relation:'<'
+            }
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function UnSend() {
+        var record = $('#wfApplying').datagrid('getSelected');
+        pageCommonJS.Ajax({
+            url: RootDirectory + '/Workflow/WfFlow/Flow_DoUnSend',
+            data: { flowNo: record.FK_FLOW, workId: record.WORKID },
+            success: function (result) {
+                if (result.success) {
+                    $('#wfApplying').datagrid("reload");
+                }
+            }
+        });
+    }
+
+    //进度情况
+    function FlowChart() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, record) {
+            WorkflowHelper.ShowWorkflowChart(record.ID);
+        })
+    }
+
+    //刷新
+    function Refresh() {
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+
+    //查看
+    function View() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var workflowParams = {
+                workflowNo: row.FK_FLOW,
+                workID: row.WORKID,
+                nodeID: row.FK_NODE,
+                nodeName: row.NODENAME,
+                wfState: row.WFSTATE,
+                bwaID: row.ID,
+                privilege: "read",
+                permission: 0,
+                SLBH: row.SLBH
+
+            };
+            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+
+            pageCommonJS.openWindowAsRedirect(url);
+        })
+    }
+    function Search() { }
+
+    //快速打印
+    function Print() {
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            var url = RootDirectory + "/PrintCommon/FastPrint?nodeId=" + row.FK_NODE + "&bwlxId=" + row.BWLXID;
+            window.location.href = url;
+        })
+    }
+
+    function BwaMove() {
+        var rows = mygrid.datagrid('getSelections');
+        if (rows) {
+            var ywhArr = [];
+            for (var i = 0 ; i < rows.length; i++) {
+                ywhArr.push(rows[i].SLBH);
+            }
+            var ywhs = ywhArr.join(",");
+            ywhs = encodeURIComponent(ywhs);
+            var url = '@Url.Action("AJYJQD", "SLSQ", new { area =""})' + "?ywhs=" + ywhs;
+
+            window.open(url, '案件移交清单');
+        }
+    }
+</script>

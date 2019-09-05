@@ -1,0 +1,258 @@
+body {
+    height: 100%;
+    background-image: url(../images/bg.jpg);
+    margin: 0px;
+}
+.flowchart-demo .windows {
+    border: 1px solid #346789;
+    box-shadow: 2px 2px 19px #aaa;
+    -o-box-shadow: 2px 2px 19px #aaa;
+    -webkit-box-shadow: 2px 2px 19px #aaa;
+    -moz-box-shadow: 2px 2px 19px #aaa;
+    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
+    /*opacity: 0.8;*/
+    filter: alpha(opacity=80);
+    text-align: center;
+    z-index: 20;
+    position: absolute;
+    background-color: #eeeeef;
+    color: black;
+    font-family: helvetica;
+    padding: 1em;
+    font-size: 1em;
+    /*width: 9em;*/
+    height: 3.5em;
+    line-height: 3.5em;
+}
+
+.ep {
+    position: absolute;
+    bottom: 37%;
+    right: 5px;
+    width: 1em;
+    height: 1em;
+    background-color: orange;
+    cursor: pointer;
+    box-shadow: 0px 0px 2px black;
+    -webkit-transition: -webkit-box-shadow 0.25s ease-in;
+    -moz-transition: -moz-box-shadow 0.25s ease-in;
+    transition: box-shadow 0.25s ease-in;
+}
+
+    .flowchart-demo .windows:hover {
+        box-shadow: 2px 2px 19px #444;
+        -o-box-shadow: 2px 2px 19px #444;
+        -webkit-box-shadow: 2px 2px 19px #444;
+        -moz-box-shadow: 2px 2px 19px #444;
+        opacity: 0.6;
+        filter: alpha(opacity=60);
+    }
+
+.flowchart-demo .bigwindow {
+    border: 1px solid #346789;
+    box-shadow: 2px 2px 19px #aaa;
+    -o-box-shadow: 2px 2px 19px #aaa;
+    -webkit-box-shadow: 2px 2px 19px #aaa;
+    -moz-box-shadow: 2px 2px 19px #aaa;
+    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
+    /* opacity: 0.8; */
+    filter: alpha(opacity=80);
+    text-align: center;
+    z-index: 20;
+    position: absolute;
+    background-color: #eeeeef;
+    color: black;
+    font-family: helvetica;
+    padding: 1em;
+    font-size: 1em;
+    /* width: 9em; */
+    width: 80px;
+    height: 3.5em;
+    line-height: 1.2em;
+    /*height: 3.5em;
+line-height: 3.5em;*/
+}
+
+    .flowchart-demo .bigwindow:hover {
+        box-shadow: 2px 2px 19px #444;
+        -o-box-shadow: 2px 2px 19px #444;
+        -webkit-box-shadow: 2px 2px 19px #444;
+        -moz-box-shadow: 2px 2px 19px #444;
+        opacity: 0.6;
+        filter: alpha(opacity=60);
+    }
+
+
+    
+.flowchart-demo .bigwindow1 {
+    border: 1px solid #346789;
+    box-shadow: 2px 2px 19px #aaa;
+    -o-box-shadow: 2px 2px 19px #aaa;
+    -webkit-box-shadow: 2px 2px 19px #aaa;
+    -moz-box-shadow: 2px 2px 19px #aaa;
+    -moz-border-radius: 0.5em;
+    border-radius: 0.5em;
+   
+    filter: alpha(opacity=80);
+    text-align: center;
+    z-index: 20;
+    position: absolute;
+    background-color: #eeeeef;
+    color: black;
+    font-family: helvetica;
+    padding: 1em;
+    font-size: 1em;
+   
+    width: 80px;
+    height: 3.5em;
+    line-height: 1.8em;
+   
+}
+
+    .flowchart-demo .bigwindow1:hover {
+        box-shadow: 2px 2px 19px #444;
+        -o-box-shadow: 2px 2px 19px #444;
+        -webkit-box-shadow: 2px 2px 19px #444;
+        -moz-box-shadow: 2px 2px 19px #444;
+        opacity: 0.6;
+        filter: alpha(opacity=60);
+    }
+
+
+.flowchart-demo .active {
+    border: 1px dotted green;
+}
+
+.flowchart-demo .hover {
+    border: 1px dotted red;
+}
+
+#flowchartWindow1 {
+    top: 20em;
+    left: 5.5em;
+}
+
+#flowchartWindow2 {
+    top: 20em;
+    left: 18.5em;
+}
+
+#flowchartWindow3 {
+    top: 11em;
+    left: 31.5em;
+}
+
+#flowchartWindow4 {
+    top: 29em;
+    left: 31.5em;
+}
+
+#flowchartWindow5 {
+    top: 29em;
+    left: 44.5em;
+}
+
+#flowchartWindow6 {
+    top: 20em;
+    left: 57.5em;
+}
+
+#flowchartWindow7 {
+    top: 38em;
+    left: 44.5em;
+}
+
+#flowchartWindow8 {
+    top: 2em;
+    left: 70.5em;
+}
+
+
+#flowchartWindow9 {
+    top: 11em;
+    left: 70.5em;
+}
+
+#flowchartWindow10 {
+    top: 20em;
+    left: 70.5em;
+}
+
+#flowchartWindow11 {
+    top: 29em;
+    left: 70.5em;
+}
+
+#flowchartWindow12 {
+    top: 38em;
+    left: 70.5em;
+}
+
+#flowchartWindow13 {
+    top: 2em;
+    left: 84.5em;
+}
+
+#flowchartWindow14 {
+    top: 29em;
+    left: 84.5em;
+}
+
+#flowchartWindow15 {
+    top: 38em;
+    left: 84.5em;
+}
+
+/*#flowchartWindow16 {
+    top: 37em;
+    left: 93.5em;
+}*/
+
+#flowchartWindow16 {
+    top: 47em;
+    left: 84.5em;
+}
+
+.flowchart-demo ._jsPlumb_connector {
+    z-index: 4;
+}
+
+.flowchart-demo ._jsPlumb_endpoint, .endpointTargetLabel, .endpointSourceLabel {
+    z-index: 21;
+    cursor: pointer;
+}
+
+.flowchart-demo .aLabel {
+    background-color: white;
+    padding: 0.4em;
+    font: 12px sans-serif;
+    color: #444;
+    z-index: 21;
+    border: 1px dotted gray;
+    opacity: 0.8;
+    filter: alpha(opacity=80);
+    cursor: pointer;
+}
+
+    .flowchart-demo .aLabel._jsPlumb_hover {
+        background-color: #5C96BC;
+        color: white;
+        border: 1px solid white;
+    }
+
+
+/** ELEMENTS **/
+.chart-demo .windows {
+    border: 0.1em dotted #d4e06b;
+    width: 14em;
+    height: 4em;
+    line-height: 4em;
+}
+
+    /** HOVER EFFECTS **/
+    .chart-demo .windows:hover, .chart-demo .windows._jsPlumb_source_hover, .chart-demo .windows._jsPlumb_target_hover {
+        border: 1px solid orange;
+        color: orange;
+    }

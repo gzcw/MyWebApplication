@@ -1,0 +1,198 @@
+﻿@{
+    ViewBag.Title = "Designer";
+}
+
+<style>
+    .selected {
+        background-color: gray;
+    }
+
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+
+<div id="main" class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north',split:true" style="height:100px;">
+        <a href="#" id="saveBtn" class="easyui-linkbutton" style="margin-top:5px" data-options="iconCls: 'icon-reload'" onclick="Save()">保存</a>
+        <a href="#" class="easyui-linkbutton" style="margin-top: 5px" data-options="iconCls: 'icon-remove'" onclick="Delete()">删除</a>
+        <hr />
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-label'" style="height:30px;" onclick="SelectComponent('Label')">标签(Label)</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-input'" style="height:30px;" onclick="SelectComponent('Input')">文本框(Input)</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-input'" style="height:30px;" onclick="SelectComponent('Number')">数值输入框(Input)</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-date'" style="height:30px;" onclick="SelectComponent('Date')">日期控件(Date)</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-textarea'" style="height:30px;" onclick="SelectComponent('TextArea')">多行文本框(TextArea)</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-droplist'" style="height:30px;" onclick="SelectComponent('DropList')">下拉框(DropList)</a>
+    </div>
+    <div data-options="region:'center'" style="padding:5px;background:#eee;">
+        <iframe id="panelIframe" src="@Url.Action("Panel", "FormDesigner", new { formId = ViewBag.id })" frameborder="0" width="1024" height="768"></iframe>
+    </div>
+    <div id="southPanel" data-options="region:'south',title:'设置',split:true" style="height:150px;">
+        <form id="designForm">
+            <table cellpadding="0" cellspacing="0" style="width: 700px;margin-top:10px;" class="formtable">
+                <tr>
+                    <th>名称(中文)：</th>
+                    <td><input name="DISPLAYNAME" class="esayui-validatebox" onchange="ChangeDisplayName(this.value)" /></td>
+                    <th>文本：</th>
+                    <td><input name="TEXT" class="esayui-validatebox" onchange="ChangeTEXT(this.value)" /></td>
+                </tr>
+                <tr>
+                    <th>宽度：</th>
+                    <td><input name="WIDTH" class="esayui-numberbox" onchange="ChangeWIDTH(this.value)" /></td>
+                    <th>高度：</th>
+                    <td><input name="HEIGHT" class="esayui-numberbox" onchange="ChangeHEIGHT(this.value)" /></td>
+                </tr>
+                <tr>
+                    <th>列名(数据库)：</th>
+                    <td><input name="COLUMNNAME" class="esayui-validatebox" onchange="ChangeColumnName(this.value)" /></td>
+                    <th>不否必填</th>
+                    <td>
+                        <select id="SFBT" name="SFBT" class="easyui-combobox">
+                            <option value="0">否</option>
+                            <option value="1">是</option>
+                        </select>
+                    </td>
+                </tr>
+            </table>
+        </form>
+    </div>
+</div>
+
+
+<script>
+    var me = this;
+    me.myform = $("#designForm");
+
+    $(document).ready(function () {
+        initForm();
+    })
+
+    //初始化表单
+    function initForm() {
+        $('#SFBT').combobox({
+            onChange: ChangeSFBT
+        });
+    }
+
+    //选择控件触发事件
+    function SelectComponent(componentType) {
+        $.extend($("#panelIframe")[0].contentWindow, {
+            createComponentType: componentType
+        });
+
+        $("#panelIframe")[0].contentWindow.setCrossCur();
+    }
+
+    //保存
+    function Save() {
+        $("#panelIframe")[0].contentWindow.Save();
+    }
+
+    //删除
+    function Delete() {
+        $("#panelIframe")[0].contentWindow.Delete();
+    }
+
+    //加载设计表单
+    function LoadDesignForm(data, selectComponent) {
+        me.selectComponent = selectComponent;
+        var disableFields = "";
+        switch (me.selectComponent.attr('ZJLX')) {
+            case 'Label': disableFields = "COLUMNNAME,DISPLAYNAME"; break;
+            case 'Input': disableFields = "TEXT"; break;
+            case 'Date': disableFields = "TEXT"; break;
+            case 'DropList': disableFields = ""; break;
+            case 'TextArea': disableFields = "TEXT"; break;
+            default: disableFields = ""; break;
+        }
+        var disableFieldList = disableFields.split(',');
+
+        $('#designForm').find('input').each(function (index, item) {
+            if (disableFieldList.indexOf($(item).attr('name')) >= 0) {
+                $(item).attr('disabled', 'disabled');
+            }
+            else {
+                $(item).removeAttr('disabled');
+            }
+        });
+        $("#designForm").form('load', data);
+    }
+
+    //列名OnChange事件
+    function ChangeColumnName(val) {
+        var targetId = $("#panelIframe")[0].contentWindow.$('.selected').attr("targetId");
+        var target = $("#panelIframe")[0].contentWindow.$("#" + targetId);
+
+        target.attr('COLUMNNAME', val);
+    }
+
+    //文本OnChange事件
+    function ChangeTEXT(val) {
+        if (me.selectComponent && me.selectComponent[0].nodeName == "DIV") {
+            me.selectComponent.html('<span class="x">*</span>' + val);
+            me.selectComponent.attr('TEXT', val);
+            if (me.selectComponent.attr("SFBT") == 0) {
+                me.selectComponent.children('span').hide();
+            }
+        }
+
+        me.selectComponent.attr('TEXT', val);
+    }
+
+    //宽度OnChange事件
+    function ChangeWIDTH(val) {
+        var targetId = $("#panelIframe")[0].contentWindow.$('.selected').attr("targetId");
+        var target = $("#panelIframe")[0].contentWindow.$("#" + targetId);
+        $("#panelIframe")[0].contentWindow.$('.selected').css('width', val);
+        target.attr('WIDTH', val);
+    }
+
+    //高度OnChange事件
+    function ChangeHEIGHT(val) {
+        var targetId = $("#panelIframe")[0].contentWindow.$('.selected').attr("targetId");
+        var target = $("#panelIframe")[0].contentWindow.$("#" + targetId);
+        $("#panelIframe")[0].contentWindow.$('.selected').css('height', val);
+        target.attr('HEIGHT', val);
+    }
+
+    //名称OnChange事件
+    function ChangeDisplayName(val) {
+        var targetId = $("#panelIframe")[0].contentWindow.$('.selected').attr("targetId");
+        var target = $("#panelIframe")[0].contentWindow.$("#" + targetId);
+
+        target.attr('DISPLAYNAME', val);
+
+    }
+
+    //是否必填OnChange事件
+    function ChangeSFBT(val) {
+        var contentWin = $("#panelIframe")[0].contentWindow;
+        var targetId = contentWin.$('.selected').attr("targetId");
+        var target = contentWin.$("#" + targetId);
+
+        if (me.selectComponent && me.selectComponent[0].nodeName == "LABEL") {
+            if (val == "0") {
+                me.selectComponent.children('span').hide();
+            }
+            else {
+                me.selectComponent.children('span').show();
+            }
+        }
+        target.attr('SFBT', val);
+        
+        if (val == 1 && target.attr('ZJLX') != "Label") {
+            contentWin.$('.selected').addClass('required');
+        }
+        else {
+            contentWin.$('.selected').removeClass('required');
+        }
+    }
+
+</script>

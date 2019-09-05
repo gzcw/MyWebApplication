@@ -1,0 +1,77 @@
+﻿@*-------------------------------------------------------------------
+    【办文材料】Grid
+-------------------------------------------------------------------*@
+<script src="~/Areas/Workflow/Application/BWCL/Grid.js"></script>
+
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+}
+
+@section searchform{
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="Create()">新增</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="Update()">修改</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="Delete()">删除</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-ok'" plain="true" onclick="Select()">选择</a>
+    <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'" plain="true" >搜索</a>
+</div>
+}
+<input type="hidden" id="BWLCID" value="@ViewBag.ID" />
+<table id="BWCL_Grid"></table>
+<script>
+    var me = this;
+    var mygrid = $('#BWCL_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [{
+                text: '材料名称',
+                value: 'CLMC'
+            }, {
+                text: '材料分组',
+                value: 'CLFZ'
+            }],
+            parentGrid: mygrid
+        });
+    }
+
+    function initGrid() {
+        var filters = me.filters || [];
+        mygridConfig = $.extend(new BWCL_GridConfig(mygrid, { showSelection: true }), {
+            border:true,
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders:'SORTORDER ASC'
+            }
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters)
+        }
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+        mygridConfig.Update();
+    }
+    function Delete() {
+        mygridConfig.Delete();
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+    function Select() {
+        mygridConfig.Select();
+    }
+</script>

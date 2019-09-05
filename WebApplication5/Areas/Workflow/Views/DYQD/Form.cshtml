@@ -1,0 +1,143 @@
+﻿@*-------------------------------------------------------------------
+    【DYQD】Grid
+    -------------------------------------------------------------------*@
+@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>
+
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="save()">保存</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="reset()">重置</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="cancel()">取消</a>
+</div>
+
+<form id="DYQD_form" method="post">
+    <input type="hidden" name="ID" />
+    <input type="hidden" name="BWLX_ID" />
+    <table cellpadding="0" cellspacing="0" style="width: 700px" class="formtable">
+        <tr>
+            <th>打印材料名称：</th>
+            <td>
+                <input class='easyui-validatebox h-text' name='NAME' />
+            </td>
+            <th>流程节点：</th>
+            <td>
+                <input id="nodeId" class="h-text" name="NODE_ID" />
+            </td>
+        </tr>
+        <tr>
+            <th>路径：</th>
+            <td>
+                <input class='easyui-validatebox h-text' name='URL' />
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#DYQD_form');
+
+    $(document).ready(function () {
+        initForm();
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            }
+            //buttons: [{
+            //    iconCls: 'icon-add',
+            //    text: '保存',
+            //    handler: save
+            //}, '-', {
+            //    iconCls: 'icon-edit',
+            //    text: '重置',
+            //    handler: reset
+            //}, '-', {
+            //    iconCls: 'icon-remove',
+            //    text: '取消',
+            //    handler: cancel
+            //}]
+        });
+        $("#nodeId").combobox({
+            valueField: 'NODEID',
+            textField: 'NAME',
+            url: '@Url.Action("GetNodesByBwlxId", "NODE")?bwlxId=' + me.defaultValues.BWLX_ID
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","DYQD")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("Save","DYQD")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>

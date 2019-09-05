@@ -1,0 +1,73 @@
+﻿@{
+    Layout = "~/Views/Shared/_BaseLayout.cshtml";
+}
+<div style="padding: 5px;">
+    <a class="easyui-linkbutton" onclick="Save()">保存</a>
+    <a class="easyui-linkbutton" onclick="Close()">关闭</a>
+</div>
+<form id="fileUpdateForm" method="post">
+    <input type="hidden" name="ID" />
+    <table>
+        <tr>
+            <td>目录：</td>
+            <td>
+                <input id="FjId" name="Parent_id" style="width: 150px;" data-options="editable:false,width:250" />
+            </td>
+        </tr>
+        <tr>
+            <td>文件名：</td>
+            <td>
+                <input class="easyui-validatebox" name="Name" readonly="readonly" style="width: 250px;" />
+            </td>
+        </tr>
+    </table>
+</form>
+<script>
+    var me = this;
+    var myform = $("#fileUpdateForm");
+
+    $(document).ready(function () {
+        $("#FjId").mycombotree({
+            valueField: 'ID',
+            textField: 'Name',
+            url: RootDirectory + '/CommonBussiness/Attachment/GetDirectoryList',
+            queryParams: { recordId: me.recordId }
+        });
+        if (me.formId) {
+            myform.form({
+                onLoadSuccess: function (result) {
+                    //var val = $("#FjId").combotree('getValue');
+                    //var text = $("#FjId").combotree('getText');
+                    //if (val == text) {
+                    //    $("#FjId").combotree('clear');
+                    //}
+                }
+            });
+            myform.form('load', RootDirectory + '/CommonBussiness/Attachment/LoadForm/' + me.formId);
+        }
+    });
+
+    function Save() {
+        myform.form('submit', {
+            url: RootDirectory + '/CommonBussiness/Attachment/Save',
+            onSubmit: function (param) {
+                //if (!param.FjId) {
+                //    param.FjId = me.dxId;
+                //}
+            },
+            success: function (data) {
+                if (me.parentGrid) {
+                    me.parentGrid.treegrid('reload');
+                }
+                if (me.easyWindow) {
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    function Close() {
+        if (me.easyWindow) {
+            me.easyWindow.window('close');
+        }
+    }
+</script>

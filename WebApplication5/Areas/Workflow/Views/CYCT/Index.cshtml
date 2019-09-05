@@ -1,0 +1,95 @@
+﻿@*-------------------------------------------------------------------
+    【CYCT】Index
+    -------------------------------------------------------------------*@
+@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_GridLayout.cshtml";
+
+}
+<script src="~/Areas/Workflow/Application/CYCT/Grid.js"></script>
+
+@section searchform{
+    <div class="toolbar panel-header">
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="Create()">新增</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="Update()">修改</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="Delete()">删除</a>
+        <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-reload'" plain="true" onclick="Refresh()">刷新</a>
+        <a id="searchBtn" href="#" data-options="iconCls: 'icon-search'" plain="true">查询</a>
+    </div>
+}
+<table id="CYCT_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#CYCT_Grid');
+    var mygridConfig = {};
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchBtn();
+    });
+
+    function initGrid() {
+        var filters = me.filters || [];
+
+        var defaultConfig = new CYCT_GridConfig(mygrid, { defaultValues: me.defaultValues || {} });
+
+        mygridConfig = $.extend(defaultConfig, {
+            queryParams: {
+                filterStr: JSON.stringify(filters),
+                orders: "SORTORDER"
+            },
+            border: true,
+            idField: 'ID'
+        });
+        mygrid.datagrid(mygridConfig);
+
+        mygrid.queryParams = {
+            filterStr: JSON.stringify(filters),
+            orders: "SORTORDER"
+        }
+    }
+
+    function initSearchBtn() {
+        $("#searchBtn").searchbutton({
+            items: [
+				{ text: '词条名称', value: 'CTMC' },
+				{ text: '创建用户', value: 'CREATOR' },
+            ],
+            parentGrid: mygrid
+        });
+    }
+
+    function Create() {
+        mygridConfig.Create();
+    }
+    function Update() {
+       
+        var flag = true;
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            if (row.CREATOR == "admin") {
+                $.messager.alert("提示", "公用的常用词条不能修改！");
+                flag = false;
+            }
+        })
+        if (flag) {
+            mygridConfig.Update();
+        }
+    }
+    function Delete() {
+
+        var flag = true;
+        pageCommonJS.SingleSelectGrid(mygrid, function (id, row) {
+            if (row.CREATOR == "admin") {
+                $.messager.alert("提示", "公用的常用词条不能删除！");
+                flag = false;
+            }
+        })
+        if (flag) {
+            mygridConfig.Delete();
+        }
+    }
+    function Refresh() {
+        mygridConfig.Refresh();
+    }
+</script>

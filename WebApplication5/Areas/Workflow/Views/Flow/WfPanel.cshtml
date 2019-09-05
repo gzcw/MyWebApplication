@@ -1,0 +1,604 @@
+﻿@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+<div class="easyui-layout" data-options="fit:true">
+    <div data-options="region:'north'" style="height:32px;">
+        <div class="toolbar panel-header" id="toolbar">
+            <a href="#" id="btnSave" class="easyui-linkbutton" data-options="iconCls: 'icon-save'" plain="true" onclick="Save()">保存</a>
+            <a href="#" id="btnSend" class="easyui-linkbutton" data-options="iconCls: 'arrow-right'" plain="true" onclick="Send()">发送</a>
+            <a href="#" id="btnOnSendBack" class="easyui-linkbutton" data-options="iconCls: 'arrow-turn-left'" plain="true" onclick="Return()">退回</a>
+            <a id="btnOnReturn" href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-clear'" plain="true" onclick="DeleteWork()">作废</a>
+            <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-back',permission:0" plain="true" onclick="Back()">返回</a>
+        </div>
+    </div>
+    <div data-options="region:'center'">
+        <div id="wfpanel"></div>
+    </div>
+</div>
+<div id="selectDialog">
+    <ul id="nodeTree"></ul>
+</div>
+<div id="returnDialog">
+    <ul id="returnNodeTree"></ul>
+</div>
+
+<script>
+    var me = this;
+    var wfpanel = $("#wfpanel");
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initParams();
+        initButton();
+        loadNodeInfo();
+        initPanel();
+    });
+
+    //获取页面参数
+    function initParams() {
+        me.workflowParams = commonhelper.getUrlParams();
+        me.workflowParams.BWLXMC = decodeURI(me.workflowParams.BWLXMC);
+        me.workflowParams.YWFZ = decodeURI(me.workflowParams.YWFZ);
+    }
+
+    //初始化按钮
+    function initButton() {
+        if (me.workflowParams.privilege == "read") {
+            $('#btnSave').remove();
+            $('#btnSend').remove();
+        }
+        else {
+            $('#btnSave').linkbutton('enable');
+            $('#btnSend').linkbutton('enable')
+        }
+
+        if (me.workflowParams.privilege == "read" || me.workflowParams.wfState == 0 || me.workflowParams.wfState == 1) {
+            $('#btnOnSendBack').remove();
+            $('#btnOnReturn').remove();
+        }
+        else {
+            $('#btnOnSendBack').linkbutton('enable');
+            $('#btnOnReturn').linkbutton('enable');
+            $('#btnPaiZhao').linkbutton('enable');
+        }
+        //抄送的案件只能发送
+        if (me.workflowParams.LISTTYPE == 1) {
+            $('#btnOnSendBack').linkbutton('disable');
+            $('#btnOnReturn').linkbutton('disable');
+        }
+        //if (decodeURI(me.workflowParams.nodeName) != "收件") {
+        //    $('#btnPaiZhao').remove();
+        //}
+        if (me.workflowParams.ISLASTNODE == "1") {
+            $('#btnSend').find('.l-btn-text').text("案件完成");
+        }
+        if (me.workflowParams.showbuttons == "0") {
+            $('#workPageLayout').layout("remove", 'north');
+        }
+        if (me.workflowParams.ShowSave == "1")
+            $('#btnSend').remove();
+    }
+
+    //获取当前节点信息
+    function loadNodeInfo() {
+        $.ajax({
+            url: '@Url.Action("LoadForm", "Node")',
+            data: { id: urlParams.NodeID },
+            async: false,
+            success: function (node) {
+                me.node = node;
+            }
+        });
+    }
+
+    //初始化面板
+    function initPanel() {
+        wfpanel.tabs({
+            border: true,
+            fit: true
+        });
+
+        initTabItems();
+    }
+
+    //初始化审批页签
+    function initTabItems() {
+        //$.messager.progress();
+        $.ajax({
+            url: '@Url.Action("GetData_NodePage", "Node")',
+            data: { NodeID: urlParams.NodeID },
+            success: function (result) {
+                $.each(result, function (index, item) {
+                    addItem(item, index == result.length - 1);
+                });
+                wfpanel.tabs('select', 0);
+                $.messager.progress('close');
+            }
+        });
+    }
+
+    function addItem(item) {
+
+        //var mypermission = me.workflowParams.permission == 0 ? me.workflowParams.permission : item.Permission;
+
+        //var baseParams = $.extend({}, me.workflowParams, {
+        //    privilege: me.privilege,
+        //    permission: mypermission,
+        //    nodeId: me.workflowParams.nodeID
+        //});
+        var baseParamsStr = $.param(urlParams);
+        var url = item.Url.indexOf('?') >= 0 ? applicationPath + item.Url + '&' + baseParamsStr : applicationPath + item.Url + '?' + baseParamsStr;
+        //var params = {};
+        //if (item.Params) {
+        //    try {
+        //        eval("params=" + item.Params + ";");
+        //        if (params.editFields && baseParams.privilege == "read") {
+        //            delete params.editFields;
+        //        }
+        //    }
+        //    catch (e) {
+        //        console.log(e);
+        //    }
+        //}
+
+        //var paramStr = $.param(params);
+        //if (paramStr.length > 0) {
+        //    url += "&" + paramStr;
+        //}
+        var frame = $('<iframe frameborder=0 height="99.3%" width="100%" style="margin-bottom:-3px;" src="' + url + '"></iframe>');
+        wfpanel.tabs("add", {
+            title: item.PageName,
+            content: frame,
+            selected: false,
+            style: { padding: 2 },
+            onOpen: function () {
+                var contentWindow = frame[0].contentWindow;
+                if (contentWindow.selectPage && typeof contentWindow.selectPage == "function") {
+                    contentWindow.selectPage();
+                }
+            }
+        });
+
+        //if (isLast) {
+        //    var contentWindow = frame[0].contentWindow;
+        //    contentWindow.onload = function (sender) {
+        //        me.$.messager.progress('close');
+        //    };
+        //}
+    }
+
+    //发送
+    function Send() {
+        //if (me.workflowParams.LISTTYPE == 1) {
+        //    savePages(true);
+        //    Node_CC_SetSta(2);
+        //    return;
+        //}
+        savePages(true);
+        if (me.node.CondModel == 1) {
+            SelectSend(me.node.CondModel != 2 && me.node.CondModel != 3);
+        }
+        else {
+            SimpleSend();
+        }
+    }
+
+    //设置抄送案件状态
+    function Node_CC_SetSta(status) {
+        ChangeTab();
+        $.messager.confirm('确认对话框', '您想要执行该操作吗？', function (r) {
+            if (r) {
+                $.messager.progress();
+                $.ajax({
+                    url: '@Url.Action("Node_CC_SetSta", "WfFlow")',
+                    data: { nodeID: me.workflowParams.nodeID, workid: me.workflowParams.workID, status: status },
+                    async: false,
+                    success: function (result) {
+                        $.messager.progress('close');
+                        var message = result.success ? "操作成功" : "操作失败";
+                        window.top.$.messager.alert("提示", result.msg || message);
+                        if (result.success) {
+                            BackAndRefresh();
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    //检查是否存不同意的审批意见
+    function isAllPreOpinionAgree() {
+        var flag = false;
+        $.ajax({
+            url: '@Url.Action("IsAllPreOpinionAgree","WfFlow")',
+            data: { nodeId: me.workflowParams.nodeID, bwaId: me.workflowParams.bwaID },
+            async: false,
+            success: function (result) {
+                if (result.success == true) {
+                    flag = true;
+                }
+                else {
+                    $.messager.alert('提示', result.msg || "该流程不能执行此操作");
+                    wfpanel.tabs('select', '审批意见');
+                }
+            }
+        });
+        return flag;
+    }
+    //保存审批页面
+    function savePages(isSumbit) {
+        var flag = true;
+        var tabs = wfpanel.tabs('tabs');
+        var errorPages = [];
+
+        $.each(tabs, function (index, tab) {
+            var tabWin = tab[0].childNodes[0].contentWindow;
+            if (!tabWin.commonhelper) {
+                return true;
+            }
+            debugger;
+            var permission = tabWin.commonhelper.getUrlParam('permission');
+            var editFields = tabWin.commonhelper.getUrlParam('editFields');
+            if ((editFields || !permission|| permission != 0) && tabWin.save) {
+                try {
+                    var saveResult = tabWin.save(isSumbit);
+                    if (saveResult) {
+                        errorPages.push({ index: index, error: saveResult });
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                    errorPages.push({ index: index, error: '保存失败' });
+                }
+            }
+        });
+        //if (errorPages.length > 0) {
+        //wfpanel.tabs('select', errorPages[0].index);
+        //}
+        return errorPages;
+    }
+
+    //获取流程参数
+    function getWfParams() {
+        var myparam = {};
+        var tabs = wfpanel.tabs('tabs');
+        $.each(tabs, function (index, tab) {
+            var tabWin = tab[0].childNodes[0].contentWindow;
+            if (tabWin.getWfParam) {
+                try {
+                    var tabparam = tabWin.getWfParam();
+                    if (tabparam) {
+                        $.extend(myparam, tabparam);
+                    }
+                }
+                catch (e) {
+                    console.log(e);
+                }
+            }
+        });
+        var paramPairs = [];
+        for (var i in myparam) {
+            paramPairs.push({ Key: i, Value: myparam[i] });
+        }
+        return paramPairs;
+    }
+
+    //简单发送
+    function SimpleSend() {
+        $.messager.confirm('确认对话框', '您想要执行该操作吗？', function (r) {
+            if (r) {
+                $.messager.progress();
+                var errorPages = savePages(true);
+                if (errorPages.length > 0) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", errorPages[0].error);
+                    return;
+                }
+                var wfParams = getWfParams();
+                var data = $.extend({}, urlParams, {
+                    WFPARAMS: JSON.stringify(wfParams)
+                });
+                $.post( '@Url.Action("Node_SendWork", "Flow")', data, function (result) {
+                        $.messager.progress('close');
+                        var message = result.success ? "操作成功" : "操作失败";
+                        window.top.$.messager.alert("提示", result.message || message);
+                        if (result.success) {
+                            BackAndRefresh();
+                        }
+                });
+            }
+        });
+    }
+
+    //发送
+    function SelectSend(singleSelect) {
+        var wfParams = getWfParams();
+
+        var callback = function (value, rows) {
+            $.messager.progress();
+            var errorPages = savePages(true);
+            if (errorPages.length > 0) {
+                $.messager.alert("提示", errorPages[0].error);
+                $.messager.progress('close');
+                return;
+            }
+            if (singleSelect/* || rows[0].RUNMODEL == 0 || rows[0].RUNMODEL == 1*/) {
+                var url = '@Url.Action("Node_SendWork", "Flow")';
+                var toNodeId = rows[0].FK_NODE;
+                $.ajax({
+                    url: url,
+                    data: {
+                        flowNo: me.workflowParams.workflowNo,
+                        workID: me.workflowParams.workID,
+                        currentNodeId: me.workflowParams.nodeID,
+                        toNodeId: toNodeId,
+                        SLBH: me.workflowParams.SLBH,
+                        bwaId: me.workflowParams.bwaID,
+                        paramPairs: JSON.stringify(paramPairs),
+                        nextWorker: value,
+                        cclist: value_1
+                    },
+                    success: function (result) {
+                        $.messager.progress('close');
+                        var message = result.success ? "操作成功" : "操作失败";
+                        window.top.$.messager.alert("提示", result.message || message);
+                        if (result.success) {
+                            BackAndRefresh();
+                        }
+                    }
+                });
+            }
+            else {
+                var nodeIds = [];
+                $.each(rows, function (index, item) {
+                    if (nodeIds.indexOf(item.FK_NODE) == -1) {
+                        nodeIds.push(item.FK_NODE);
+                    }
+                });
+                $.ajax({
+                    url: '@Url.Action("WorkOpt_SendToNodes", "WfFlow")',
+                    data: { flowNo: me.workflowParams.workflowNo, currentNodeId: me.workflowParams.nodeID, workID: me.workflowParams.workID, toNodes: nodeIds.join(','), SLBH: me.workflowParams.SLBH, FID: me.workflowParams.FID, bwaId: me.workflowParams.bwaID, cclist: value_1 },
+                    success: function (result) {
+                        $.messager.progress('close');
+                        var message = result.success ? "操作成功" : "操作失败";
+                        window.top.$.messager.alert("提示", result.message || message);
+                        if (result.success) {
+                            BackAndRefresh();
+                        }
+                    }
+                });
+            }
+        };
+
+        if (me.node.CCROLE == "1") {
+
+
+            commonhelper.openDialog2({
+                title: '选择发送节点',
+                //items: items,
+                callback: callback
+            });
+        }
+        else {
+            $('#nodeTree').tree({
+                url: '@Url.Action("WorkOpt_GetToNodes", "Node")?' + $.param(urlParams) + "&wfParams=" + JSON.stringify(wfParams),
+                onlyLeafCheck: true,
+                checkbox:true
+            });
+            $('#selectDialog').dialog({
+                title: '选择发送节点',
+                width: 300,
+                height: 400,
+                toolbar: [{
+                    text: '确定',
+                    iconCls: 'icon-edit',
+                    handler: function () {
+                        var nodes = $('#nodeTree').tree('getChecked');
+                        if (nodes.length == 0) {
+                            $.messager.alert('提示', '未选择任何记录！');
+                            return;
+                        }
+                        var url = '@Url.Action("Node_SendWork", "Flow")';
+                        var toNodeId = nodes[0].FK_NODE;
+                        var data = $.extend({}, urlParams, {
+                            WFPARAMS: JSON.stringify(wfParams),
+                            NEXTWORKER: nodes[0].value,
+                            TONODEID: nodes[0].NODEID
+                        });
+                        $.post(url,data,function (result) {
+                            $.messager.progress('close');
+                            var message = result.success ? "操作成功" : "操作失败";
+                            window.top.$.messager.alert("提示", result.message || message);
+                            if (result.success) {
+                                BackAndRefresh();
+                            }
+                        }
+                        );
+                    }
+                }, {
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                        handler: function () {
+
+                        }
+                }]
+            });
+        }
+
+    }
+
+    //保存
+    function Save() {
+        ChangeTab();
+        $.messager.progress();
+        var errorPages = savePages(false);
+        var msg = "";
+        if (errorPages.length > 0) {
+            //if (errorPages[0].index == 0) {
+            //    $.messager.alert("提示", errorPages[0].error);
+            //    $.messager.progress('close');
+            //    return;
+            //}
+            $.each(errorPages, function (index, page) {
+                var tab = wfpanel.tabs('getTab', page.index);
+                msg += "<div style='line-height: 20px;'>【" + tab.panel('options').title + "】：" + page.error + '</div>';
+            })
+        }
+        if (urlParams.WfState == 0) {
+            $.ajax({
+                url: '@Url.Action("SaveAsDraft", "Flow")',
+                data: { WorkID: urlParams.WorkID },
+                success: function (result) {
+                    if (result.success) {
+                        urlParams.WfState = 1;
+                        msg = msg == '' ? msg : '<br/><br/><fieldset style="border:1px solid;padding:3px;border-color:gray"><legend>警告</legend>' + msg + '</fieldset>';
+                        $.messager.alert('提示', "保存成功！" + msg);
+                    }
+                    else {
+                        $.messager.alert('提示', result.msg);
+                    }
+                    $.messager.progress('close');
+                }
+            });
+        }
+        else {
+            $.messager.alert('提示', msg == "" ? "保存成功！" : msg);
+            $.messager.progress('close');
+        }
+    }
+
+    //退回
+    function Return() {
+        $.messager.progress();
+        $.ajax({
+            url: '@Url.Action("DB_GenerWillReturnNodes", "Flow")',
+            data: urlParams,
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success == false) {
+                    $.messager.alert('提示',result.msg);
+                    return;
+                }
+                if (!result || result.length == 0) {
+                    $.messager.alert('提示', '当前节点不能退回！');
+                    return;
+                }
+                var data = $.map(result, function (item) {
+                    item.value = item.Name;
+                    item.text = item.Name;
+                    item.children = [{ value: item.No, text: item.RecName, NodeID: item.No }];
+                    return item;
+                });
+                $('#returnNodeTree').tree({
+                    data: data,
+                    onlyLeafCheck: true,
+                    checkbox: true
+                });
+                $('#returnDialog').dialog({
+                title: '选择退回环节',
+                width: 300,
+                height: 400,
+                toolbar: [{
+                    text: '确定',
+                    iconCls: 'icon-edit',
+                    handler: function () {
+                        var nodes = $('#returnNodeTree').tree('getChecked');
+                        if (nodes.length == 0) {
+                            $.messager.alert('提示', '未选择任何记录！');
+                            return;
+                        }
+                        var url = '@Url.Action("Node_ReturnWork", "Flow")';
+                        var data = $.extend({}, urlParams, {
+                            ToNodeID: nodes[0].value
+                        });
+                        $.post(url,data,function (result) {
+                            $.messager.progress('close');
+                            var message = result.success ? "操作成功" : "操作失败";
+                            window.top.$.messager.alert("提示", result.message || message);
+                            if (result.success) {
+                                BackAndRefresh();
+                            }
+                        }
+                        );
+                    }
+                }, {
+                    text: '关闭',
+                    iconCls: 'icon-cancel',
+                        handler: function () {
+
+                        }
+                }]
+            });
+            }
+        });
+    }
+
+    //作废
+    function DeleteWork() {
+        $.messager.confirm('确认', '您确认想要作废该案件吗？', function (r) {
+            if (r) {
+                $.post(applicationPath + "/Workflow/Flow/DeleteWork", urlParams, function (result) {
+                    if (result.success) {
+                        window.parent.$.messager.alert('提示', '案件已作废!', 'info');
+                        BackAndRefresh();
+                    }
+                    $.messager.alert('提示', result.msg || '操作失败!', 'info');
+                });
+            }
+        });  
+    }
+
+    //返回上一页面
+    function Back() {
+        if (me.easyWindow) {
+            me.easyWindow.window('close');
+        }
+        else {
+            var frame = commonhelper.getIframe(window.parent, window);
+            if (me.workflowParams.backUrl) {
+                frame.src = RootDirectory + me.workflowParams.backUrl;
+            }
+            else {
+                var frame = commonhelper.getIframe(window.parent, window);
+                frame.src = frame.src;
+            }
+        }
+    }
+
+    //返回上一页面
+    function BackAndRefresh() {
+        if (me.easyWindow) {
+            me.easyWindow.window('close');
+            if (me.parentGrid) {
+                me.parentGrid.datagrid('reload');
+            }
+        }
+        else {
+            var frame = commonhelper.getIframe(window.parent, window);
+            if (me.workflowParams.backUrl) {
+                frame.src = RootDirectory + me.workflowParams.backUrl;
+            }
+            else {
+                var frame = commonhelper.getIframe(window.parent, window);
+                frame.src = frame.src;
+            }
+        }
+    }
+
+    //切换至非object标签页面
+    function ChangeTab() {
+        var panel = wfpanel.tabs('getSelected');
+        var panelWin = panel[0].childNodes[0].contentWindow;
+        if (panelWin.document.getElementById('TANGER_OCX') != null) {
+            var tabs = wfpanel.tabs('tabs');
+            $.each(tabs, function (index, tab) {
+                var tabWin = tab[0].childNodes[0].contentWindow;
+                if (tabWin.document.getElementById('TANGER_OCX') == null) {
+                    wfpanel.tabs('select', index);
+                    return false;
+                }
+            })
+        }
+    }
+
+</script>

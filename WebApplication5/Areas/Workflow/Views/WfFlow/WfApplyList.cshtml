@@ -1,0 +1,168 @@
+﻿@{
+    ViewBag.Title = "Index";
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+<style>
+    html, body {
+        height: 100%;
+        padding: 0;
+        margin: 0;
+    }
+
+    .container {
+        width: 100%;
+        height: 100%;
+        overflow: auto;
+    }
+
+    .itemCls {
+        float: left;
+        margin: 10px 10px 0 10px;
+        border-radius: 5px;
+        
+    }
+
+    .title {
+        font-weight: bold;
+        text-align: center;
+        font-size: large;
+        padding: 10px 0 20px 0;
+    }
+
+    h3 {
+        text-align: center;
+    }
+
+    .btnCls {
+        margin: 0 3px 0 3px;
+        padding: 0 5px 0 5px;
+    }
+
+    .hiddenCls {
+        display: none;
+    }
+
+    .applyPanel {
+        width: 140px;
+        text-align: center;
+        height: 40px;
+        display: table;
+    }
+
+        .applyPanel div {
+            vertical-align: middle;
+            display: table-cell;
+            line-height: 20px;
+            font-weight: bold;
+            font-size: 14px;
+        }
+
+    fieldset {
+        padding: 5px;
+        border-width: 1px;
+        border-style: solid;
+        margin: 10px;
+    }
+
+        fieldset legend {
+            font-size: 15px;
+        }
+
+    .itemBodyCls {
+        background-color: #E0ECFF;
+    }
+</style>
+
+<div class="container">
+    <div id="workflowList"></div>
+</div>
+
+<script>
+
+    var mygrid = $('#workflow');
+
+    var workflowList = $("#workflowList");
+
+    $(document).ready(function () {
+        initWorkflowList();
+    });
+
+    function initWorkflowList() {
+        $.ajax({
+            url: '@Url.Action("GetData", "WfFlow")',
+            success: function (data) {
+                if (data.length == 0) {
+                    workflowList.append('<p style="padding:20px;font-size:large;">您当前账号未分配任何收件业务！</p>');
+                }
+                $.each(data, function (index, array) {
+                    var fieldset = $('<fieldset><legend>' + array[0].YWFZ + '</legend></fieldset');
+                    workflowList.append(fieldset);
+                    $.each(array, function (index, item) {
+                        var panel = $("<div></div>");
+                        var title = $("<div class='applyPanel'><div>" + item.Name + "</div></div>");
+                        var applyBtn = $("<a class='easyui-linkbutton btnCls' data-options='iconCls:\"icon-redo\"'>新增</a>");
+                        var viewBtn = $("<a class='easyui-linkbutton btnCls' data-options='iconCls:\"icon-help\"'>查看</a>");
+
+                        panel.append(title, applyBtn, viewBtn);
+                        fieldset.append(panel);
+
+                        $(panel).panel({
+                            width: 159,
+                            height: 75,
+                            cls: 'itemCls',
+                            bodyCls: 'itemBodyCls'
+                        });
+
+                        $(applyBtn).bind('click', function () {
+                            StartProcess(item.No, item.Name, item.BWLXID);
+                        });
+                        $(viewBtn).bind('click', function () {
+                            ViewWorkflow(item.No, item.Name, item.BWLXID);
+                        });
+                    })
+                })
+                $.parser.parse(workflowList);
+            }
+        })
+    }
+
+    //发起流程
+    function StartProcess(workflowNo, workflowName, bwlxId) {
+        $.messager.progress();
+        $.ajax({
+            url: '@Url.Action("CreateBlankWork", "WfFlow")',
+            data: { flowNo: workflowNo, bwlxId: bwlxId },
+            cache: false,
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success && result.workID) {
+                    var workflowParams = {
+                        workflowNo: workflowNo,
+                        workID: result.workID,
+                        nodeID: result.node.NodeID,
+                        nodeName: result.node.Name,
+                        wfState: 0,
+                        sjdID: result.sjdID,
+                        bwaID: result.workID,
+                        FID: result.workID,
+                        SLBH: result.SLBH,
+                        BWLXID: bwlxId
+                    };
+                    var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+                    window.location.href = url;
+                }
+                else {
+                    $.messager.alert('提示', result.message || '办理业务失败，请联系管理员设置该业务流程');
+                }
+            }
+        });
+    }
+
+    //查看流程
+    function ViewWorkflow(workflowNo, workflowName) {
+        pageCommonJS.openWindowInWorkArea('@Url.Action("WfChart", "WfFlow")?workflowNo=' + workflowNo, {
+            title: "【" + workflowName + '】查看' || '查看流程',
+            maximized: true
+        });
+    }
+</script>

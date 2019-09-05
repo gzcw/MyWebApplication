@@ -1,0 +1,789 @@
+﻿@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+
+
+<script src="~/@(ViewBag.WorkflowPath)Scripts/jsplumb/dom.jsPlumb-1.6.2-min.js">@ViewBag.Title</script>
+<link href="~/@(ViewBag.WorkflowPath)ViewJS/Designer/demo.css" rel="stylesheet" />
+
+<style>
+    .statemachine-demo {
+        background-repeat: repeat;
+    }
+
+        .statemachine-demo .windows {
+            width: 90px;
+            height: 30px;
+            line-height: 15px;
+            padding: 2px 0px 2px 0px;
+            font-size: medium;
+            display: table;
+        }
+
+        .statemachine-demo .processedWindows {
+            background-color: green;
+            color: black;
+        }
+
+        .statemachine-demo .waitProcessingWindows {
+            background-color: red;
+        }
+        .statemachine-demo .processingWindows {
+            background-color: yellow;
+        }
+
+    .selected {
+        background-color: #5c96bc;
+    }
+
+    .buttomBar a {
+        height: 30px;
+        padding-top: 6px;
+    }
+
+    h6 {
+        margin: 15px 0px 15px 0px;
+    }
+
+    .toolbar {
+        padding-top: 3px;
+        background-color: rgb(206, 223, 231);
+        width: 100%;
+        height: 30px;
+    }
+
+    form {
+        margin-left: auto;
+        margin-right: auto;
+        margin-top: 20px;
+        width: 560px;
+    }
+
+    .nodeform input {
+        width: 170px;
+    }
+
+    .nodeform .colspaninput {
+        width: 450px;
+    }
+
+    .btnContainer {
+        text-align: center;
+        margin-top: 10px;
+    }
+
+    .processedWindow {
+        background-color: green;
+        color: black;
+    }
+
+    .waitProcessingWindows {
+        background-color: red;
+    }
+
+    .processingWindow {
+        background-color: yellow;
+    }
+
+    .processedLine {
+        background-color: green;
+        color: black;
+    }
+</style>
+
+@*<div class="toolbar panel-header">
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-add'" plain="true" style="margin-left:5px;" onclick="addNode()">添加节点</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-remove'" plain="true" onclick="deleteNode()">删除节点</a>
+        <a class="easyui-linkbutton" data-options="iconCls:'icon-detail'" plain="true" onclick="check()">检查并发布</a>
+    </div>*@
+<a class="easyui-linkbutton" data-options="iconCls:'icon-back'" style="margin:3px;" onclick="Back();">返回</a>
+<div class="demo statemachine-demo" id="statemachine-demo">
+</div>
+<div id="nodeWin" title="节点信息" data-options="iconCls:'icon-save',modal:true,closed:true">
+    <form id="nodeForm" method="post">
+        <table class="formtable nodeform" style="width:560px;">
+            <tr>
+                <th style="width:100px">节点编号:</th>
+                <td style="width:180px;"><input class="easyui-textbox input" readonly="readonly" name="NODEID" /></td>
+                <th style="width:90px">节点名称:</th>
+                <td style="width:180px;"><input class="easyui-textbox input" name="NAME" /></td>
+            </tr>
+            <tr>
+                <th>运行模式:</th>
+                <td><input class="easyui-combobox input" name="RUNMODEL" data-options="data:[{value:0,text:'普通节点'},{value:1,text:'合流'},{value:2,text:'分流'},{value:3,text:'分合流'},{value:4,text:'子流程'}]" /></td>
+                <th>方向控制规则:</th>
+                <td><input class="easyui-combobox input" name="CONDMODEL" data-options="data:[{value:0,text:'按照方向条件计算'},{value:1,text:'按照用户选择计算'}]" /></td>
+            </tr>
+            <tr>
+                <th>节点访问规则:</th>
+                <td colspan="3"><input id="DELIVERYWAY" class="input colspaninput" name="DELIVERYWAY" /></td>
+            </tr>
+            <tr id="stationTR">
+                <th>岗位:</th>
+                <td colspan="3"><input id="station" class="easyui-selectwindow input colspaninput" name="STATION" /></td>
+            </tr>
+            <tr id="nodeTR">
+                <th>指定节点:</th>
+                <td colspan="3"><input id="DELIVERYPARAS" class="easyui-combobox input colspaninput" name="DELIVERYPARAS" /></td>
+            </tr>
+            <tr>
+                <th>备注</th>
+                <td colspan="3">
+                    <input class="easyui-textbox  colspaninput" name="BZ" data-options="multiline:true,height:100" />
+                </td>
+            </tr>
+        </table>
+        <div class="btnContainer">
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="saveNode()">保存</a>
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="closeWin(this)">关闭</a>
+        </div>
+    </form>
+</div>
+
+<div id="directionWin" title="连接线条件" data-options="iconCls:'icon-save',modal:true,closed:true">
+    <form id="directionForm">
+        <input type="hidden" name="MYPK">
+        <input type="hidden" name="FK_FLOW" />
+        <input type="hidden" name="NODEID" />
+        <input type="hidden" name="TONODEID" />
+        <table class="formtable">
+            <tr>
+                <th>参数:</th>
+                <th><input class="easyui-validatebox input" name="OPERATORVALUE" /></th>
+            </tr>
+        </table>
+        <div class="btnContainer">
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-save'" onclick="SaveCond()">保存</a>
+            <a class="easyui-linkbutton" data-options="iconCls:'icon-cancel'" onclick="closeWin(this)">关闭</a>
+        </div>
+    </form>
+</div>
+
+<script>
+    var me = this;
+    var mychart = $('#statemachine-demo');
+    var nodeWin = $("#nodeWin");
+    var directionWin = $("#directionWin");
+    var nodeForm = $("#nodeForm");
+    var directionForm = $("#directionForm");
+
+    me.workflowNo = "@ViewBag.workflowNo";
+    me.workflowName = "@ViewBag.workflowName";
+    me.bwaId = "@ViewBag.bwaId";
+    me.jsp = {};
+
+    $(document).ready(function () {
+        initForm();
+        if (!me.workflowNo) {
+            return;
+        }
+        initChart();
+        initEvents();
+    });
+
+    function Back() {
+        try{
+            window.parent.CloseWindow();
+        }catch(e){
+            CloseWindow();
+        }
+    }
+
+    //me.workflowNo = pageCommonJS.getUrlParam('workflowNo');
+    //me.workflowName = pageCommonJS.getUrlParam('workflowName');
+    me.workId = "4109";
+    me.FID = "0";
+    me.directionList = [];
+    me.nodeList = [];
+    me.selectLine = undefined;
+    me.selectNodeId = undefined;
+
+    var connectorPaintStyle = {
+        lineWidth: 3,
+        strokeStyle: "#61B7CF",
+        joinstyle: "round",
+        outlineColor: "white",
+        outlineWidth: 3,
+        radius: 5
+    };
+    // 已审批连线的样式
+    processedConnectorPaintStyle = {
+        lineWidth: 3,
+        strokeStyle: "green",
+        joinstyle: "round",
+        outlineColor: "white",
+        outlineWidth: 2
+    },
+
+    connectorHoverStyle = {
+        lineWidth: 2,
+        strokeStyle: "#216477",
+        outlineWidth: 2,
+        outlineColor: "white",
+        backgroundColor: "white"
+    };
+    endpointHoverStyle = {
+        fillStyle: "#216477",
+        strokeStyle: "#216477"
+    };
+
+    //初始化流程设计界面
+    function initChart() {
+        me.chartWidth = window.innerWidth;
+        var nodeList = [];
+        $.ajax({
+            url: '@Url.Action("GetNodeList","Node")',
+            data: { workflowNo: me.workflowNo },
+            success: function (data) {
+                if (data.success && data.success == false) {
+                    $.messager.alert('提示', '获取流程节点数据失败！');
+                    return;
+                }
+                me.nodeList = data.nodeList;
+                me.directionList = data.directionList;
+                updateChart();
+
+            }
+        });
+    }
+
+    //绑定键盘事件
+    function initEvents() {
+        window.onkeydown = function (e) {
+            if (e.keyCode == 46) {
+                me.reomve();
+            }
+        }
+    }
+
+    //初始化表单
+    function initForm() {
+        $('#station').selectwindow({
+            url: '@Url.Action("GetData", "STATION")',
+            valueField: 'NO',
+            textField: 'NAME',
+            multiple: true,
+            windowConfig: {
+                url: '@Url.Action("Index", "STATION")',
+                title: '选择岗位'
+            }
+        });
+
+        $('#DELIVERYWAY').combobox({
+            data: [{
+                value: 14, text: '按岗位'
+            }, {
+                value: 8, text: '按指定节点的人员计算'
+            }, {
+                value: 6, text: '按收件人'
+            }],
+            onSelect: function (record) {
+                ShowFileds({ DELIVERYWAY: record.value });
+            }
+        });
+
+        $('#DELIVERYPARAS').combobox({
+            url: '@Url.Action("GetNodesByFLOWNO", "NODE")' + '?fk_flow=' + me.workflowNo,
+            valueField: 'NODEID',
+            textField: 'NAME'
+        });
+
+        nodeWin.window({
+            width: 600,
+            height: 350,
+            modal: true,
+            onClose: function () {
+                nodeForm.form('reset');
+            }
+        });
+        nodeForm.form({
+            onLoadSuccess: function (record) {
+                nodeWin.window('open');
+                ShowFileds(record);
+            }
+        });
+
+        directionWin.window({
+            width: 500,
+            height: 300,
+            modal: true
+        });
+    }
+
+    function ShowFileds(record) {
+        if (record.DELIVERYWAY == 14) {
+            $('#nodeTR').hide();
+            $('#stationTR').show();
+        }
+        else if (record.DELIVERYWAY == 8) {
+            $('#nodeTR').show();
+            $('#stationTR').hide();
+        }
+        else {
+            $('#nodeTR').hide();
+            $('#stationTR').hide();
+        }
+    }
+
+    //删除
+    function reomve() {
+        if (me.selectLine) {
+            $.messager.confirm('提示', '您确定要删除连接线吗？', function (r) {
+                if (r) {
+                    deleteLine();
+                }
+            });
+        }
+        else if (me.selectNodeId) {
+            $.messager.confirm('提示', '您确定要删除节点【' + me.selectNodeId + '】吗？', function (r) {
+                if (r) {
+                    deleteNode();
+                }
+            });
+        }
+        else {
+            $.messager.alert('提示', '请选择节点或连接线！');
+        }
+    }
+
+    //加载流程界面
+    function LoadPlumb(nodeList, directionList, processedNodeList, trackList) {
+
+        jsPlumb.ready(function () {
+            var instance = jsPlumb.getInstance({
+                Endpoint: ["Dot", { radius: 2 }],
+                //HoverPaintStyle: { strokeStyle: "#1e8151", lineWidth: 2 },
+                ConnectionOverlays: [
+                    ["Arrow", {
+                        location: 1,
+                        width: 8,
+                        height: 10,
+                        id: "arrow",
+                        length: 14,
+                        foldback: 0.8
+                    }]
+                ],
+                Container: "statemachine-demo"
+            });
+
+            me.jsp = instance;
+
+            var windows = jsPlumb.getSelector(".statemachine-demo .w");
+
+            // initialise draggable elements.
+            //instance.draggable(windows, {
+            //    stop: function (event, dom) {
+            //        if (event.e.x + 100 > me.chartWidth) {
+            //            me.chartWidth = event.e.x + 100;
+            //        }
+            //        $.each(me.nodeList, function (index, item) {
+            //            if (item.NodeID == event.el.id) {
+            //                item.X = $(event.el).offset().left;
+            //                item.Y = $(event.el).offset().top;
+            //                updateNode(item);
+            //                return false;
+            //            }
+            //        })
+            //    },
+            //    drag: function (event, dom) {
+            //        if (event.e.x + 100 > me.chartWidth) {
+            //            window.parent.$("iframe").css('width', event.e.x + 500);
+            //        }
+            //    }
+            //});
+
+            // bind a click listener to each connection; the connection is deleted. you could of course
+            // just do this: jsPlumb.bind("click", jsPlumb.detach), but I wanted to make it clear what was
+            // happening.
+            //instance.bind("click", function (connector) {
+            //    if (me.selectLine) {
+            //        me.selectLine.setPaintStyle(connectorPaintStyle);
+            //    }
+            //    $('.selected').removeClass('selected');
+            //    me.selectLine = connector;
+            //    me.selectNodeId = undefined;
+
+            //    connector.setPaintStyle(connectorHoverStyle);
+
+            //});
+            //instance.bind("dblclick", function (connector) {
+            //    if (me.selectLine) {
+            //        me.selectLine.setPaintStyle(connectorPaintStyle);
+            //    }
+
+            //    me.selectLine = connector;
+            //    connector.setPaintStyle(connectorHoverStyle);
+            //    editDirectionForm(connector);
+            //});
+
+            // bind a connection listener. note that the parameter passed to this function contains more than
+            // just the new connection - see the documentation for a full list of what is included in 'info'.
+            // this listener sets the connection's internal
+            // id as the label overlay's text.
+            //instance.bind("connection", function (info) {
+            //    var lines = jsp.getConnections({ source: info.sourceId, target: info.targetId, scope: '*' }, true);
+            //    if (lines.length > 1) {
+            //        instance.detach(info.connection);
+            //        $.messager.alert("提示", "已存在相同的连接线！");
+            //        return;
+            //    }
+            //    addDirection(info.sourceId, info.targetId);
+            //    info.connection.getOverlay("label").setLabel(info.connection.id);
+            //});
+
+            // suspend drawing and initialise.
+            instance.doWhileSuspended(function () {
+                var isFilterSupported = instance.isDragFilterSupported();
+                // make each ".ep" div a source and give it some parameters to work with.  here we tell it
+                // to use a Continuous anchor and the StateMachine connectors, and also we give it the
+                // connector's paint style.  note that in this demo the strokeStyle is dynamically generated,
+                // which prevents us from just setting a jsPlumb.Defaults.PaintStyle.  but that is what i
+                // would recommend you do. Note also here that we use the 'filter' option to tell jsPlumb
+                // which parts of the element should actually respond to a drag start.
+                // here we test the capabilities of the library, to see if we
+                // can provide a `filter` (our preference, support by vanilla
+                // jsPlumb and the jQuery version), or if that is not supported,
+                // a `parent` (YUI and MooTools). I want to make it perfectly
+                // clear that `filter` is better. Use filter when you can.
+                if (isFilterSupported) {
+
+                    instance.makeSource(windows, {
+                        filter: ".ep",
+                        anchor: "Continuous",
+                        connector: ["Flowchart"],
+                        connectorStyle: connectorPaintStyle,
+                        //hoverPaintStyle: endpointHoverStyle,
+                        //connectorHoverStyle: connectorHoverStyle,
+                        maxConnections: 5,
+                        onMaxConnections: function (info, e) {
+                            alert("Maximum connections (" + info.maxConnections + ") reached");
+                        }
+                    });
+                }
+                else {
+                    var eps = jsPlumb.getSelector(".ep");
+
+                    for (var i = 0; i < eps.length; i++) {
+                        var e = eps[i], p = e.parentNode;
+                        instance.makeSource(e, {
+                            parent: p,
+                            anchor: "Continuous",
+                            connector: ["Straight"],
+                            connectorStyle: { strokeStyle: "#5c96bc", lineWidth: 2, outlineColor: "transparent", outlineWidth: 4 },
+                            maxConnections: 5,
+                            onMaxConnections: function (info, e) {
+                                alert("Maximum connections (" + info.maxConnections + ") reached");
+                            }
+                        });
+                    }
+                }
+            });
+
+            // initialise all '.w' elements as connection targets.
+            instance.makeTarget(windows, {
+                dropOptions: { hoverClass: "dragHover" },
+                anchor: "Continuous",
+                allowLoopback: true,
+                anchor: "Continuous"
+            });
+
+            //$(windows).bind('dblclick', function (sender) {
+            //    onSelectNode(sender);
+            //});
+            //$(windows).bind('click', function (sender) {
+            //    if (me.selectLine) {
+            //        me.selectLine.setPaintStyle(connectorPaintStyle);
+            //        me.selectLine = undefined;
+            //    }
+
+            //    me.selectNodeId = sender.target.id;
+            //    $('.selected').removeClass('selected');
+
+            //    $("#" + sender.target.id).addClass('selected');
+            //});
+
+            jsPlumb.fire("jsPlumbDemoLoaded", instance);
+
+            initConnector(me.jsp, me.directionList);
+            if (me.bwaId) {
+                initApproveInfo();
+            }
+        });
+    }
+
+    //编辑流程节点
+    function onSelectNode(sender) {
+        loadNodeForm(sender.target.id);
+    }
+
+    //加载节点表单
+    function loadNodeForm(id) {
+        nodeForm.form('load', '@Url.Action("LoadForm","Node")/' + id);
+    }
+
+    //编辑连接线
+    function editDirectionForm(connector) {
+        loadCondForm(connector);
+    }
+
+    //加载连接线
+    function loadCondForm(connector) {
+        var id = connector.source.id + "_" + connector.target.id + "_Dir_Paras";
+        $.ajax({
+            url: '@Url.Action("LoadForm", "COND")/' + id,
+            success: function (result) {
+                if (!result) {
+                    result = { FK_FLOW: me.workflowNo, NODEID: connector.source.id, TONODEID: connector.target.id, OPERATORVALUE: '' };
+                }
+                directionForm.form('load', result);
+                directionWin.window('open');
+            }
+        })
+    }
+
+    //添加节点DOM
+    function addNodeDom(node) {
+        var panel = $('<div class="w" id="' + node.NodeID + '" style="top:' + node.Y + 'px;left:' + node.X + 'px">' + node.Name + '</div>');
+        if (me.selectNodeId == node.NodeID) {
+            panel.addClass('selected');
+        }
+        mychart.append(panel);
+
+        if (node.X + 100 > window.parent.$("iframe").css('width').replace('px', '')) {
+            window.parent.$("iframe").css('width', node.X + 200);
+            // window.parent.$("iframe").parent().css('overflow', 'auto');
+            // window.parent.$("iframe").parent().css('overflow-y', 'hidden');
+        }
+
+        if (node.Y + 100 > window.parent.$("iframe").css('height').replace('px', '')) {
+            window.parent.$("iframe").css('height', node.Y + 200);
+            // window.parent.$("iframe").parent().css('overflow', 'auto');
+            //window.parent.$("iframe").parent().css('overflow-x', 'hidden');
+        }
+    }
+
+    //初始化连接线
+    function initConnector(instance, directionList) {
+        $.each(directionList, function (index, direction) {
+            instance.connect({ source: direction.NODE + '', target: "" + direction.TONODE + '' });
+        });
+    }
+
+    //添加节点
+    function addNode() {
+        $.messager.progress();
+        $.post('@Url.Action("AddNode", "Node")', { flowNo: me.workflowNo }, function (result) {
+            if (result.success) {
+                $.messager.progress('close');
+                me.nodeList.push(result.record);
+
+                updateChart();
+            }
+            else {
+                $.messager.alert('提示', result.msg);
+            }
+        });
+    }
+
+    //更新节点
+    function updateNode(node) {
+        $.post('@Url.Action("UpdateNode", "Node")', node, function (result) { })
+    }
+
+    //删除节点
+    function deleteNode() {
+        if (!me.selectNodeId) {
+            return;
+        }
+        $.messager.progress();
+        $.post('@Url.Action("DeleteNode", "Node")', { nodeId: me.selectNodeId }, function (result) {
+            if (result.success) {
+                $.messager.progress('close');
+
+                var node = getNode(me.selectNodeId);
+                me.nodeList.splice($.inArray(node, me.nodeList), 1);
+                me.selectNodeId = undefined;
+                me.directionList = result.directionList;
+
+                updateChart();
+            }
+            else {
+                $.messager.alert('提示', result.msg);
+            }
+        });
+    }
+
+    //添加连接线
+    function addDirection(fromNodeId, toNodeId) {
+        var flag = true;
+        $.each(me.directionList, function (index, item) {
+            if (item.NODE == fromNodeId && item.TONODE == toNodeId) {
+                flag = false; return false;
+            }
+        })
+        if (flag) {
+            $.post('@Url.Action("SaveDirection", "Direction")', { workflowNo: me.workflowNo, fromNodeId: fromNodeId, toNodeId: toNodeId }, function (result) {
+                if (result.success) {
+                    me.directionList = result.directionList;
+                }
+                else {
+                    $.messager.alert('提示', result.msg);
+                }
+            })
+        }
+    }
+
+    //#region 删除连接线
+    function deleteLine() {
+        if (!me.selectLine) {
+            $.messager.alert('提示', '请选择连接线');
+            return;
+        }
+        $.post('@Url.Action("DeleteDirection","Direction")', { workflowNo: me.workflowNo, fromNodeId: me.selectLine.sourceId, toNodeId: me.selectLine.targetId }, function () {
+            jsPlumb.detach(me.selectLine);
+            me.selectLine = undefined;
+        })
+    }
+    //endregion
+
+    //检查
+    function check() {
+        $.messager.progress();
+        $.post("@Url.Action("Check","FLOW")", { workflowNo: me.workflowNo }, function (result) {
+            $.messager.progress('close');
+            result.msg = result.msg.replace(new RegExp('@@', "gm"), '<br/>@@');
+            $.messager.show({
+                title: '提示',
+                msg: result.msg,
+                timeout: 0,
+                showType: 'show',
+                width: 600,
+                height: 400,
+                shadow: true,
+                modal: true,
+                draggable: true,
+                style: {
+                    right: '',
+                    top: document.body.scrollTop + document.documentElement.scrollTop,
+                    bottom: ''
+                }
+            });
+        });
+    }
+
+    //获取节点
+    function getNode(id) {
+        var result = undefined;
+        $.each(me.nodeList, function (index, item) {
+            if (item.NodeID == id) {
+                result = item;
+                return false;
+            }
+        })
+        return result;
+    }
+
+    //更新流程设计面板
+    function updateChart() {
+        mychart.empty();
+        $.each(me.nodeList, function (index, item) {
+            addNodeDom(item);
+        });
+
+        LoadPlumb();
+    }
+
+    //保存节点
+    function saveNode() {
+        nodeForm.form('submit', {
+            url: '@Url.Action("SaveNode","Node")',
+            showMsg: false,
+            success: function (result) {
+                $.messager.alert('提示', result.msg);
+
+                if (result.success) {
+                    me.nodeList = result.nodeList;
+                    updateChart();
+                }
+            }
+        });
+    }
+
+    //保存连接线条件
+    function SaveCond() {
+        directionForm.form('submit', {
+            url: '@Url.Action("SaveCond", "Cond")',
+            data: { workflowNo: me.workflowNo },
+            showMsg: false,
+            success: function (result) {
+                $.messager.alert('提示', result.msg);
+            }
+        });
+    }
+
+    //关闭窗口
+    function closeWin(sender) {
+        $(sender).parentsUntil('.panel.window').last().window('close');
+    }
+
+    //初始化审批信息
+    function initApproveInfo() {
+        $.ajax({
+            url: RootDirectory + '/Workflow/Node/GetNodeList',//返回{ nodeList = nodeList, directionList = directionList, processedNodeList = processedNodeList, trackList = trackList, currentNodeIDList = currentNodeIDList }
+            data: { bwaId: me.bwaId, workflowNo: me.workflowNo },
+            success: function (data) {
+                $.each(data.processedNodeList, function (index, node) {
+                    var Y = $("#" + node.FK_Node).css('top').replace('px', '') - 15;
+                    var X = $("#" + node.FK_Node).css('left').replace('px', '');
+
+                    mychart.append('<div style="position:absolute;z-index: 1000;top:' + Y + 'px;left:' + X + 'px">' + node.FK_EmpText + node.CDT.split(' ')[0] + '</div>');
+                    $("#" + node.FK_Node).addClass('processedWindow');
+
+                    $("#" + node.FK_Node).bind('click', function () {
+                        if (me.bwaId && node != null) {
+                            var workflowParams = {
+                                nodeID: node.FK_Node,
+                                bwaID: me.bwaId,
+                                wfState: 2,
+                                workflowNo: me.workflowNo || data.workflowNo,
+                                SLBH: data.bwa.SLBH,
+                                privilege: 'read',
+                                permission: 0
+                            };
+                            var url = RootDirectory + "/Workflow/WfFlow/WfPanel?" + $.param(workflowParams);
+                            window.location.href = url;
+                        }
+                        else {
+                            $.messager.alert('【' + item.Name + '】描述', item.DOC || item.Name, 'info');
+                        }
+                    })
+                });
+
+                $.each(data.processingNodeList, function (index, node) {
+                    var Y = $("#" + node.FK_NODE).css('top').replace('px', '') - 15;
+                    var X = $("#" + node.FK_NODE).css('left').replace('px', '');
+                    mychart.append('<div style="position:absolute;z-index: 1000;top:' + Y + 'px;left:' + X + 'px">' + node.FK_EMPTEXT + '</div>');
+
+                    if (node.ISREAD==1) {
+                        $("#" + node.FK_NODE).addClass('processingWindow');
+                    }
+                    else {
+                        $("#" + node.FK_NODE).addClass('waitProcessingWindows');
+                    }
+                });
+                $.each(data.trackList, function (index, track) {
+                    var lines = jsp.getConnections({ source: track.NDFrom, target: track.NDTo, scope: '*' }, true);
+                    debugger;
+                    if (lines.length > 0)
+                        lines[0].setPaintStyle(processedConnectorPaintStyle);
+                });
+            }
+        });
+    }
+
+    function CloseWindow() {
+        if (this.easyWindow) {
+            this.easyWindow.window('close');
+        }
+    }
+</script>

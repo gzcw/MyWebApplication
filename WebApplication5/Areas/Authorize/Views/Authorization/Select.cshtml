@@ -1,0 +1,114 @@
+﻿@{
+    //-------------------------------------------------------------------
+    //【Auth_Authorization】Select
+    //-------------------------------------------------------------------
+
+    Layout = "~/Views/Shared/_GridLayout.cshtml";
+}
+
+@section PageCommandBefore{
+    <div id="searchPanel"></div>
+}
+@section Buttons{
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-save',plain:true" onclick="save();">确定</a>
+   <a class="easyui-linkbutton" data-options="iconCls:'icon-reload',plain:true" onclick="refresh();">刷新</a>
+}
+
+<table id="Auth_Authorization_Grid"></table>
+
+<script>
+    var me = this;
+    var mygrid = $('#Auth_Authorization_Grid');
+    var mygridConfig = {};
+    var urlParams = commonhelper.getUrlParams();
+
+    $(document).ready(function () {
+        initGrid();
+        initSearchPanel();
+    });
+
+    function initGrid() {
+	    var filters = me.filters || [];
+
+		var opts={
+            url:window.applicationPath +'/Authorize/Authorization/GetTreePaged',
+            border: true,
+            fit:true,
+            pagination: true,
+            rownumbers: true,
+		    singleSelect:true,
+			striped:true,
+			idField:'ID',
+						treeField: 'Name',
+			checkbox:false,
+						columns:[[
+			    { field: 'ck', checkbox: true},
+			                { field: 'Name', title: "资源名称",width:200 },
+			                { field: 'RTypeName', title: "资源类型",width:100 },
+			                { field: 'Url', title: "路径",width:200 },
+			                { field: 'UrlSign', title: "路径参数",width:100 },
+			                { field: 'Method', title: "方法",width:100 },
+			                { field: 'Icon', title: "图标",width:100 },
+			                { field: 'SortNumber', title: "排序号",width:100 }
+						]],
+            queryParams: {
+                filters: JSON.stringify(me.filters),
+				orders:'SORTNUMBER ASC'
+            },
+			loadFilter: function (data, parentId) {
+                if (parentId != undefined && (data.length == 0 || !Array.isArray(data))) {
+                    mygrid.treegrid('update', { id: parentId, row: { state: 'open' } });
+                    return data;
+                }
+                $.each(data.rows || data, function (index, item) {
+                    item.state = item.ISLEAF == 1 || item.isleaf == 1 ? 'open' : 'closed';
+                });
+                return data;
+            }
+				    };
+
+        
+
+		        mygrid.treegrid(opts);
+		        mygrid.queryParams = {
+            filters: JSON.stringify(filters),
+			orders:'SORTNUMBER ASC'
+        }
+    }
+
+    function initSearchPanel() {
+        $("#searchPanel").searchpanel({
+            items: [
+					    {text:'资源类型',value:'RType'}
+		     			,		    {text:'资源名称',value:'Name'}
+		     			],
+            parentGrid: mygrid
+        });
+    }
+
+    function save() {
+	    if(urlParams.singleSelect){
+            commonhelper.SingleSelectGrid(mygrid, function (id, row) {
+		      if(window.selectCallback){
+			     window.selectCallback([id],[row]);
+			  }
+            });
+		}
+		else{
+		    commonhelper.MultiSelectGrid(mygrid, function (ids, rows) {
+		      if(window.selectCallback){
+			     window.selectCallback(ids,rows);
+			  }
+            });
+		}
+    }
+    function refresh() {
+        mygrid.datagrid('clearSelections');
+        if (mygrid.queryParams) {
+            mygrid.datagrid('load', mygrid.queryParams);
+        }
+        else {
+            mygrid.datagrid('reload');
+        }
+    }
+</script>

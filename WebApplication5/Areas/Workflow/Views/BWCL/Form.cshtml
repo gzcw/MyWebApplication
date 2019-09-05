@@ -1,0 +1,161 @@
+﻿@{
+    Layout = "../Shared/_BaseLayout.cshtml";
+}
+@*<style>
+    form {
+        width: 700px;
+        margin-left: auto;
+        margin-right: auto;
+    }
+
+    input {
+        width: 200px;
+        height: 20px;
+    }
+</style>*@
+
+<div class="toolbar panel-header">
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-add'" plain="true" onclick="save()">保存</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-edit'" plain="true" onclick="reset()">重置</a>
+    <a href="#" class="easyui-linkbutton" data-options="iconCls: 'icon-remove'" plain="true" onclick="cancel()">取消</a>
+</div>
+<form id="BWCL_form" method="post">
+    <table cellpadding="0" cellspacing="0" style="width: 100%" class="formtable">
+        <tr style="display:none">
+            <td>
+                <input type="hidden" name="ID" />
+                <input type="hidden" name="DATAORIGIN" />
+                <input type="hidden" name="ISDELETE" />
+                <input type="hidden" name="ISSHARE" />
+                <input type="hidden" name="ISVALID" />
+                <input type="hidden" name="ISCONFIG" />
+                <input type="hidden" name="SORTORDER" />
+                <input type="hidden" name="ORGANIZATIONID" />
+                <input type="hidden" name="CREATEPERSONID" />
+                <input type="hidden" name="CREATEDATE" />
+                <input type="hidden" name="MODIFYPERSONID" />
+                <input type="hidden" name="MODIFYDATE" />
+            </td>
+        </tr>
+        <tr>
+            <th width="140">材料名称：</th>
+            <td width="210">
+                <input class="easyui-validatebox h-text" name="CLMC" />
+            </td>
+            <th width="140">材料分组：</th>
+            <td width="210">
+                <input class="easyui-validatebox h-text" name="CLFZ" />
+            </td>
+        </tr>
+        <tr>
+            <th>收件类型：</th>
+            <td>
+                <input class="easyui-sjlxcombobox h-text" name="SJLX" />
+            </td>
+            <th>材料页数：</th>
+            <td>
+                <input class="easyui-validatebox h-text" name="CLYS" />
+            </td>
+        </tr>
+        <tr>
+            <th>序号：</th>
+            <td>
+                <input class="easyui-validatebox h-text" name="XH" />
+            </td>
+            <th></th>
+            <td></td>
+        </tr>
+    </table>
+</form>
+
+<script>
+    var me = this;
+    var myform = $('#BWCL_form');
+
+    initForm();
+    $(document).ready(function () {
+
+        if (me.formId) {
+            $.messager.progress();
+            loadForm();
+        }
+        else if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+
+        if (me.Personalize && typeof (me.Personalize) == "function") {
+            Personalize();
+        }
+    });
+    //region个性化代码
+
+    //endregion
+
+    //初始化表单
+    function initForm() {
+        myform.form({
+            onLoadSuccess: function (data) {
+                $.messager.progress('close');
+            }
+            //buttons: [{
+            //    iconCls: 'icon-add',
+            //    text: '保存',
+            //    handler: save
+            //}, '-', {
+            //    iconCls: 'icon-edit',
+            //    text: '重置',
+            //    handler: reset
+            //}, '-', {
+            //    iconCls: 'icon-remove',
+            //    text: '取消',
+            //    handler: cancel
+            //}]
+        });
+    }
+
+    //加载表单
+    function loadForm() {
+        myform.form('load', '@Url.Action("LoadForm","BWCL")/' + me.formId);
+    }
+
+    //保存
+    function save() {
+        $.messager.progress();
+        myform.form('submit', {
+            url: '@Url.Action("Save","BWCL")',
+            onSubmit: function () {
+                var isValid = myform.form('validate');
+                flag = isValid;
+                if (!isValid) {
+                    $.messager.progress('close');
+                    $.messager.alert("提示", "表单未正确填写，请检查");
+                }
+                return isValid;
+            },
+            success: function (result) {
+                $.messager.progress('close');
+                if (result.success) {
+                    if (me.parentGrid) {
+                        me.parentGrid.datagrid('reload');
+                    }
+                    me.easyWindow.window('close');
+                }
+            }
+        })
+    }
+    //重置
+    function reset() {
+        if (me.formId) {
+            loadForm();
+            return;
+        }
+        myform.form('reset');
+        if (me.defaultValues) {
+            myform.form('load', me.defaultValues);
+        }
+    }
+    //取消
+    function cancel() {
+        me.easyWindow.window('close');
+    }
+</script>
