@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="FLOWSORT" table="WF_FLOWSORT" schema="HRFLOW" lazy="true">
+    <id name="NO" column="NO">
+      <generator class="assigned" />
+    </id>
+    <property name="NAME" column="NAME"  />
+    <property name="PARENTNO" column="PARENTNO"  />
+    <property name="TREENO" column="TREENO"  />
+    <property name="IDX" column="IDX"  />
+    <property name="ISDIR" column="ISDIR"  />
+  </class>
+</hibernate-mapping>

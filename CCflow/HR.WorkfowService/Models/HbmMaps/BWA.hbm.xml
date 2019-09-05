@@ -1,0 +1,50 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.BWA, HR.WorkflowService" table="HRFLOW.BIZ_INFO_BWA" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="BWLXID" column="BWLXID" not-null="true" />
+    <property name="DJZG" column="DJZG" not-null="false" />
+    <property name="DJLSH" column="DJLSH" not-null="false" />
+    <property name="DJZH" column="DJZH" not-null="false" />
+    <property name="QBWAID" column="QBWAID" not-null="false" />
+    <property name="LCSLID" column="LCSLID" not-null="false" />
+    <property name="YWFZ" column="YWFZ" not-null="false" />
+    <property name="SQLX" column="SQLX" not-null="false" />
+    <property name="DQHJ" column="DQHJ" not-null="false" />
+    <property name="DQHJMC" column="DQHJMC" not-null="false" />
+    <property name="SLBH" column="SLBH" not-null="false" />
+    <property name="AJZTBS" column="AJZTBS" not-null="false" />
+    <property name="ZL" column="ZL" not-null="false" />
+    <property name="YSBBS" column="YSBBS" not-null="false" />
+    <property name="GDBS" column="GDBS" not-null="false" />
+    <property name="YJBS" column="YJBS" not-null="false" />
+    <property name="REGISTERDATE" column="REGISTERDATE" not-null="true" />
+    <property name="FINISHDATE" column="FINISHDATE" not-null="false" />
+    <property name="SHDJZ" column="SHDJZ" not-null="false" />
+    <property name="SHDJH" column="SHDJH" not-null="false" />
+    <property name="SHJHWCRQ" column="SHJHWCRQ" not-null="true" />
+    <property name="ISDELETE" column="ISDELETE" not-null="true" />
+    <property name="ISSHARE" column="ISSHARE" not-null="true" />
+    <property name="ISVALID" column="ISVALID" not-null="true" />
+    <property name="ISCONFIG" column="ISCONFIG" not-null="true" />
+    <property name="SORTORDER" column="SORTORDER" not-null="false" />
+    <property name="CREATEPERSONID" column="CREATEPERSONID" not-null="false" />
+    <property name="CREATEDATE" column="CREATEDATE" not-null="false" />
+    <property name="MODIFYPERSONID" column="MODIFYPERSONID" not-null="false" />
+    <property name="ORGANIZATIONID" column="ORGANIZATIONID" not-null="false" />
+    <property name="MODIFYDATE" column="MODIFYDATE" not-null="false" />
+    <property name="DATAORIGIN" column="DATAORIGIN" not-null="false" />
+    <property name="BWABZ" column="BWABZ" not-null="false" />
+    <property name="SZTCBM" column="SZTCBM" not-null="false" />
+    <property name="TXGLZT" column="TXGLZT" not-null="false" />
+    <property name="NPH" column="NPH" not-null="false" />
+    <property name="XZQHDM" column="XZQHDM" not-null="false" />
+    <property name="SQRMC" column="SQRMC" not-null="false" />
+    <property name="YWRMC" column="YWRMC" not-null="false" />
+    <one-to-one name="SJD" class="HR.WorkflowService.Models.SJD,HR.WorkflowService" property-ref="BWA"/>
+    <many-to-one name="BWLX" class="HR.WorkflowService.Models.BWLX,HR.WorkflowService" column="BWLXID" insert="false" update="false"  />
+    <property name="TIPUSERS" column="TIPUSERS" not-null="false" />
+  </class>
+</hibernate-mapping>

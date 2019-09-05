@@ -1,0 +1,32 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.SJD, HR.WorkflowService" table="HRFLOW.BIZ_INFO_SJD" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="BWAID" column="BWAID" not-null="true" />
+    <property name="SJH" column="SJH" not-null="false" />
+    <property name="LXR" column="LXR" not-null="false" />
+    <property name="LXDH" column="LXDH" not-null="false" />
+    <property name="LXDZ" column="LXDZ" not-null="false" />
+    <property name="JJRZJLX" column="JJRZJLX" not-null="false" />
+    <property name="JJRZJH" column="JJRZJH" not-null="false" />
+    <property name="SJR" column="SJR" not-null="false" />
+    <property name="SJRQ" column="SJRQ" not-null="true" />
+    <property name="WXTS" column="WXTS" not-null="false" />
+    <property name="BZ" column="BZ" not-null="false" />
+    <property name="TJH" column="TJH" not-null="false" />
+    <property name="DATAORIGIN" column="DATAORIGIN" not-null="false" />
+    <property name="TCMC" column="TCMC" not-null="false" />
+    <property name="CREATEPERSONID" column="CREATEPERSONID" not-null="false" />
+    <property name="CREATEDATE" column="CREATEDATE" not-null="true" />
+    <property name="MODIFYPERSONID" column="MODIFYPERSONID" not-null="false" />
+    <property name="MODIFYDATE" column="MODIFYDATE" not-null="true" />
+    <property name="ORGANIZATIONID" column="ORGANIZATIONID" not-null="false" />
+    <set name="SJDSQRList" table="SJDSQRRLT" generic="true" inverse="true">
+      <key column="SJDID" foreign-key="FK_SJDSQRRLT_SJDID"/>
+      <one-to-many class="HR.WorkflowService.Models.SJDSQRRLT,HR.WorkflowService"/>
+    </set>
+    <many-to-one name="BWA" class="HR.WorkflowService.Models.BWA,HR.WorkflowService" column="BWAID" unique="true" insert="false" update="false"  />
+  </class>
+</hibernate-mapping>

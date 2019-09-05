@@ -1,0 +1,19 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.Attachment, HR.WorkflowService" table="HRFLOW.CM_SYS_Attachment" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="Name" column="NAME" not-null="true" />
+    <property name="Filetype" column="FILETYPE" not-null="false" />
+    <property name="Path" column="PATH" not-null="false" />
+    <property name="Filesize" column="FILESIZE" not-null="false" />
+    <property name="Property" column="PROPERTY" not-null="false" />
+    <property name="Isdirectory" column="ISDIRECTORY" not-null="true" />
+    <property name="Record_id" column="RECORD_ID" not-null="true" />
+    <property name="Parent_id" column="PARENT_ID" not-null="false" />
+    <property name="Creator" column="CREATOR" not-null="false" />
+    <property name="Createtime" column="CREATETIME" not-null="false" />
+    <property name="Sortnumber" column="SORTNUMBER" not-null="false" />
+  </class>
+</hibernate-mapping>

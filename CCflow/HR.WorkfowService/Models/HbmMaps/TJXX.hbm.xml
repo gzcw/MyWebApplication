@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.TJXX, HR.WorkflowService" table="HRFLOW.BIZ_INFO_TJXX" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="BWAID" column="BWAID" not-null="true" />
+    <property name="SLBH" column="SLBH" not-null="false" />
+    <property name="YWFZ" column="YWFZ" not-null="false" />
+    <property name="YWLX" column="YWLX" not-null="false" />
+    <property name="TJYY" column="TJYY" not-null="false" />
+    <property name="CREATORID" column="CREATORID" not-null="false" />
+    <property name="CREATETIME" column="CREATETIME" not-null="false" />
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="COND" table="WF_COND" schema="HRFLOW" lazy="true">
+    <id name="MYPK" column="MYPK">
+      <generator class="assigned" />
+    </id>
+    <!--<property name="MYPK" column="MYPK" not-null="true" />-->
+    <property name="CONDTYPE" column="CONDTYPE"  />
+    <property name="DATAFROM" column="DATAFROM"  />
+    <property name="FK_FLOW" column="FK_FLOW"  />
+    <property name="NODEID" column="NODEID"  />
+    <property name="FK_NODE" column="FK_NODE"  />
+    <property name="FK_ATTR" column="FK_ATTR"  />
+    <property name="ATTRKEY" column="ATTRKEY"  />
+    <property name="ATTRNAME" column="ATTRNAME"  />
+    <property name="FK_OPERATOR" column="FK_OPERATOR"  />
+    <property name="OPERATORVALUE" column="OPERATORVALUE"  />
+    <property name="OPERATORVALUET" column="OPERATORVALUET"  />
+    <property name="TONODEID" column="TONODEID"  />
+    <property name="CONNJUDGEWAY" column="CONNJUDGEWAY"  />
+    <property name="MYPOID" column="MYPOID"  />
+    <property name="PRI" column="PRI"  />
+    <property name="CONDORAND" column="CONDORAND"  />
+  </class>
+</hibernate-mapping>

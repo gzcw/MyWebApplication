@@ -1,0 +1,48 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.SQR, HR.WorkflowService" table="HRFLOW.BIZ_INFO_SQR" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="BSID" column="BSID" not-null="false" />
+    <property name="SQRLX" column="SQRLX" not-null="true" />
+    <property name="JGDM" column="JGDM" not-null="false" />
+    <property name="SQRMC" column="SQRMC" not-null="true" />
+    <property name="SQRZJLX" column="SQRZJLX" not-null="false" />
+    <property name="SQRZJH" column="SQRZJH" not-null="false" />
+    <property name="ZGBMDM" column="ZGBMDM" not-null="false" />
+    <property name="ZGBM" column="ZGBM" not-null="false" />
+    <property name="DWXZ" column="DWXZ" not-null="false" />
+    <property name="FRDBXM" column="FRDBXM" not-null="false" />
+    <property name="FRDBZJLX" column="FRDBZJLX" not-null="false" />
+    <property name="FRDBZJH" column="FRDBZJH" not-null="false" />
+    <property name="FRDBDHHM" column="FRDBDHHM" not-null="false" />
+    <property name="FRZW" column="FRZW" not-null="false" />
+    <property name="SJHM" column="SJHM" not-null="false" />
+    <property name="LXDH" column="LXDH" not-null="false" />
+    <property name="CZHM" column="CZHM" not-null="false" />
+    <property name="EMAIL" column="EMAIL" not-null="false" />
+    <property name="TXDZ" column="TXDZ" not-null="false" />
+    <property name="YZBM" column="YZBM" not-null="false" />
+    <property name="NYHKBS" column="NYHKBS" not-null="true" />
+    <property name="ZXBS" column="ZXBS" not-null="true" />
+    <property name="KHYH" column="KHYH" not-null="false" />
+    <property name="YHZH" column="YHZH" not-null="false" />
+    <property name="ZCZJ" column="ZCZJ" not-null="false" />
+    <property name="ZJLY" column="ZJLY" not-null="false" />
+    <property name="ISDELETE" column="ISDELETE" not-null="true" />
+    <property name="ISSHARE" column="ISSHARE" not-null="true" />
+    <property name="ISVALID" column="ISVALID" not-null="true" />
+    <property name="ISCONFIG" column="ISCONFIG" not-null="true" />
+    <property name="SORTORDER" column="SORTORDER" not-null="false" />
+    <property name="CREATEPERSONID" column="CREATEPERSONID" not-null="false" />
+    <property name="CREATEDATE" column="CREATEDATE" not-null="true" />
+    <property name="MODIFYPERSONID" column="MODIFYPERSONID" not-null="false" />
+    <property name="MODIFYDATE" column="MODIFYDATE" not-null="true" />
+    <property name="DATAORIGIN" column="DATAORIGIN" not-null="true" />
+    <property name="ORGANIZATIONID" column="ORGANIZATIONID" not-null="false" />
+    <property name="PREVIOUSID" column="PREVIOUSID" not-null="false" />
+    <property name="GSZZBH" column="GSZZBH" not-null="false" />
+    <property name="LXR" column="LXR" not-null="false" />
+  </class>
+</hibernate-mapping>

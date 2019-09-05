@@ -1,0 +1,3740 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HR.WorkflowService</name>
+    </assembly>
+    <members>
+        <member name="T:HR.WorkflowService.Service.ApproveOpinionService">
+            <summary>
+            审批意见服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.ApproveOpinionService.GetOpinionOfCurrentUser(System.String,System.String,System.String)">
+            <summary>
+            根据WorkID,NodeID获取当前用户的审批意见信息
+            </summary>
+            <param name="workID">工作ID</param>
+            <param name="nodeID">节点ID</param>
+            <param name="userName">用户名</param>
+            <returns>审批意见</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.ApproveOpinionService.GetOpinionOfPreviousNode(System.Int32,System.Int32)">
+            <summary>
+            获取节点以前的审批意见
+            </summary>
+            <param name="bwaID">办文案ID</param>
+            <param name="nodeID">节点ID</param>
+            <returns>审批意见列表</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Service.BWAService">
+            <summary>
+            办文案服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.OnCompleted(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            流程完成触发事件
+            </summary>
+            <param name="bwaId">办文案ID</param>
+            <param name="bwlxId">办文类型ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.OnBeforeSend(System.String,System.String,System.String,System.Int32,System.Collections.Generic.List{System.Object}@)">
+            <summary>
+            流程发送前触发事件
+            </summary>
+            <param name="bwaId">办文案ID</param>
+            <param name="slbh">受理编号</param>
+            <param name="bwlxId">办文类型ID</param>
+            <param name="currentNodeId">当前节点ID</param>
+            <param name="toNodes">到达的节点ID</param>
+            <param name="senderList">发送列表</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.OnSend(System.String,System.String,System.String,System.Int32,System.String)">
+            <summary>
+            流程发送触发事件
+            </summary>
+            <param name="bwaId">办文案ID</param>
+            <param name="slbh">受理编号</param>
+            <param name="bwlxId">办文类型ID</param>
+            <param name="currentNodeId">当前节点ID</param>
+            <param name="toNodes">到达的节点ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.OnTuiJian(System.String,System.String,System.String,System.Int32)">
+            <summary>
+            流程退件触发事件
+            </summary>
+            <param name="bwaId">办文案ID</param>
+            <param name="slbh">受理编号</param>
+            <param name="bwlxId">办文类型ID</param>
+            <param name="currentNodeId">当前节点ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.OnReturn(System.String,System.String,System.String,System.Int32,System.Int32)">
+            <summary>
+            流程退回触发事件
+            </summary>
+            <param name="bwaId">办文案ID</param>
+            <param name="slbh">受理编号</param>
+            <param name="bwlxId">办文类型ID</param>
+            <param name="currentNodeId">当前节点ID</param>
+            <param name="toNodeId">退回节点ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.OnSaveAsDraft(System.Int32,System.String,System.String)">
+            <summary>
+            保存为草稿触发事件
+            </summary>
+            <param name="bwaId">办文案ID</param>
+            <param name="slbh">受理编号</param>
+            <param name="bwlxId">办文类型ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.getTrigger(System.String)">
+            <summary>
+            获取流程触发器
+            </summary>
+            <param name="bwlxId">办文案ID</param>
+            <returns>触发器</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetMyPagedOfStation(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取岗位待办
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>岗位待办分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetMyPagedOfPersonal(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取个人待办
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>个人待办分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetMyPagedOfDraft(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取用户草稿分页信息
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>草稿分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetPagedOfYWCX(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            业务查询列表
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>业务查询分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetPagedOfYWCX_YB(System.Int32,System.Int32,System.Collections.Generic.List{HR.WorkflowService.Common.Filter},System.String)">
+            <summary>
+            已办业务查询
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>业务查询分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetPagedOfReturn(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            获取退件列表
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>退件分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetMyPageOfShift(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取流程转发列表
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>流程转发分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetCountOfDbOutdate(System.String)">
+            <summary>
+            获取用户待办箱超时流程数
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>待办超时总和</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BWAService.GetCountOfZbOutdate(System.String)">
+            <summary>
+            获取用户在办箱超时流程数
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>在办超时总和</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Service.FlowService">
+            <summary>
+            流程服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.WorkOpt_SendToNodes(System.String,System.Int32,System.Int32,System.String,System.Int32,System.String)">
+            <summary>
+            发送流程
+            </summary>
+            <param name="flowNo">流程编号</param>
+            <param name="nodeID">节点ID</param>
+            <param name="workID">工作ID</param>
+            <param name="toNodes">发送到的节点</param>
+            <param name="userName">用户名</param>
+            <returns>发送结果</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetData(System.String)">
+            <summary>
+            获取我可以申请的流程
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>流程列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetMyPagedOfDraft(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取用户草稿分页信息
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>流程分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetDataOfDraft(System.String,System.String,System.String)">
+            <summary>
+            获取用户草稿列表
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>流程草稿列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetPagedOfAllDraft(System.Int32,System.Int32,System.Collections.Generic.List{System.String},System.Int32@)">
+            <summary>
+            获取流程所有草稿列表
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="workNoList">工作编号列表</param>
+            <param name="total">总数</param>
+            <returns>流程草稿列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_DeleteDraft(System.String,System.Int32)">
+            <summary>
+            删除草稿数据
+            </summary>
+            <param name="flowNo">流程编号</param>
+            <param name="workID">工作ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetMyPagedOfStation(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取岗位待办
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>待办分页结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetMyPagedOfPersonal(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取个人待办
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>个人待办分页结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.CreateBlankWork(System.String,System.String)">
+            <summary>
+            创建空白流程，流程状态为0
+            </summary>
+            <param name="flowNo">流程编号</param>
+            <param name="userName">用户名</param>
+            <returns>流程工作标识</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.SaveAsDraft(System.String,System.Int64)">
+            <summary>
+            保存为草稿
+            </summary>
+            <param name="flowNo">流程编号</param>
+            <param name="workID">工作ID</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_SendWork(System.String,System.Int32,System.Int32,System.Int32,System.String,HR.WorkflowService.Common.KeyValue[],System.String)">
+            <summary>
+            发送流程
+            </summary>
+            <param name="flowNo">流程编号</param>
+            <param name="workId">工作ID</param>
+            <param name="currentNodeID">工作ID</param>
+            <param name="nodeID">节点ID</param>
+            <param name="userName">用户名</param>
+            <param name="pairs">参数</param>
+            <param name="nextWorkers">参数</param>
+            <returns>发送结果</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_ReturnWork(System.String,System.Int64,System.Int64,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            执行工作退回(退回指定的点)
+            </summary>
+            <param name="fk_flow">流程编号</param>
+            <param name="workID">工作ID</param>
+            <param name="fid">父ID</param>
+            <param name="currentNodeID">当前节点ID</param>
+            <param name="returnToNodeID">退回的节点ID</param>
+            <param name="userName">用户名</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Flow_DoUnSend(System.String,System.Int64,System.String)">
+            <summary>
+            执行-撤销发送
+            </summary>
+            <param name="flowNo">流程编号</param>
+            <param name="workID">工作ID</param>
+            <param name="userName">用户名</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.DB_GenerTrack(System.String,System.Int32,System.Int32)">
+            <summary>
+            获取流程日志
+            </summary>
+            <param name="FK_Flow">流程编号</param>
+            <param name="WorkID">工作ID</param>
+            <param name="FID">父ID</param>
+            <returns>日志列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetDirectionsByFlowNo(System.String)">
+            <summary>
+            根据流程编号获取迁移方向实体
+            </summary>
+            <param name="workflowNo">流程编号</param>
+            <returns>连接线记录集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_SetWorkRead(System.Int32,System.Int64,System.String)">
+            <summary>
+            设置是此工作为读取状态
+            </summary>
+            <param name="nodeID">节点标识</param>
+            <param name="workID">工作标识</param>
+            <param name="userName">用户名</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_SetWorkUnRead(System.Int32,System.Int64,System.String)">
+            <summary>
+            设置是此工作为未读取状态
+            </summary>
+            <param name="nodeID">节点标识</param>
+            <param name="workID">工作标识</param>
+            <param name="userName">用户名</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_Shift(System.String,System.Int32,System.Int64,System.Int64,System.String,System.String,System.String)">
+            <summary>
+            流程转发
+            </summary>
+            <param name="flowNo">流程标识</param>
+            <param name="nodeID">节点标识</param>
+            <param name="workID">工作标识</param>
+            <param name="fid">父标识</param>
+            <param name="toEmp">要转发用户</param>
+            <param name="msg">信息</param>
+            <param name="userName">用户名</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_UnShift(System.String,System.Int64,System.String,System.String)">
+            <summary>
+            取消流程转发
+            </summary>
+            <param name="flowNo">流程标识</param>
+            <param name="workID">工作标识</param>
+            <param name="toEmpName">已转发用户</param>
+            <param name="userName">用户名</param>
+            <returns>操作结果消息</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetMyPageOfShift(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取流程转发列表
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>转发分页记录集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Flow_DoDeleteFlowByFlag(System.String,System.Int64,System.Boolean,System.String,System.String)">
+            <summary>
+            退件
+            </summary>
+            <param name="flowNo">流程标识</param>
+            <param name="workID">工作标识</param>
+            <param name="isDelSubFlow">是否删除子流程</param>
+            <param name="userName">用户名</param>
+            <param name="msg">退件信息（一般为空）</param>
+            <returns>成功与否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetPagedOfReturn(System.Int32,System.Int32,System.String,System.String,System.String)">
+            <summary>
+            获取退件列表
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="userName">用户名</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序号</param>
+            <returns>退件分页结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.IsEndNode(System.Int32)">
+            <summary>
+            是否最后一个节点
+            </summary>
+            <param name="nodeId">节点标识</param>
+            <returns>是或否</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.GetCountOfDbOutdate(System.String)">
+            <summary>
+            获取用户待办箱超时流程数
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>超时流程数</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_HungUpWork(System.String,System.String,System.Int64)">
+            <summary>
+            挂起
+            </summary>
+            <param name="userName"></param>
+            <param name="flowNo"></param>
+            <param name="workID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.Node_UnHungUpWork(System.String,System.String,System.Int64)">
+            <summary>
+            解挂
+            </summary>
+            <param name="userName"></param>
+            <param name="flowNo"></param>
+            <param name="workID"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.CheckAcrossNodeId(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            判断是否跨某一节点，只适合一条线流程
+            </summary>
+            <param name="targetNodeId"></param>
+            <param name="fromNodeId"></param>
+            <param name="toNodeId"></param>
+            <returns></returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.UserLogin(System.String)">
+            <summary>
+            用户登陆
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.FlowService.BeforeSendCheck(System.String,System.Int32,System.Int32)">
+            <summary>
+            发送前检查是否已退件、是否已办理
+            </summary>
+            <param name="fk_flow">流程标识</param>
+            <param name="workId">工作标识</param>
+            <param name="currentNodeID">当前节点标识</param>
+        </member>
+        <member name="T:HR.WorkflowService.Service.SendReturnObject">
+            <summary>
+            发送返回数据
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.success">
+            <summary>
+            是否成功
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.error">
+            <summary>
+            错误消息
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarWorkID">
+            <summary>
+            工作标识字符串
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.IsStopFlow">
+            <summary>
+            是否终止流程
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarToNodeID">
+            <summary>
+            到达节点ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarToNodeIDs">
+            <summary>
+            到达节点IDs
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarToNodeName">
+            <summary>
+            到达节点名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarCurrNodeName">
+            <summary>
+            到达的节点名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarCurrNodeID">
+            <summary>
+            当前节点标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarAcceptersName">
+            <summary>
+            接受人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarAcceptersID">
+            <summary>
+            接受人IDs
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Service.SendReturnObject.VarTreadWorkIDs">
+            <summary>
+            分流向子线程发送时产生的子线程的WorkIDs, 多个有逗号分开.
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Service.BHService">
+            <summary>
+            编号服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.BHService.CreateCode(System.String,System.String,System.String,System.String,System.String)">
+            <summary>
+            获取编号
+            </summary>
+            <param name="bhId">编号ID</param>
+            <param name="workflowName">流程名称</param>
+            <param name="userName">用户名</param>
+            <param name="region">区域</param>
+            <param name="xzqhbm">行政区划编码</param>
+            <returns>编号</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Service.NodeService">
+            <summary>
+            节点服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetPagedFromCCFlow(System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            从CCFlow获取节点分页数据
+            </summary>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序</param>
+            <returns>节点分页记录集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetNode(System.Int32)">
+            <summary>
+            获取节点
+            </summary>
+            <param name="nodeID">节点ID</param>
+            <returns>节点</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.WorkOpt_GetToNodes(System.String,System.Int32,System.Int32,System.Int32)">
+            <summary>
+            获取下一步骤的所有节点
+            </summary>
+            <param name="workflowNo">流程编号</param>
+            <param name="ndFrom">从节点</param>
+            <param name="workid">工作ID</param>
+            <returns>节点列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.Node_GetCurrentNode(System.String,System.Int64)">
+            <summary>
+            获取当前节点
+            </summary>
+            <param name="workflowNo">流程编号</param>
+            <param name="workId">工作ID</param>
+            <returns>节点</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.Node_GetCurrentNodeID(System.String,System.Int64)">
+            <summary>
+            获取当前节点ID
+            </summary>
+            <param name="workflowNo">流程编号</param>
+            <param name="workId">工作ID</param>
+            <returns>节点标识</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.Node_GetCurrentNodeIDList(System.String,System.Int64)">
+            <summary>
+            获取当前节点ID列表
+            </summary>
+            <param name="workflowNo">流程编号</param>
+            <param name="workId">工作ID</param>
+            <returns>节点标识集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.DB_GenerWillReturnNodes(System.Int32,System.Int32,System.Int32)">
+            <summary>
+            获取当前节点可以退回的节点
+            </summary>
+            <param name="fk_node">节点ID</param>
+            <param name="workid">工作ID</param>
+            <param name="fid">父ID</param>
+            <returns>节点记录集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetProcessedNodesByWorkId(System.Int32)">
+            <summary>
+            根据工作ID获取已处理的流程节点
+            </summary>
+            <param name="workId">工作ID</param>
+            <returns>已处理的流程节点</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetOneGenerWorkerlist(System.Int32,System.Int32)">
+            <summary>
+            根据工作ID、节点ID获取流程明细
+            </summary>
+            <param name="workId">工作ID</param>
+            <param name="nodeId">节点ID</param>
+            <returns>流程明细</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetNodesByFlowNo(System.String)">
+            <summary>
+            根据流程编号获取节点
+            </summary>
+            <param name="workflowNo">流程编号</param>
+            <returns>节点列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetPreviousNodeList(System.Int32)">
+            <summary>
+            获取节点以前的节点集合
+            </summary>
+            <param name="nodeId">节点ID</param>
+            <returns>节点集合</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Service.NodeService.GetPreNodeList(System.Collections.Generic.IList{HR.WorkflowService.Models.DIRECTION},System.Int32,System.Collections.Generic.List{HR.WorkflowService.Models.FlowNode})">
+            <summary>
+            获取之前节点集合
+            </summary>
+            <param name="directions">方向集合</param>
+            <param name="nodeId">节点ID</param>
+            <returns>节点集合</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Service.SJCLMXService">
+            <summary>
+            收件材料明细服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Service.SJCLMXService.CreateByBWLXID(System.String,System.String)">
+            <summary>
+            根据办文类型ID创建办文材料明细
+            </summary>
+            <param name="sjdId">收件单ID</param>
+            <param name="bwlxId">办文类型ID</param>
+        </member>
+        <member name="T:HR.WorkflowService.Common.ApplicationController`1">
+            <summary>
+            应用控制器
+            </summary>
+            <typeparam name="T">实体</typeparam>
+        </member>
+        <member name="P:HR.WorkflowService.Common.ApplicationController`1.WfState">
+            <summary>
+            案件流转状态
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.ApplicationController`1.BwaId">
+            <summary>
+            办文案ID
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.PageQuery(System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            加载表格数据
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序</param>
+            <returns>分页列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.getPageData(System.String,System.Int32,System.Int32,System.String,System.String)">
+            <summary>
+            获取表格分页数据
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序</param>
+            <returns>分页数据集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.PageQuery(System.String,System.Int32,System.Int32,System.Collections.Generic.List{HR.WorkflowService.Common.Filter},System.String)">
+            <summary>
+            加载表格数据
+            </summary>
+            <param name="sql">SQL语句</param>
+            <param name="page">页</param>
+            <param name="rows">行</param>
+            <param name="filters">过滤条件</param>
+            <param name="orders">排序</param>
+            <returns>分页数据集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetData(System.String,System.String)">
+            <summary>
+            加载数据集
+            </summary>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序</param>
+            <returns>数据集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetViewData(System.String,System.String,System.String)">
+            <summary>
+            加载视图数据集
+            </summary>
+            <param name="filterStr">过滤条件</param>
+            <param name="orders">排序</param>
+            <param name="viewName">视图名称</param>
+            <returns>数据集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetById(System.String)">
+            <summary>
+            根据ID获取实体
+            </summary>
+            <param name="Id">标识</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.Save">
+            <summary>
+            保存
+            </summary>
+            <returns>操作结果</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.Save``1">
+            <summary>
+            保存其它实体
+            </summary>
+            <typeparam name="A">实体类型</typeparam>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetUpdateModel">
+            <summary>
+            获取从表单提交更新后的实体
+            </summary>
+            <param name="dao">数据访问对象</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetUpdateModel``1(System.String,System.String[],System.String[])">
+            <summary>
+            获取从表单提交更新A实体
+            </summary>
+            <typeparam name="A">实体类型</typeparam>
+            <param name="dao">数据访问对象</param>
+            <param name="prefix">前缀</param>
+            <param name="includeProperties">包含的属性</param>
+            <param name="excludeProperties">排除的属性</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.Delete(System.String[])">
+            <summary>
+            删除实体
+            </summary>
+            <param name="ids">标识集合</param>
+            <returns>操作结果</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.LoadForm(System.String)">
+            <summary>
+            加载表单
+            </summary>
+            <param name="id">标识</param>
+            <returns>表单数据</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetCurrentRegionsFilters">
+            <summary>
+            获取当前用户区域Filters
+            </summary>
+            <returns>过滤条件列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ApplicationController`1.GetCurrentXZQHDMFilters">
+            <summary>
+            获取当前行政区划过滤条件
+            </summary>
+            <returns>过滤条件列表</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.BaseController">
+            <summary>
+            控制器基类
+            </summary>
+        </member>
+        <member name="F:HR.WorkflowService.Common.BaseController.currentUser">
+            <summary>
+            当前用户
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.BaseController.CurrentSystemID">
+            <summary>
+            当前系统ID编码(在应用程序的设置文件(Setting.settings)中配置)
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.BaseController.CurrentUser">
+            <summary>
+            当前用户
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.BaseController.UserIP">
+            <summary>
+            客户端IP地址(若在服务端则为"::1")
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.BaseController.AppSettings">
+            <summary>
+            获取NameValueCollection型的当前应用程序的自定义配置信息，对应Web.config中的appSettings节。
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseController.Json_Post(System.Object)">
+            <summary>
+            返回Post请求
+            </summary>
+            <param name="obj">返回的实体</param>
+            <returns>序列化对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseController.Json_Get(System.Object)">
+            <summary>
+            返回Get请求
+            </summary>
+            <param name="obj">返回的实体</param>
+            <returns>序列化对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseController.Json(System.Object,System.String,System.Text.Encoding,System.Web.Mvc.JsonRequestBehavior)">
+            <summary>
+            重写Controller的序列化方法
+            </summary>
+            <param name="data">实例化对象</param>
+            <param name="contentType">对象类型</param>
+            <param name="contentEncoding">内容编码</param>
+            <param name="behavior">请求行为，是否请允许get请求</param>
+            <returns>序列化对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseController.OnActionExecuting(System.Web.Mvc.ActionExecutingContext)">
+            <summary>
+            执行Action前过滤器
+            </summary>
+            <param name="filterContext">执行内容</param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseController.OnException(System.Web.Mvc.ExceptionContext)">
+            <summary>
+            错误处理
+            </summary>
+            <param name="filterContext">错误消息实体</param>
+        </member>
+        <member name="T:HR.WorkflowService.Common.JsonNetResult">
+            <summary>
+            扩展JsonResult
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.JsonNetResult.SerializerSettings">
+            <summary>
+            序列化配置
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.JsonNetResult.Formatting">
+            <summary>
+            格式
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.JsonNetResult.#ctor">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.JsonNetResult.ExecuteResult(System.Web.Mvc.ControllerContext)">
+            <summary>
+            重写执行结果方法
+            </summary>
+            <param name="context">控制器内容</param>
+        </member>
+        <member name="T:HR.WorkflowService.Common.BaseEntity`1">
+            <summary>
+            实体类的基类
+            </summary>
+            <typeparam name="IdType">实体类主键Id的数据类型(目前不考虑多列组合主键)</typeparam>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseEntity`1.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseEntity`1.#ctor(System.String)">
+            <summary>
+            带参构造方法
+            </summary>
+            <param name="tableName">当前实体类对应的数据库表名</param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseEntity`1.Equals(HR.WorkflowService.Common.BaseEntity{`0})">
+            <summary>
+            判断给定的实体对象与当前实体对象是否相等（若主键ID及哈希值相等，则认为两个对象相等）
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="P:HR.WorkflowService.Common.BaseEntity`1.ID">
+            <summary>
+            实体类的主键Id
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.BaseEntity`1.TableName">
+            <summary>
+            实体类对应的关系数据库表名
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseEntity`1.OnBeforeSave">
+            <summary>
+            保存之前事件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.BaseEntity`1.CheckRepeat``1(HR.WorkflowService.Common.BaseEntity{System.String},System.String,System.String,System.Collections.Generic.IList{``0})">
+            <summary>
+            查询字段是否重复
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.CommonEntity">
+            <summary>
+            实体基类
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.CommonEntity.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="tableName">数据表名称</param>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.CREATEDATE">
+            <summary>
+            创建日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.ISDELETE">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.ISSHARE">
+            <summary>
+            是否共享
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.ISVALID">
+            <summary>
+            是否有效
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.ISCONFIG">
+            <summary>
+            是否可配置
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.SORTORDER">
+            <summary>
+            顺序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.CREATEPERSONID">
+            <summary>
+            创建人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.MODIFYPERSONID">
+            <summary>
+            修改人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.ORGANIZATIONID">
+            <summary>
+            组织机构部门
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.MODIFYDATE">
+            <summary>
+            修改日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CommonEntity.DATAORIGIN">
+            <summary>
+            0或null系统生成数据，1迁移数据，2初始录入
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.CommonService">
+            <summary>
+            公共服务类
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.CommonService.OnLogin(System.String)">
+            <summary>
+            登陆
+            </summary>
+            <param name="userNo">用户名</param>
+            <returns>登陆成功与否</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.ConvertHelper">
+            <summary>
+            转换帮助类
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ConvertHelper.GetList``1(System.Data.DataTable)">
+            <summary>
+            表格转换实例
+            </summary>
+            <typeparam name="T">实体类型</typeparam>
+            <param name="table">表格数据</param>
+            <returns></returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.CustomAttributes.BWLXID">
+            <summary>
+            办文类型特性
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.CustomAttributes.BWLXID.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="Id">标识</param>
+        </member>
+        <member name="P:HR.WorkflowService.Common.CustomAttributes.BWLXID.IDs">
+            <summary>
+            标识
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.DaoExtensionFunctions">
+            <summary>
+            数据库访问对象扩展方法定义类
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.DaoExtensionFunctions.ListIDictionary(NHibernate.IQuery)">
+            <summary>
+            返回IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集
+            </summary>
+            <param name="query">NHibernate的IQuery对象</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.DaoExtensionFunctions.ListDynamic(NHibernate.IQuery)">
+            <summary>
+            返回IList&lt;dynamic&gt;型的结果集，列表中元素的实际类型为ExpandoObject。
+            </summary>
+            <param name="query">NHibernate的IQuery对象</param>
+            <returns>IList&lt;dynamic&gt;型的结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.DaoExtensionFunctions.ToIDictionaryList(System.Data.DataTable)">
+            <summary>
+            将DataTable转换为IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集
+            每个IDictionary&lt;string, object&gt;对象代表了DataTable中的一个数据行
+            </summary>
+            <param name="dataTable">DataTable对象</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.DaoExtensionFunctions.ToList``1(System.Data.DataTable)">
+            <summary>
+            将DataTable转换为IList&lt;TEntity&gt;型的结果集
+            </summary>
+            <typeparam name="TEntity">DataTable中的记录要转换成的类型</typeparam>
+            <param name="dt">要转换的DataTable</param>
+            <returns>IList&lt;TEntity&gt;型的结果集</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.DomainException">
+            <summary>
+            领域层异常
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.DomainException.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.Filter">
+            <summary>
+            过滤条件类
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.property">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.dataType">
+            <summary>
+            属性类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.relation">
+            <summary>
+            运行符号，如=、like、not like
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.value">
+            <summary>
+            属性值
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.left">
+            <summary>
+            左则符号，如(、((等
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.right">
+            <summary>
+            右侧符号，如),))等
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Filter.connect">
+            <summary>
+            连接符,如 and 、or
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.IEntity`1">
+            <summary>
+            实体类的基接口
+            </summary>
+            <typeparam name="IdType">实体类主键Id的数据类型(目前不考虑多列组合主键)</typeparam>
+        </member>
+        <member name="M:HR.WorkflowService.Common.IEntity`1.Equals(HR.WorkflowService.Common.BaseEntity{`0})">
+            <summary>
+            判断给定的实体对象与当前实体对象是否相等
+            </summary>
+            <param name="entity">给定的实体对象</param>
+            <returns>true相等，false不等</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Common.IEntity`1.ID">
+            <summary>
+            实体类主键Id
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.IEntity`1.TableName">
+            <summary>
+            实体类对应的关系数据库表名
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.Interface.IMessage">
+            <summary>
+            提醒接口
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.IMessage.GetMessage(System.String)">
+            <summary>
+            获取提醒信息
+            </summary>
+            <param name="username">用户名</param>
+            <returns>消息列表</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.Interface.ITrigger">
+            <summary>
+            触发器接口
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.ITrigger.OnCompleted(System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            流程完成触发器
+            </summary>
+            <param name="FLOWNO"></param>
+            <param name="WORKID"></param>
+            <param name="YWH"></param>
+            <param name="NODEID"></param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.ITrigger.OnBeforeSend(System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            发送前触发器
+            </summary>
+            <param name="FLOWNO"></param>
+            <param name="WORKID"></param>
+            <param name="YWH"></param>
+            <param name="NODEID"></param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.ITrigger.OnSend(System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            发送触发器
+            </summary>
+            <param name="FLOWNO"></param>
+            <param name="WORKID"></param>
+            <param name="YWH"></param>
+            <param name="NODEID"></param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.ITrigger.OnTuiJian(System.String,System.Int32,System.String,System.Int32)">
+            <summary>
+            作废触发器
+            </summary>
+            <param name="FLOWNO"></param>
+            <param name="WORKID"></param>
+            <param name="YWH"></param>
+            <param name="NODEID"></param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.ITrigger.OnReturn(System.String,System.Int32,System.String,System.Int32,System.Int32)">
+            <summary>
+            返回触发器
+            </summary>
+            <param name="FLOWNO"></param>
+            <param name="WORKID"></param>
+            <param name="YWH"></param>
+            <param name="NODEID"></param>
+            <param name="TONODEID"></param>
+        </member>
+        <member name="M:HR.WorkflowService.Common.Interface.ITrigger.OnSaveAsDraft(System.Int32,System.String)">
+            <summary>
+            保存为草稿触发器
+            </summary>
+            <param name="workID">工作标识</param>
+            <param name="ywh">业务号</param>
+        </member>
+        <member name="T:HR.WorkflowService.Common.KeyValue">
+            <summary>
+            键值对类
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.KeyValue.Key">
+            <summary>
+            键
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.KeyValue.Value">
+            <summary>
+            值
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.Model.Message">
+            <summary>
+            提醒实体
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Model.Message.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Model.Message.Url">
+            <summary>
+            链接地址
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.Model.Message.Msg">
+            <summary>
+            信息内容
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Common.ObjectResultSetTransformer">
+            <summary>
+            NHibernate查询返回的object类型结果(集)的转换类,转换为IList&lt;IDictionary&lt;string, object&gt;&gt;
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ObjectResultSetTransformer.TransformList(System.Collections.IList)">
+            <summary>
+            转换整个IList结果集
+            </summary>
+            <param name="collection">要转换的IList结果集</param>
+            <returns>转换后的IList结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ObjectResultSetTransformer.TransformTuple(System.Object[],System.String[])">
+            <summary>
+            转换单个object对象为IDictionary&lt;string, object&gt;类型对象
+            </summary>
+            <param name="tuple">object对象属性成员值的数组</param>
+            <param name="aliases">object对象属性成员名的数组</param>
+            <returns>转换(组装)好的IDictionary&lt;string, object&gt;类型对象</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.ObjectResultSetTransformer2">
+            <summary>
+            NHibernate查询返回的object类型结果(集)的转换类,转换为IList&lt;dynamic&gt;
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ObjectResultSetTransformer2.TransformList(System.Collections.IList)">
+            <summary>
+            转换整个IList结果集
+            </summary>
+            <param name="collection">要转换的IList结果集</param>
+            <returns>转换后的IList结果集</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.ObjectResultSetTransformer2.TransformTuple(System.Object[],System.String[])">
+            <summary>
+            转换单个object对象为dynamic类型(object对象转换成的实际类型为ExpandoObject)
+            </summary>
+            <param name="tuple">object对象属性成员值的数组</param>
+            <param name="aliases">object对象属性成员名的数组</param>
+            <returns>转换(组装)好的dynamic类型对象</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.PaginationInfo">
+            <summary>
+            封装分页查询信息的分页信息类(不使用泛型，防止限死结果集的类型)
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.PaginationInfo.pagesize">
+            <summary>
+            每页的记录数
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.PaginationInfo.pageindex">
+            <summary>
+            当前页码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.PaginationInfo.total">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.PaginationInfo.rows">
+            <summary>
+            返回去的记录集(注意这里使用IEnumerable接口)
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.PaginationInfo.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="pageIndex">页码(可选参数，默认值为1)</param>
+            <param name="pageSize">每页记录数(可选参数，默认值为10)</param>
+        </member>
+        <member name="T:HR.WorkflowService.Common.PaginationInfoExtention">
+            <summary>
+            封装分页查询信息的分页信息类扩展方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.PaginationInfoExtention.ToPaging(System.Linq.IQueryable{System.Object},System.Int32,System.Int32)">
+            <summary>
+            提供可查询类型的分页方法扩展
+            </summary>
+            <param name="query">查询方法</param>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页的记录数</param>
+            <returns>分页信息类</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.PaginationInfoExtention.ToPaging``1(System.Linq.IQueryable{``0},System.Int32,System.Int32)">
+            <summary>
+            提供可查询类型的分页方法扩展
+            </summary>
+            <param name="query">查询方法</param>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页的记录数</param>
+            <returns>分页信息类</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.QueryService">
+            <summary>
+            查询服务
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.QueryService.CreatePagedSQLQuery(System.String,System.Int32,System.Int32,System.Collections.Generic.List{HR.WorkflowService.Common.Filter},System.String,System.Boolean)">
+            <summary>
+            根据SQL查询命令获取分页列表
+            </summary>
+            <param name="session">当前数据库会话</param>
+            <param name="sql">SQL查询命令</param>
+            <param name="page">目标页码</param>
+            <param name="rows">每页的记录数</param>
+            <param name="filters">过滤器，默认为null</param>
+            <param name="orders">排序字段组合字符串，例如："NAME asc"、"NAME asc,AGE desc"</param>
+            <param name="isUpper">是否将结果列表的所有字段名转换为大写字母，默认为false</param>
+            <returns>承载着SQL命令查询结果的特定页的分页对象</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.QueryService.GetData(System.String,System.Collections.Generic.List{HR.WorkflowService.Common.Filter},System.String,System.Boolean)">
+            <summary>
+            根据SQL查询命令获取数据列表
+            </summary>
+            <param name="session">当前数据库会话</param>
+            <param name="sql">SQL查询命令</param>
+            <param name="filters">过滤器，默认为null</param>
+            <param name="orders">排序字段组合字符串，例如："NAME asc"、"NAME asc,AGE desc"</param>
+            <param name="isUpper">是否将结果列表的所有字段名转换为大写字母，默认为false</param>
+            <returns>SQL命令查询结果列表</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.QueryService.CreateSql(System.String,System.Collections.Generic.List{HR.WorkflowService.Common.Filter})">
+            <summary>
+            根据过滤条件创建新的sql语句
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.QueryService.DeserializeFilter(System.String)">
+            <summary>
+            反序列化过滤条件
+            </summary>
+            <param name="filterStr">处于序列化状态的过滤条件</param>
+            <returns>已反序列化的过滤条件</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.QueryService.DeserializeFilterAddCurrentUser(System.String,System.String)">
+            <summary>
+            反序列化过滤条件的同时加上过滤当前用户
+            </summary>
+            <param name="filterStr">处于序列化状态的过滤条件</param>
+            <param name="UserName">当前用户名</param>
+            <returns>已反序列化并加上了当前和户名的过滤条件</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.RequestHelper">
+            <summary>
+            主要用于获取URL查询参数和POST参数的值
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetQueryString(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对string型的参数值)，若未找至则返回null。
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetQueryString(System.String,System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对string型的参数值)，若未找至则返回默认值。
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetQueryInt(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对int型的参数值)，若未找到则返回-1。
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetQueryInt(System.String,System.Int32)">
+            <summary>
+            获取指定名称的URL查询参数，若未找到则返回指定的默认值(针对int型的参数值)
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormString(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对string型的参数值)，若未找至则返回null。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormInt(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对int型的参数值)，若未找到则返回-1。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormInt(System.String,System.Int32)">
+            <summary>
+            获取指定名称的POST参数，若未找到则返回指定的默认值(针对int型的参数值)
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormDouble(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对double型的参数值)，若未找到则返回0。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormDouble(System.String,System.Double)">
+            <summary>
+            获取指定名称的POST参数，若未找到则返回指定的默认值(针对double型的参数值)
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormDecimal(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对decimal型的参数值)，若未找到则返回0。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Common.RequestHelper.GetFormDecimal(System.String,System.Decimal)">
+            <summary>
+            获取指定名称的POST参数，若未找到则返回指定的默认值(针对decimal型的参数值)
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Common.WFSession">
+            <summary>
+            流程Session
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Common.WFSession.Session">
+            <summary>
+            
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.ApproveOpinion">
+            <summary>
+            审批意见
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.ApproveOpinion.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.ApproveOpinion.#ctor(System.String,System.String,System.DateTime,System.String,System.String,System.String,System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="approver">审批人</param>
+            <param name="createtime">审批时间</param>
+            <param name="station">岗位</param>
+            <param name="department">部门</param>
+            <param name="opinion">意见</param>
+            <param name="node_id">节点标识</param>
+            <param name="work_id">工作标识</param>
+            <param name="nodename">节点名称</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.ApproveOpinion.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Approver">
+            <summary>
+            审批人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Createtime">
+            <summary>
+            审批时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Station">
+            <summary>
+            岗位
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Department">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Opinion">
+            <summary>
+            意见
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Node_id">
+            <summary>
+            节点标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Nodename">
+            <summary>
+            节点名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Work_id">
+            <summary>
+            工作标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Agree">
+            <summary>
+            是否同意
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.ApproveOpinion.Submit">
+            <summary>
+            是否同意
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.Attachment">
+            <summary>
+            附件
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.Attachment.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.Attachment.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.Boolean,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Nullable{System.Decimal})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="name">名称</param>
+            <param name="filetype">文件类型</param>
+            <param name="path">路径</param>
+            <param name="filesize">大小</param>
+            <param name="property">文件属性</param>
+            <param name="isdirectory">是否目录</param>
+            <param name="record_id">业务记录ID</param>
+            <param name="parent_id">父记录ID</param>
+            <param name="creator">创建用户名称</param>
+            <param name="createtime">创建时间</param>
+            <param name="sortnumber">排序号</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.Attachment.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Name">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Filetype">
+            <summary>
+            文件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Path">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Filesize">
+            <summary>
+            大小
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Property">
+            <summary>
+            文件属性
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Isdirectory">
+            <summary>
+            是否目录
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Record_id">
+            <summary>
+            业务记录ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Parent_id">
+            <summary>
+            父记录ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Creator">
+            <summary>
+            创建用户名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Createtime">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment.Sortnumber">
+            <summary>
+            排序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Attachment._parentId">
+            <summary>
+            父节点标识
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.BH">
+            <summary>
+            编号
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BH.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BH.#ctor(System.String,System.String,System.Nullable{System.Decimal},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.String,System.Nullable{System.DateTime},System.String,System.Nullable{System.DateTime},System.Int32)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">办文类型ID</param>
+            <param name="bHMC">编号名称</param>
+            <param name="cZFS">重置方式,0:没有1：年2：月3：日</param>
+            <param name="bHBDS">编号表达式</param>
+            <param name="lSH">当前流水号</param>
+            <param name="bC">流水号步长</param>
+            <param name="cD">流水号长度</param>
+            <param name="bHSM">编号说明</param>
+            <param name="iSDELETE">是否删除</param>
+            <param name="iSSHARE">是否共享</param>
+            <param name="iSVALID">是否有效</param>
+            <param name="iSCONFIG">是否可配置</param>
+            <param name="sORTORDER">顺序号</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人ID</param>
+            <param name="mODIFYDATE">修改日期</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BH.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.BHMC">
+            <summary>
+            编号名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.CZFS">
+            <summary>
+            重置方式,0:没有1：年2：月3：日
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.BHBDS">
+            <summary>
+            编号表达式
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.LSH">
+            <summary>
+            当前流水号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.BC">
+            <summary>
+            流水号步长
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.CD">
+            <summary>
+            流水号长度
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BH.BHSM">
+            <summary>
+            编号说明
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BH.CreateCode(System.String,System.String,System.String,System.String)">
+            <summary>
+            创建编号
+            </summary>
+            <param name="workflowName">流程名称</param>
+            <param name="userName">用户名</param>
+            <param name="reigon">区域</param>
+            <param name="xzqhbm">行政区划编码</param>
+            <returns>编号</returns>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BH.GetNextNumber">
+            <summary>
+            获取下一个编号
+            </summary>
+            <returns>编号</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Models.BWA">
+            <summary>
+            办文案
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWA.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWA.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.Int32},System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Int32},System.DateTime,System.Nullable{System.DateTime},System.Nullable{System.Decimal},System.Nullable{System.Int32},System.DateTime,System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.String,System.Nullable{System.DateTime},System.String,System.String,System.Nullable{System.DateTime},System.Int32,System.String,System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="bWLXID">办文类型ID</param>
+            <param name="dJZG">登记字轨</param>
+            <param name="dJLSH">登记流水号</param>
+            <param name="dJZH">登记字号</param>
+            <param name="qBWAID">之前的办文案ID</param>
+            <param name="lCSLID">流程实例ID</param>
+            <param name="yWFZ">申请类型名称</param>
+            <param name="sQLX">申请类型</param>
+            <param name="dQHJ">当前环节是否已提交.1提交,0未提交</param>
+            <param name="dQHJMC">当前环节名称</param>
+            <param name="sLBH">受理编号</param>
+            <param name="aJZTBS">0处理中，1已办结，2崔办，3缓办，4督办，5挂起，-1注销</param>
+            <param name="zL">这个是方便查询土地坐落、矿山坐落、房屋坐落的字段</param>
+            <param name="ySBBS">与电子监察一起使用时的上报标记,,已上报的业务值为1</param>
+            <param name="gDBS">用于档案流程-1为不用归档,0为需要归档，1为启动归档流程</param>
+            <param name="yJBS">移交标识</param>
+            <param name="rEGISTERDATE">立案时间</param>
+            <param name="fINISHDATE">结案时间</param>
+            <param name="sHDJZ">SH登记字</param>
+            <param name="sHDJH">SH登记号</param>
+            <param name="sHJHWCRQ">SH计划完成日期</param>
+            <param name="iSDELETE">是否删除</param>
+            <param name="iSSHARE">是否共享</param>
+            <param name="iSVALID">是否有效</param>
+            <param name="sORTORDER">顺序号</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人</param>
+            <param name="oRGANIZATIONID">组织机构部门</param>
+            <param name="mODIFYDATE">修改日期</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+            <param name="bWABZ">备注</param>
+            <param name="sZTCBM">所在图层编码</param>
+            <param name="tXGLZT">A=跳过计财，B=跳过局长，C=跳过打印发证</param>
+            <param name="nPH">NP号</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWA.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.BWLXID">
+            <summary>
+            办文类型ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.DJZG">
+            <summary>
+            登记字轨
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.DJLSH">
+            <summary>
+            登记流水号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.DJZH">
+            <summary>
+            登记字号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.QBWAID">
+            <summary>
+            之前的办文案ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.LCSLID">
+            <summary>
+            流程实例ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.YWFZ">
+            <summary>
+            申请类型名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SQLX">
+            <summary>
+            申请类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.DQHJ">
+            <summary>
+            当前环节是否已提交.1提交,0未提交
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.DQHJMC">
+            <summary>
+            当前环节名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SLBH">
+            <summary>
+            受理编号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.AJZTBS">
+            <summary>
+            0处理中，1已办结，2崔办，3缓办，4督办，5挂起，-1注销
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.ZL">
+            <summary>
+            这个是方便查询土地坐落、矿山坐落、房屋坐落的字段
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.YSBBS">
+            <summary>
+            与电子监察一起使用时的上报标记,,已上报的业务值为1
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.GDBS">
+            <summary>
+            用于档案流程-1为不用归档,0为需要归档，1为启动归档流程
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.YJBS">
+            <summary>
+            移交标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.REGISTERDATE">
+            <summary>
+            立案时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.FINISHDATE">
+            <summary>
+            结案时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SHDJZ">
+            <summary>
+            SH登记字
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SHDJH">
+            <summary>
+            SH登记号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SHJHWCRQ">
+            <summary>
+            SH计划完成日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.BWABZ">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SZTCBM">
+            <summary>
+            所在图层编码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.TXGLZT">
+            <summary>
+            A=跳过计财，B=跳过局长，C=跳过打印发证
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.NPH">
+            <summary>
+            NP号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.XZQHDM">
+            <summary>
+            行政区划代码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SQRMC">
+            <summary>
+            申请人名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.YWRMC">
+            <summary>
+            义务人名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SJD">
+            <summary>
+            收件单
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.BWLX">
+            <summary>
+            办文类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SQRID">
+            <summary>
+            申请人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.LXDH">
+            <summary>
+            联系电话
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.TXDZ">
+            <summary>
+            通信地址
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.TJH">
+            <summary>
+            图件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SJR">
+            <summary>
+            收件人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.SJRQ">
+            <summary>
+            收件时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.BZ">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.BWLXMC">
+            <summary>
+            办文类型名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.FZMC">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWA.TIPUSERS">
+            <summary>
+            提醒用户
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWA.Clone">
+            <summary>
+            克隆实体
+            </summary>
+            <returns>办文案对象</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Models.BWCL">
+            <summary>
+            办文材料
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWCL.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWCL.#ctor(System.String,System.Nullable{System.Decimal},System.String,System.String,System.Nullable{System.Decimal},System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.String,System.String,System.Nullable{System.DateTime},System.String,System.Nullable{System.DateTime})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="xH">序号</param>
+            <param name="cLMC">材料名称</param>
+            <param name="cLFZ">材料分组</param>
+            <param name="cLYS">材料页数</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+            <param name="iSDELETE">是否删除</param>
+            <param name="iSSHARE">是否共享</param>
+            <param name="iSVALID">是否有效</param>
+            <param name="iSCONFIG">是否可配置</param>
+            <param name="sORTORDER">顺序号</param>
+            <param name="oRGANIZATIONID">组织机构部门</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人</param>
+            <param name="mODIFYDATE">修改日期</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWCL.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWCL.XH">
+            <summary>
+            序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWCL.CLMC">
+            <summary>
+            材料名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWCL.CLFZ">
+            <summary>
+            材料分组
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWCL.CLYS">
+            <summary>
+            材料页数
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWCL.SJLX">
+            <summary>
+            收件类型
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWCL.OnBeforeSave">
+            <summary>
+            保存验证
+            </summary>
+            <returns>验证通过与否</returns>
+        </member>
+        <member name="T:HR.WorkflowService.Models.BWLX">
+            <summary>
+            办文类型
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWLX.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWLX.#ctor(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.Nullable{System.Int32},System.String,System.Nullable{System.DateTime},System.String,System.Nullable{System.DateTime},System.Int32,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="yWFZID">业务分组ID</param>
+            <param name="yWFZ">申请类型名称</param>
+            <param name="bWLXMC">办文类型名称</param>
+            <param name="bWLXSM">办文类型说明</param>
+            <param name="sFSJ">初始为不收件0，收件为1,,</param>
+            <param name="sFGD">是否显示在档案签收列表里，0为不用归档的，1为要归档</param>
+            <param name="dAFLID">档案分类ID</param>
+            <param name="iSDELETE">是否删除</param>
+            <param name="iSSHARE">是否共享</param>
+            <param name="iSVALID">是否有效</param>
+            <param name="iSCONFIG">是否可配置</param>
+            <param name="oRGANIZATIONID">组织机构部门</param>
+            <param name="sORTORDER">顺序号</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人</param>
+            <param name="mODIFYDATE">修改日期</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+            <param name="bHID">编号ID</param>
+            <param name="lCID">流程标识</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWLX.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.YWFZID">
+            <summary>
+            业务分组ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.YWFZ">
+            <summary>
+            申请类型名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.BWLXMC">
+            <summary>
+            办文类型名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.BWLXSM">
+            <summary>
+            办文类型说明
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.SFSJ">
+            <summary>
+            初始为不收件0，收件为1,,
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.SFGD">
+            <summary>
+            是否显示在档案签收列表里，0为不用归档的，1为要归档
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.DAFLID">
+            <summary>
+            档案分类ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.BHID">
+            <summary>
+            编号ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.DJZHID">
+            <summary>
+            登记字号ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.LCID">
+            <summary>
+            流程ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.JHWCTS">
+            <summary>
+            计划完成天数
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLX.YWFZENTITY">
+            <summary>
+            业务分组实体
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.BWLXBWCLRLT">
+            <summary>
+            办文类型与办文材料关系
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWLXBWCLRLT.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWLXBWCLRLT.#ctor(System.String,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Decimal,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="bWLXID">办文类型ID</param>
+            <param name="bWCLID">办文材料ID</param>
+            <param name="cLYS">材料页数</param>
+            <param name="iSCONFIG">是否可配置</param>
+            <param name="bBCLBS">必备材料标识</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.BWLXBWCLRLT.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.BWLXID">
+            <summary>
+            办文类型ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.BWCLID">
+            <summary>
+            办文材料ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.CLYS">
+            <summary>
+            材料页数
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.ISCONFIG">
+            <summary>
+            是否可配置
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.BBCLBS">
+            <summary>
+            必备材料标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.DATAORIGIN">
+            <summary>
+            0或null系统生成数据，1迁移数据，2初始录入
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.SJSL">
+            <summary>
+            收件数量
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.SORTORDER">
+            <summary>
+            顺序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.BWLXBWCLRLT.BWCL">
+            <summary>
+            办文材料
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.COND">
+            <summary>
+            连接线条件
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.COND.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.COND.#ctor(System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="mYPK">MyPK,-,主键</param>
+            <param name="cONDTYPE">条件类型</param>
+            <param name="dATAFROM">条件数据来源0表单,1岗位(对方向条件有效)</param>
+            <param name="fK_FLOW">流程</param>
+            <param name="nODEID">发生的事件MainNode</param>
+            <param name="fK_NODE">节点ID</param>
+            <param name="fK_ATTR">属性</param>
+            <param name="aTTRKEY">属性键</param>
+            <param name="aTTRNAME">中文名称</param>
+            <param name="fK_OPERATOR">运算符号</param>
+            <param name="oPERATORVALUE">要运算的值</param>
+            <param name="oPERATORVALUET">要运算的值T</param>
+            <param name="tONODEID">ToNodeID（对方向条件有效）</param>
+            <param name="cONNJUDGEWAY">条件关系,枚举类型:0,or;1,and;</param>
+            <param name="mYPOID">MyPOID</param>
+            <param name="pRI">计算优先级</param>
+            <param name="cONDORAND">方向条件类型</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.COND.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.MYPK">
+            <summary>
+            MyPK,-,主键
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.CONDTYPE">
+            <summary>
+            条件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.DATAFROM">
+            <summary>
+            条件数据来源0表单,1岗位(对方向条件有效)
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.FK_FLOW">
+            <summary>
+            流程
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.NODEID">
+            <summary>
+            发生的事件MainNode
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.FK_NODE">
+            <summary>
+            节点ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.FK_ATTR">
+            <summary>
+            属性
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.ATTRKEY">
+            <summary>
+            属性键
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.ATTRNAME">
+            <summary>
+            中文名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.FK_OPERATOR">
+            <summary>
+            运算符号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.OPERATORVALUE">
+            <summary>
+            要运算的值
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.OPERATORVALUET">
+            <summary>
+            要运算的值T
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.TONODEID">
+            <summary>
+            ToNodeID（对方向条件有效）
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.CONNJUDGEWAY">
+            <summary>
+            条件关系,枚举类型:0,or;1,and;
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.MYPOID">
+            <summary>
+            MyPOID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.PRI">
+            <summary>
+            计算优先级
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.COND.CONDORAND">
+            <summary>
+            方向条件类型
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.DIRECTION">
+            <summary>
+            连接线
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DIRECTION.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DIRECTION.#ctor(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="mYPK">MyPK,-,主键</param>
+            <param name="fK_FLOW">流程</param>
+            <param name="nODE">从节点</param>
+            <param name="tONODE">到节点</param>
+            <param name="dIRTYPE">类型0前进1返回</param>
+            <param name="iSCANBACK">是否可以原路返回(对后退线有效)</param>
+            <param name="dOTS">轨迹信息</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DIRECTION.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.MYPK">
+            <summary>
+            MyPK,-,主键
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.FK_FLOW">
+            <summary>
+            流程
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.NODE">
+            <summary>
+            从节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.TONODE">
+            <summary>
+            到节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.DIRTYPE">
+            <summary>
+            类型0前进1返回
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.ISCANBACK">
+            <summary>
+            是否可以原路返回(对后退线有效)
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DIRECTION.DOTS">
+            <summary>
+            轨迹信息
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.CYCT">
+            <summary>
+            常用词条
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.CYCT.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.CYCT.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="node_id">流程节点标识</param>
+            <param name="page_id">流程页签标识</param>
+            <param name="sortNumber">排序号</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.CYCT.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.CTMC">
+            <summary>
+            词条名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.CTNR">
+            <summary>
+            词条内容
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.ISVALID">
+            <summary>
+            是否有效
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.ISDELETED">
+            <summary>
+            是否删除
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.SORTORDER">
+            <summary>
+            顺序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.CREATOR">
+            <summary>
+            创建者
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.CYCT.CREATETIME">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.DLR">
+            <summary>
+            代理人
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DLR.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DLR.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Nullable{System.Int32},System.String,System.Nullable{System.DateTime},System.String,System.Nullable{System.DateTime},System.Int32)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="dLRMC">代理人名称</param>
+            <param name="dLRZJLX">代理人证件类型</param>
+            <param name="dLRZJH">代理人证件号</param>
+            <param name="dLRTXDZ">通信地址</param>
+            <param name="dLRYZBM">邮政编码</param>
+            <param name="dLRDHHM">代理人电话号码</param>
+            <param name="zGZSHM">资格证书号码</param>
+            <param name="sSJG">所属机构</param>
+            <param name="jGDM">机构代码，申请代码</param>
+            <param name="eMAIL">电子邮件</param>
+            <param name="iSDELETE">是否删除</param>
+            <param name="iSSHARE">是否共享</param>
+            <param name="iSVALID">是否有效</param>
+            <param name="iSCONFIG">是否可配置</param>
+            <param name="sORTORDER">顺序号</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人</param>
+            <param name="mODIFYDATE">修改日期</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DLR.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.DLRMC">
+            <summary>
+            代理人名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.DLRZJLX">
+            <summary>
+            代理人证件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.DLRZJH">
+            <summary>
+            代理人证件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.DLRTXDZ">
+            <summary>
+            通信地址
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.DLRYZBM">
+            <summary>
+            邮政编码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.DLRDHHM">
+            <summary>
+            代理人电话号码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.ZGZSHM">
+            <summary>
+            资格证书号码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.SSJG">
+            <summary>
+            所属机构
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.JGDM">
+            <summary>
+            机构代码，申请代码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DLR.EMAIL">
+            <summary>
+            电子邮件
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.DYQD">
+            <summary>
+            打印清单
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DYQD.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DYQD.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="nAME">名称</param>
+            <param name="nODE_ID">节点标识</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.DYQD.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DYQD.NAME">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DYQD.NODE_ID">
+            <summary>
+            节点标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DYQD.URL">
+            <summary>
+            路径
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.DYQD.BWLX_ID">
+            <summary>
+            办文类型标识
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.FlowData">
+            <summary>
+            流程数据
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.FK_FLOW">
+            <summary>
+            流程编号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.FK_EMP">
+            <summary>
+            流程编号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.TITLE">
+            <summary>
+            标题
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.STARTER">
+            <summary>
+            流程发起人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.STARTNAME">
+            <summary>
+            流程发起人姓名
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.FLOWNAME">
+            <summary>
+            流程名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.TODOEMPS">
+            <summary>
+            参与成员
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.RDT">
+            <summary>
+            流程发起日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.NODENAME">
+            <summary>
+            审批节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.WORKID">
+            <summary>
+            工作标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.FK_NODE">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.FID">
+            <summary>
+            父标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.WFSTATE">
+            <summary>
+            流程状态
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.BWAID">
+            <summary>
+            办文案标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.WFSTATENAME">
+            <summary>
+            流程状态名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowData.ISREAD">
+            <summary>
+            是否已读
+            </summary>
+        </member>
+        <member name="F:HR.WorkflowService.Models.FlowData.StateDic">
+            <summary>
+            状态字典
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.FlowNode">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.NodeID">
+            <summary>
+            节点ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.FK_Flow">
+            <summary>
+            流程ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.Step">
+            <summary>
+            步骤
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.Name">
+            <summary>
+            节点名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.Rec">
+            <summary>
+            被退回节点上的操作员编号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.RecName">
+            <summary>
+            被退回节点上的操作员名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.CondModel">
+            <summary>
+            条件模式
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.RunModel">
+            <summary>
+            运行模式
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.X">
+            <summary>
+            X轴
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.Y">
+            <summary>
+            Y轴
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.DOC">
+            <summary>
+            描述
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FlowNode.CCROLE">
+            <summary>
+            抄送方式
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.FLOWSORT">
+            <summary>
+            流程分组
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.FLOWSORT.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.FLOWSORT.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="nO">编号,-,主键</param>
+            <param name="nAME">名称</param>
+            <param name="pARENTNO">父节点No</param>
+            <param name="tREENO">TreeNo</param>
+            <param name="iDX">Idx</param>
+            <param name="iSDIR">IsDir</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.FLOWSORT.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FLOWSORT.NO">
+            <summary>
+            编号,-,主键
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FLOWSORT.NAME">
+            <summary>
+            名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FLOWSORT.PARENTNO">
+            <summary>
+            父节点No
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FLOWSORT.TREENO">
+            <summary>
+            TreeNo
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FLOWSORT.IDX">
+            <summary>
+            Idx
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.FLOWSORT.ISDIR">
+            <summary>
+            IsDir
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.GenerWorkerlist">
+            <summary>
+            工作明细
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.WorkID">
+            <summary>
+            工作节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.FK_Node">
+            <summary>
+            流程节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.FK_Emp">
+            <summary>
+            处理用户
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.FK_EmpText">
+            <summary>
+            处理用户名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.FK_Dept">
+            <summary>
+            部门
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.RDT">
+            <summary>
+            记录时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.DTOFWARNING">
+            <summary>
+            警告时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.ZDT">
+            <summary>
+            转发时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.CDT">
+            <summary>
+            完成时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.Sender">
+            <summary>
+            转发人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.ISREAD">
+            <summary>
+            已读
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.GenerWorkerlist.ISPASS">
+            <summary>
+            已通过
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.NODEPAGE">
+            <summary>
+            节点页签
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.NODEPAGE.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.NODEPAGE.#ctor(System.String,System.String,System.String,System.Int32)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="node_id">流程节点标识</param>
+            <param name="page_id">流程页签标识</param>
+            <param name="sortNumber">排序号</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.NODEPAGE.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODEPAGE.Node_id">
+            <summary>
+            流程节点标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODEPAGE.Page_id">
+            <summary>
+            流程页签标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODEPAGE.Sortnumber">
+            <summary>
+            排序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODEPAGE.Permission">
+            <summary>
+            权限 0：只读、1：读写
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODEPAGE.Params">
+            <summary>
+            自定义参数
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.NODESTATION">
+            <summary>
+            节点岗位
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.NODESTATION.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.NODESTATION.#ctor(System.Decimal,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="fK_NODE">节点,-,主键</param>
+            <param name="fK_STATION">工作岗位,,主外键:对应物理表:Port_Station,表描述:岗位</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.NODESTATION.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODESTATION.FK_NODE">
+            <summary>
+            节点,-,主键
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.NODESTATION.FK_STATION">
+            <summary>
+            工作岗位,,主外键:对应物理表:Port_Station,表描述:岗位
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.PAGE">
+            <summary>
+            页签
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.PAGE.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.PAGE.#ctor(System.String,System.String,System.String,System.String,System.Int32)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">主键ID</param>
+            <param name="definition_id">流程定义标识</param>
+            <param name="name">审核页签名称</param>
+            <param name="url">审核页签路径</param>
+            <param name="sortNumber">排序号</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.PAGE.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.PAGE.FK_FLOW">
+            <summary>
+            流程定义标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.PAGE.Name">
+            <summary>
+            审核页签名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.PAGE.Url">
+            <summary>
+            审核页签路径
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.PAGE.Sortnumber">
+            <summary>
+            排序号
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.SJCLMX">
+            <summary>
+            收件材料明细
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJCLMX.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJCLMX.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.Nullable{System.Decimal},System.String,System.String,System.Nullable{System.Decimal},System.Nullable{System.Decimal})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="bWCLID">办文材料ID</param>
+            <param name="sJDID">签收单ID</param>
+            <param name="wJDLID">文件材料ID</param>
+            <param name="sH">序号</param>
+            <param name="cLMC">材料名称</param>
+            <param name="cLBH">材料的证件编号</param>
+            <param name="cLYS">材料页数</param>
+            <param name="yJFS">原件份数</param>
+            <param name="fYJFS">复印件份数</param>
+            <param name="yJBS">移交标识</param>
+            <param name="fJLJ">扫描件路径</param>
+            <param name="sHBZ">SH备注</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+            <param name="cLLYBS">材料来源标识：1窗口正常收件，2补交件；</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJCLMX.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.BWCLID">
+            <summary>
+            办文材料ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.SJDID">
+            <summary>
+            签收单ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.WJDLID">
+            <summary>
+            文件材料ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.SH">
+            <summary>
+            序号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.CLMC">
+            <summary>
+            材料名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.CLBH">
+            <summary>
+            材料的证件编号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.CLYS">
+            <summary>
+            材料页数
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.YJBS">
+            <summary>
+            移交标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.FJLJ">
+            <summary>
+            扫描件路径
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.SHBZ">
+            <summary>
+            SH备注
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.DATAORIGIN">
+            <summary>
+            0或null系统生成数据，1迁移数据，2初始录入
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.CLLYBS">
+            <summary>
+            材料来源标识：1窗口正常收件，2补交件；
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.SJLX">
+            <summary>
+            收件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.SJSL">
+            <summary>
+            收件数量
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJCLMX.SFLYZMWJ">
+            <summary>
+            是否来源证明文件
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.SJD">
+            <summary>
+            收件单
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJD.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJD.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.DateTime,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.String,System.DateTime,System.String,System.DateTime,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="bWAID">办文案ID</param>
+            <param name="sJH">收件号</param>
+            <param name="lXR">联系人</param>
+            <param name="lXDH">联系电话</param>
+            <param name="lXDZ">联系地址</param>
+            <param name="jJRZJLX">权利人证件类型</param>
+            <param name="jJRZJH">权利人证件号</param>
+            <param name="sJR">收件人</param>
+            <param name="sJRQ">收件日期</param>
+            <param name="wXTS">温馨提示</param>
+            <param name="bZ">备注</param>
+            <param name="tJH">图件号</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+            <param name="tCMC">图层名称</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人</param>
+            <param name="mODIFYDATE">修改日期</param>
+            <param name="oRGANIZATIONID">组织机构部门</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJD.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.BWAID">
+            <summary>
+            办文案ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.SJH">
+            <summary>
+            收件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.LXR">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.LXDH">
+            <summary>
+            联系电话
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.LXDZ">
+            <summary>
+            联系地址
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.JJRZJLX">
+            <summary>
+            权利人证件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.JJRZJH">
+            <summary>
+            权利人证件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.SJR">
+            <summary>
+            收件人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.SJRQ">
+            <summary>
+            收件日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.WXTS">
+            <summary>
+            温馨提示
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.BZ">
+            <summary>
+            备注
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.TJH">
+            <summary>
+            图件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.DATAORIGIN">
+            <summary>
+            0或null系统生成数据，1迁移数据，2初始录入
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.TCMC">
+            <summary>
+            图层名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.CREATEPERSONID">
+            <summary>
+            创建人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.CREATEDATE">
+            <summary>
+            创建日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.MODIFYPERSONID">
+            <summary>
+            修改人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.MODIFYDATE">
+            <summary>
+            修改日期
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.ORGANIZATIONID">
+            <summary>
+            组织机构部门
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.SJDSQRList">
+            <summary>
+            申请人列表
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.SQRID">
+            <summary>
+            默认申请人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJD.BWA">
+            <summary>
+            办文案
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.SJDSQRRLT">
+            <summary>
+            收件单与申请人关系
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJDSQRRLT.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJDSQRRLT.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="sQRID">申请人ID,</param>
+            <param name="sJDID">一般用办文案ID</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SJDSQRRLT.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJDSQRRLT.SQRID">
+            <summary>
+            申请人ID,
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJDSQRRLT.SJDID">
+            <summary>
+            一般用办文案ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJDSQRRLT.SQRJS">
+            <summary>
+            申请人角色
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJDSQRRLT.DLRID">
+            <summary>
+            代理人ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SJDSQRRLT.SQR">
+            <summary>
+            申请人
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.SQR">
+            <summary>
+            申请人
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SQR.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SQR.#ctor(System.String,System.String,System.Int32,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.String,System.String,System.Nullable{System.Double},System.String,System.Int32,System.Int32,System.Int32,System.Int32,System.Int32,System.String,System.DateTime,System.String,System.DateTime,System.Int32,System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="bSID">标识ID：对于带有版本的对象，这是各版本的唯一标识ID</param>
+            <param name="sQRLX">申请人类型。1为申请人，2为单位</param>
+            <param name="jGDM">机构代码，申请代码</param>
+            <param name="sQRMC">申请人名称</param>
+            <param name="sQRZJLX">申请人证件类型</param>
+            <param name="sQRZJH">申请人证件号</param>
+            <param name="zGBMDM">主管部门代码</param>
+            <param name="zGBM">主管部门</param>
+            <param name="dWXZ">单位性质</param>
+            <param name="fRDBXM">法人代表姓名</param>
+            <param name="fRDBZJLX">法人代表证件类型</param>
+            <param name="fRDBZJH">法人代表证件号</param>
+            <param name="fRDBDHHM">法人代表电话号码</param>
+            <param name="fRZW">法人职务</param>
+            <param name="sJHM">法人手机号码</param>
+            <param name="lXDH">联系电话</param>
+            <param name="cZHM">传真号码</param>
+            <param name="eMAIL">电子邮件</param>
+            <param name="tXDZ">通信地址</param>
+            <param name="yZBM">邮政编码</param>
+            <param name="nYHKBS">农业人口标识：１为农业，０为非农</param>
+            <param name="zXBS">注销标识：1正常，2历史，-1为注销</param>
+            <param name="kHYH">开户银行</param>
+            <param name="yHZH">银行账号</param>
+            <param name="zCZJ">注册资金</param>
+            <param name="zJLY">资金来源</param>
+            <param name="iSDELETE">是否删除</param>
+            <param name="iSSHARE">是否共享</param>
+            <param name="iSVALID">是否有效</param>
+            <param name="iSCONFIG">是否可配置</param>
+            <param name="sORTORDER">顺序号</param>
+            <param name="cREATEPERSONID">创建人ID</param>
+            <param name="cREATEDATE">创建日期</param>
+            <param name="mODIFYPERSONID">修改人</param>
+            <param name="mODIFYDATE">修改日期</param>
+            <param name="dATAORIGIN">0或null系统生成数据，1迁移数据，2初始录入</param>
+            <param name="oRGANIZATIONID">组织机构部门</param>
+            <param name="pREVIOUSID">历史数据ID</param>
+            <param name="gSZZBH">工商执照编号(单位)</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.SQR.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.BSID">
+            <summary>
+            标识ID：对于带有版本的对象，这是各版本的唯一标识ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.SQRLX">
+            <summary>
+            申请人类型。1为申请人，2为单位
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.JGDM">
+            <summary>
+            机构代码，申请代码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.SQRMC">
+            <summary>
+            申请人名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.SQRZJLX">
+            <summary>
+            申请人证件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.SQRZJH">
+            <summary>
+            申请人证件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.ZGBMDM">
+            <summary>
+            主管部门代码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.ZGBM">
+            <summary>
+            主管部门
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.DWXZ">
+            <summary>
+            单位性质
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.FRDBXM">
+            <summary>
+            法人代表姓名
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.FRDBZJLX">
+            <summary>
+            法人代表证件类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.FRDBZJH">
+            <summary>
+            法人代表证件号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.FRDBDHHM">
+            <summary>
+            法人代表电话号码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.FRZW">
+            <summary>
+            法人职务
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.SJHM">
+            <summary>
+            法人手机号码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.LXDH">
+            <summary>
+            联系电话
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.CZHM">
+            <summary>
+            传真号码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.EMAIL">
+            <summary>
+            电子邮件
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.TXDZ">
+            <summary>
+            通信地址
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.YZBM">
+            <summary>
+            邮政编码
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.NYHKBS">
+            <summary>
+            农业人口标识：１为农业，０为非农
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.ZXBS">
+            <summary>
+            注销标识：1正常，2历史，-1为注销
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.KHYH">
+            <summary>
+            开户银行
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.YHZH">
+            <summary>
+            银行账号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.ZCZJ">
+            <summary>
+            注册资金
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.ZJLY">
+            <summary>
+            资金来源
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.PREVIOUSID">
+            <summary>
+            历史数据ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.GSZZBH">
+            <summary>
+            工商执照编号(单位)
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.SQR.LXR">
+            <summary>
+            联系人
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.TJXX">
+            <summary>
+            退件信息
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.TJXX.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.TJXX.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.DateTime})">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">标识</param>
+            <param name="bWAID">办文案ID</param>
+            <param name="sLBH">受理编号</param>
+            <param name="yWFZ">业务分组</param>
+            <param name="yWLX">业务类型</param>
+            <param name="tJYY">退件原因</param>
+            <param name="cREATORID">创建人</param>
+            <param name="cREATETIME">创建时间</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.TJXX.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.BWAID">
+            <summary>
+            办文案ID
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.SLBH">
+            <summary>
+            受理编号
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.YWFZ">
+            <summary>
+            业务分组
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.YWLX">
+            <summary>
+            业务类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.TJYY">
+            <summary>
+            退件原因
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.CREATORID">
+            <summary>
+            创建人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.TJXX.CREATETIME">
+            <summary>
+            创建时间
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.Track">
+            <summary>
+            流程运行轨迹
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.RDT">
+            <summary>
+            日期时间
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.NDFrom">
+            <summary>
+            从节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.NDFromT">
+            <summary>
+            从节点名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.EmpFromT">
+            <summary>
+            从人员
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.EmpFrom">
+            <summary>
+            从人员
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.NDTo">
+            <summary>
+            到节点
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.NDToT">
+            <summary>
+            到节点名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.EmpToT">
+            <summary>
+            到人员
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.EmpTo">
+            <summary>
+            到人员
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.Exer">
+            <summary>
+            实际执行人
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.ActionType">
+            <summary>
+            操作类型
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.Msg">
+            <summary>
+            消息
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.WfState">
+            <summary>
+            流程状态标识
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.IsRead">
+            <summary>
+            是否读取
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.Track.IsPass">
+            <summary>
+            是否读取
+            </summary>
+        </member>
+        <member name="T:HR.WorkflowService.Models.YWFZ">
+            <summary>
+            业务分组
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.YWFZ.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.WorkflowService.Models.YWFZ.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="iD">办文类型ID</param>
+            <param name="fZMC">分组名称</param>
+            <param name="fZSM">分组说明</param>
+        </member>
+        <member name="M:HR.WorkflowService.Models.YWFZ.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:HR.WorkflowService.Models.YWFZ.FZMC">
+            <summary>
+            分组名称
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.YWFZ.FZSM">
+            <summary>
+            分组说明
+            </summary>
+        </member>
+        <member name="P:HR.WorkflowService.Models.User.DepartmentID">
+            <summary>
+            部门ID
+            </summary>
+        </member>
+    </members>
+</doc>

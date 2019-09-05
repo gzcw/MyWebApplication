@@ -1,0 +1,2056 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PTXT</name>
+    </assembly>
+    <members>
+        <member name="T:PTXT.AdoNetHelper">
+            <summary>
+            纯ADO.NET数据库访问助手类
+            </summary>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.#ctor(System.Configuration.ConnectionStringSettings)">
+            <summary>
+            构造函数
+            </summary>
+            <param name="connectionStringSetting">通过ConfigurationManager.ConnectionStrings["某数据库连接的配置名"]，从应用程序的配置文件中获取表标相关的数据库连接配置的ConnectionStringSettings对象</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.OpenDbConnection">
+            <summary>
+            打开数据库连接
+            </summary>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.CloseDbConnection">
+            <summary>
+            关闭数据库连接
+            </summary>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.GetDbConnection">
+            <summary>
+            获取已经打开的数据库连接对象dbConnection
+            </summary>
+            <returns>已经打开的数据库连接</returns>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.PrepareCommand(System.Data.Common.DbCommand,System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            对命令对象进行预处理，设置命令对象的类型、文本、参数以及基于的连接对象。
+            </summary>
+            <param name="cmdObject">命令对象</param>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式，可以为null)</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.PrepareCommand(System.Data.Common.DbConnection,System.Data.Common.DbTransaction,System.Data.Common.DbCommand,System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            对命令对象进行预处理，设置命令对象的类型、文本、参数以及基于的连接对象，并将命令对象关联(加入)事务
+            </summary>
+            <param name="connection">连接对象</param>
+            <param name="transaction">事务对象（事务是基于连接对象开启的）</param>
+            <param name="cmdObject">命令对象</param>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteNonQuery(System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            对数据库执行增、删、改操作
+            </summary>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteNonQuery(System.Data.CommandType,System.String,System.Data.Common.DbParameter[],System.Int32@)">
+            <summary>
+            对数据库执行增、删、改操作，并通过输出参数返回受影响的行数
+            </summary>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+            <param name="affectedNum">受影响的行数</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteNonQuery(System.Data.CommandType,System.String,System.Data.Common.DbParameter[]@)">
+            <summary>
+            对数据库执行增、删、改操作，用于定义了输出参数或返回值的存储过程的执行。
+            </summary>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式的ref型参数)</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteNonQueryInTransaction(System.Data.Common.DbTransaction,System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            对数据库执行增、删、改操作（使用事务）
+            </summary>
+            <param name="transaction">事务对象</param>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteNonQueryInTransaction(System.Data.Common.DbTransaction,System.Data.CommandType,System.String,System.Data.Common.DbParameter[],System.Int32@)">
+            <summary>
+            对数据库执行增、删、改操作，并通过输出参数返回受影响的行数（使用事务）
+            </summary>
+            <param name="transaction">事务对象</param>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+            <param name="affectedNum">受影响的行数</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteNonQueryInTransaction(System.Data.Common.DbTransaction,System.Data.CommandType,System.String,System.Data.Common.DbParameter[]@)">
+            <summary>
+            对数据库执行增、删、改操作，并返回受影响的行数,用于定义了输出参数或返回值的存储过程的执行（使用事务）
+            </summary>
+            <param name="transaction">事务对象</param>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteDataReader(System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            执行查询，并返回一个DataReader对象。
+            </summary>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+            <returns>DataReader对象</returns>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.ExcuteScalar(System.Data.CommandType,System.String,System.Data.Common.DbParameter[])">
+            <summary>
+            执行查询，并返回结果集第一行第一列的值。
+            </summary>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+            <returns>结果集第一行第一列的值</returns>
+        </member>
+        <member name="M:PTXT.AdoNetHelper.CreateDataAdapter(System.Data.CommandType,System.String,System.Data.Common.DbParameter[],System.Int32)">
+            <summary>
+            根据adatperType选项，创建对应的数据适配器。
+            </summary>
+            <param name="cmdType">命令类型</param>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(数组形式,可以为null)</param>
+            <param name="adapterType">数据适配器类型选项：1查询适配器；2插入适配器；3删除适配器；4修改适配器</param>
+            <returns></returns>
+        </member>
+        <member name="T:PTXT.BaseDAO`2">
+            <summary>
+            数据访问对象的基类，提供基本的数据库CRUD操作
+            </summary>
+            <typeparam name="IdType">数据访问对象操作的实体对象主键Id的数据类型</typeparam>
+            <typeparam name="TEntity">数据访问对象操作的实体对象的数据类型</typeparam>
+        </member>
+        <member name="T:PTXT.IDAO`2">
+            <summary>
+            数据访问对象的基接口
+            </summary>
+            <typeparam name="IdType">数据访问对象操作的实体对象主键Id的数据类型</typeparam>
+            <typeparam name="TEntity">数据访问对象操作的实体对象的数据类型</typeparam>
+        </member>
+        <member name="M:PTXT.IDAO`2.Save(`1)">
+            <summary>
+            保存给定的实体对象到数据库(新增一条记录)
+            </summary>
+            <param name="entity">实体对象</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.SaveOrUpdate(`1)">
+            <summary>
+            保存或更新给定的实体对象到数据库(有则更新，无则新增)
+            </summary>
+            <param name="entity">实体对象</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.BatchSave(System.Collections.Generic.IList{`1})">
+            <summary>
+            批量保存给定的实体对象列表中的实体到数据库
+            </summary>
+            <param name="entityList">实体对象列表</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.Delete(`1,System.Boolean)">
+            <summary>
+            删除给定的实体对象记录(若实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="entity">实体对象</param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.Delete(`0,System.Boolean)">
+            <summary>
+            删除给定主键Id值的当前实体类型的对象记录(若实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="id"></param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.BatchDelete(System.Collections.Generic.IList{`1},System.Boolean)">
+            <summary>
+            从数据库中批量删除给定的实体对象列表中的实体(若实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="entityList">实体对象列表</param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.BatchDelete(System.Collections.Generic.IList{`0},System.Boolean)">
+            <summary>
+            从数据库中批量删除给定主键Id列表中当前实体类型对应的记录(若当前实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="IdList">主键Id列表</param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.DeleteLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            Lqin删除对象
+            </summary>
+            <param name="where"></param>
+        </member>
+        <member name="M:PTXT.IDAO`2.Update(`1)">
+            <summary>
+            更新给定的实体对象到数据库
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:PTXT.IDAO`2.BatchUpdate(System.Collections.Generic.IList{`1})">
+            <summary>
+            批量更新给定的实体对象列表中的实体到数据库
+            </summary>
+            <param name="entityList">实体对象列表</param>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindById(`0)">
+            <summary>
+            通过给定的主键Id查找实体对象，若找不到则直接返回相应实体类的基本实例。
+            </summary>
+            <param name="id">主键Id</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindOneByHQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的第一个实体对象，此对象为包含所有实体属性的完整对象，若要返回不完整的对象请使用FindOneByHQL2方法
+            </summary>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindOneBySQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的第一个实体对象，此对象为包含所有实体属性的完整对象，若要返回不完整的对象请使用FindOneBySQL2方法
+            </summary>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindOneByHQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的第一个对象，此对象可以为未定义类的实体对象
+            </summary>
+            <param name="hqlQueryString">HQL查询语句(注意：要为每一个投影字段取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个对象</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindOneBySQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的第一个对象，此对象为包含所有实体属性的完整对象
+            </summary>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个对象</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByHQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用HQL查询语句返回符合条件的实体对象列表，列表中的对象为包含所有实体属性的完整对象，若要返回不完整的对象请使用FindByHQL2方法
+            </summary>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindBySQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用原生SQL查询语句返回符合条件的实体对象列表，列表中的对象为包含所有实体属性的完整对象，若要返回不完整的对象请使用FindBySQL2方法
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">原生SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByHQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用HQL查询语句返回符合条件的实体对象列表，列表中的对象已经转换为IDictionary&lt;string, object&gt;
+            </summary>
+            <param name="hqlQueryString">HQL查询语句(注意：要为每一个投影字段取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindBySQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用原生SQL查询语句返回符合条件的实体对象列表，列表中的对象已经转换为IDictionary&lt;string, object&gt;
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">原生SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByHQL3(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用HQL查询语句返回符合条件的实体对象列表，列表中的对象已经转换为dynamic类型
+            </summary>
+            <param name="hqlQueryString">HQL查询语句(注意：要为每一个投影字段取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;dynamic&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindBySQL3(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用原生SQL查询语句返回符合条件的实体对象列表，列表中的对象已经转换为dynamic类型
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">原生SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;dynamic&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetAll">
+            <summary>
+            获取当前DAO对应实体类的所有实体对象(若当前的实体类具有SortValue属性，则结果集将按SortValue值升序排列)
+            </summary>
+            <returns>当前DAO对应实体类的所有实体对象</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetColumnValueByHQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的第一个实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句(注意：要为指定列取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetColumnValueBySQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的第一个实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetColumnValuesByHQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的所有实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句(注意：要为指定列取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的所有实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetColumnValuesBySQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的所有实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的所有实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetTotalRecordsByHQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询统计语句返回符合条件的记录数
+            </summary>
+            <param name="hqlCountString">HQL查询统计语句,样例:select count(*) from Xmxx;</param>
+            <param name="paramNameValuePairs">HQL查询统计语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的记录数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetTotalRecordsBySQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询统计语句符合条件的记录数
+            </summary>
+            <param name="sqlCountString">SQL查询统计语句,样例:select count(*) from SGHY_INFO_XMXX;</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的记录数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetDataSet(System.String,PTXT.PaginationInfo)">
+            <summary>
+            使用SQL命令获取DataSet（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataSet结果集</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetDataSet(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用带参数的SQL命令获取DataSet（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataSet结果集</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetDataTable(System.String,PTXT.PaginationInfo)">
+            <summary>
+            使用SQL命令获取DataTable（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataTable结果集</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.GetDataTable(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用带参数的SQL命令获取DataSet（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataTable结果集</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteScalar(System.String)">
+            <summary>
+            执行SQL查询命令并返回结果集中的第一行第一列
+            </summary>
+            <param name="cmdText">SQL查询命令</param>
+            <returns>第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteScalar(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            执行带参数的SQL查询命令并返回结果集中的第一行第一列
+            </summary>
+            <param name="cmdText">SQL查询命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <returns>第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteNonQuery(System.String)">
+            <summary>
+            执行SQL命令并返回受影响的行数
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteNonQuery(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            执行带参数的SQL命令并返回受影响的行业
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteProcedureNonQuery(System.String)">
+            <summary>
+            执行不带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteProcedureNonQuery(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IDictionary{System.String,System.Data.ParameterDirection})">
+            <summary>
+            执行带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <param name="paramNameValuePairs">参数列表</param>
+            <param name="paramNameDirectionPairs">参数方向列表(可选参数，需要指定方向的参数请加入此集合中)</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteProcedureScalar(System.String)">
+            <summary>
+            执行不带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <returns>执行结果的第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.ExecuteProcedureScalar(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IDictionary{System.String,System.Data.ParameterDirection})">
+            <summary>
+            执行不带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <param name="paramNameValuePairs">参数列表</param>
+            <param name="paramNameDirectionPairs">参数方向列表(可选参数，需要指定方向的参数请加入此集合中)</param>
+            <returns>执行结果的第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindOneByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的第一个实体对象，此对象为包含所有实体属性的完整对象。
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <returns>返回符合条件的第一个实体对象，没有则返回NULL</returns>        
+        </member>
+        <member name="M:PTXT.IDAO`2.Count(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+             使用LINQ lambda 表达式返回符合条件的记录数
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <returns>返回符合条件的记录数</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}})">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="order">排序方法</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}},PTXT.PaginationInfo)">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="order">排序方法</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.IDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}},System.Int32,System.Int32)">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="order">排序方法</param>
+            <param name="skip">跳过的记录数</param>
+            <param name="count">返回的记录数</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="P:PTXT.IDAO`2.IsNHibernateCacheable">
+            <summary>
+            是否启用NHibernate查询结果集缓存
+            </summary>
+        </member>
+        <member name="P:PTXT.IDAO`2.NSession">
+            <summary>
+            一个已经打开并已建立连接的NHibernate会话(Session)
+            </summary>
+        </member>
+        <member name="P:PTXT.IDAO`2.NStatelessSession">
+            <summary>
+            一个无状态的NHibernate会话(Session)
+            </summary>
+        </member>
+        <member name="P:PTXT.IDAO`2.Table">
+            <summary>
+            提供对对当前实体“LINQ”查询进行计算的功能。可用于“LINQ”查询的
+            </summary>
+        </member>
+        <member name="F:PTXT.BaseDAO`2.nlog">
+            <summary>
+            NHibernate日志记录器
+            </summary>
+        </member>
+        <member name="F:PTXT.BaseDAO`2.log">
+            <summary>
+            普通日志记录器
+            </summary>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.IsVirtualDelete">
+            <summary>
+            判断当前DAO操作的实体对象是否使用虚删除(若实体对象存在IsDelete(不区分大小写)属性，则认为对实体对象的删除操作为虚删除！)
+            </summary>
+            <returns>true:使用虚删除；false：使用物理删除</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.Save(`1)">
+            <summary>
+            保存给定的实体对象到数据库(新增一条记录)
+            </summary>
+            <param name="entity">实体对象</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.SaveOrUpdate(`1)">
+            <summary>
+            保存或更新给定的实体对象到数据库(有则更新，无则新增)
+            </summary>
+            <param name="entity">实体对象</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.BatchSave(System.Collections.Generic.IList{`1})">
+            <summary>
+            批量保存给定的实体对象列表中的实体到数据库
+            </summary>
+            <param name="entityList">实体对象列表</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.Delete(`1,System.Boolean)">
+            <summary>
+            删除给定的实体对象记录(若实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="entity">实体对象</param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.Delete(`0,System.Boolean)">
+            <summary>
+            删除给定主键Id值的当前实体类型的对象记录(若实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="id"></param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.BatchDelete(System.Collections.Generic.IList{`1},System.Boolean)">
+            <summary>
+            从数据库中批量删除给定的实体对象列表中的实体(若实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="entityList">实体对象列表</param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.BatchDelete(System.Collections.Generic.IList{`0},System.Boolean)">
+            <summary>
+            从数据库中批量删除给定主键Id列表中当前实体类型对应的记录(若当前实体对象有IsDelete(不区分大小写)属性，则进行虚删除！)
+            </summary>
+            <param name="IdList">主键Id列表</param>
+            <param name="IsCheckVirtualDelete">是否检查虚删除属性(若为false，则本方法将失去虚删除功能，默认为true)</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.DeleteLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            Linq 批量删除
+            </summary>
+            <param name="where"></param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.Update(`1)">
+            <summary>
+            更新给定的实体对象到数据库
+            </summary>
+            <param name="entity"></param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.BatchUpdate(System.Collections.Generic.IList{`1})">
+            <summary>
+            批量更新给定的实体对象列表中的实体到数据库
+            </summary>
+            <param name="entityList">实体对象列表</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindById(`0)">
+            <summary>
+            通过给定的主键Id查找实体对象，若找不到则直接返回null。
+            </summary>
+            <param name="id">主键Id</param>
+            <returns>实体对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindOneByHQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的第一个实体对象，此对象为包含所有实体属性的完整对象，若要返回不完整的对象请使用FindOneByHQL2方法
+            </summary>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindOneBySQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的第一个实体对象，此对象为包含所有实体属性的完整对象，若要返回不完整的对象请使用FindOneBySQL2方法
+            </summary>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindOneByHQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的第一个对象，此对象可以为未定义类的实体对象
+            </summary>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindOneBySQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的第一个对象，此对象为包含所有实体属性的完整对象
+            </summary>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByHQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用HQL查询语句返回符合条件的实体对象列表
+            </summary>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindBySQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用原生SQL查询语句返回符合条件的实体对象列表
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">原生SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByHQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用HQL查询语句返回符合条件的对象列表，列表中的对象已经转换为IDictionary&lt;string, object&gt;
+            </summary>
+            <param name="hqlQueryString">HQL查询语句(注意：要为每一个投影字段取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindBySQL2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用原生SQL查询语句返回符合条件的对象列表，列表中的对象已经转换为IDictionary&lt;string, object&gt;
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">原生SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByHQL3(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用HQL查询语句返回符合条件的对象列表，列表中的对象已经转换为dynamic类型
+            </summary>
+            <param name="hqlQueryString">HQL查询语句(注意：要为每一个投影字段取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;dynamic&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindBySQL3(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用原生SQL查询语句返回符合条件的对象列表，列表中的对象已经转换为dynamic类型
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">原生SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>IList&lt;dynamic&gt;型的对象列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetAll">
+            <summary>
+            获取当前DAO对应实体类的所有实体对象(若当前的实体类具有SortValue属性，则结果集将按SortValue值升序排列)
+            </summary>
+            <returns>当前DAO对应实体类的所有实体对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetColumnValueByHQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的第一个实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句(注意：要为指定列取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetColumnValueBySQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的第一个实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的第一个实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetColumnValuesByHQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句返回符合条件的所有实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句(注意：要为指定列取别名)</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的所有实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetColumnValuesBySQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句返回符合条件的所有实体对象某列的值（必须显式指明列值的数据类型）
+            </summary>
+            <typeparam name="TResult">列值的数据类型</typeparam>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的所有实体对象指定列的值</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetTotalRecordsByHQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询统计语句返回符合条件的记录数
+            </summary>
+            <param name="hqlCountString">HQL查询统计语句,样例:select count(*) from Xmxx;</param>
+            <param name="paramNameValuePairs">HQL查询统计语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的记录数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetTotalRecordsBySQL(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询统计语句符合条件的记录数
+            </summary>
+            <param name="sqlCountString">SQL查询统计语句,样例:select count(*) from SGHY_INFO_XMXX;</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <returns>符合条件的记录数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetDataSet(System.String,PTXT.PaginationInfo)">
+            <summary>
+            使用SQL命令获取DataSet（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataSet结果集</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetDataSet(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用带参数的SQL命令获取DataSet（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataSet结果集</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetDataTable(System.String,PTXT.PaginationInfo)">
+            <summary>
+            使用SQL命令获取DataTable（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataTable结果集</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.GetDataTable(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            使用带参数的SQL命令获取DataSet（可传PaginationInfo对象进行分页获取，主要用于跨表、跨库查询）
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <param name="paginationInfo">PaginationInfo对象(可选参数)</param>
+            <returns>DataTable结果集</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteScalar(System.String)">
+            <summary>
+            执行SQL命令并返回结果集中的第一行第一列
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <returns>第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteScalar(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            执行带参数的SQL命令并返回结果集中的第一行第一列
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <returns>第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteNonQuery(System.String)">
+            <summary>
+            执行SQL命令并返回受影响的行数
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteNonQuery(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            执行带参数的SQL命令并返回受影响的行业
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="paramNameValuePairs">命名参数的[名、值]对集合</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteProcedureNonQuery(System.String)">
+            <summary>
+            执行不带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteProcedureNonQuery(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IDictionary{System.String,System.Data.ParameterDirection})">
+            <summary>
+            执行带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <param name="paramNameValuePairs">参数列表</param>
+            <param name="paramNameDirectionPairs">参数方向列表(可选参数，需要指定方向的参数请加入此集合中)</param>
+            <returns>受影响的行数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteProcedureScalar(System.String)">
+            <summary>
+            执行不带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <returns>执行结果的第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ExecuteProcedureScalar(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IDictionary{System.String,System.Data.ParameterDirection})">
+            <summary>
+            执行不带参的存储过程
+            </summary>
+            <param name="procedureName">存储过程名</param>
+            <param name="paramNameValuePairs">参数列表</param>
+            <param name="paramNameDirectionPairs">参数方向列表(可选参数，需要指定方向的参数请加入此集合中)</param>
+            <returns>执行结果的第一行第一列</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindOneByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的第一个实体对象，此对象为包含所有实体属性的完整对象。
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <returns>返回符合条件的第一个实体对象，没有则返回NULL</returns>        
+        </member>
+        <member name="M:PTXT.BaseDAO`2.Count(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+             使用LINQ lambda 表达式返回符合条件的记录数
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <returns>返回符合条件的记录数</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}})">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="order">排序方法</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},PTXT.PaginationInfo)">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}},PTXT.PaginationInfo)">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="order">排序方法</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Int32,System.Int32)">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="skip">跳过的记录数</param>
+            <param name="count">返回的记录数</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.FindByLinq(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}},System.Int32,System.Int32)">
+            <summary>
+            使用LINQ lambda 表达式返回符合条件的实体对象列表
+            </summary>
+            <param name="predicate">lambda 表达式</param>
+            <param name="order">排序方法</param>
+            <param name="skip">跳过的记录数</param>
+            <param name="count">返回的记录数</param>
+            <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreateHQLQuery(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            基于HQL查询语句创建面向对象的NHibernate查询对象
+            </summary>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>HQL查询对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreateSQLQuery(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},PTXT.PaginationInfo)">
+            <summary>
+            基于原生SQL查询语句创建NHibernate原生SQL查询对象
+            </summary>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名、值]对集合(可选参数)</param>
+            <param name="paginationInfo">分页信息(可选参数)</param>
+            <returns>原生SQL查询对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.SetParameters(NHibernate.IQuery,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            设置NHibernate查询对象(包括基于HQL和SQL创建的查询对象)中命名参数的值
+            </summary>
+            <param name="query">NHibernate查询对象</param>
+            <param name="paramNameValuePairs">命名参数的名值对集合</param>
+            <returns>设置好参数值后的NHibernate查询对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreatePaginationSQL(System.String,System.Data.IDbConnection,PTXT.PaginationInfo)">
+            <summary>
+            创建分页查询SQL命令（主要用于跨表、跨库查询时的分页）
+            </summary>
+            <param name="sourceSQL">原始SQL命令</param>
+            <param name="conn">连接对象</param>
+            <param name="paginationInfo">分页信息</param>
+            <returns>分页查询SQL命令</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.PrepareCommand(System.String,System.Data.IDbConnection,System.Data.CommandType)">
+            <summary>
+            Command对象预处理类
+            </summary>
+            <param name="cmdText">SQL命令</param>
+            <param name="conn">数据库连接对象</param>
+            <param name="cmdType">SQL命令类型(可选参数)</param>
+            <returns>Command对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.AddParameter(System.Data.IDbCommand,System.String,System.Object,System.Data.ParameterDirection)">
+            <summary>
+            向Command对象添加单个参数及其值
+            </summary>
+            <param name="cmd">Command对象</param>
+            <param name="paramName">参数名</param>
+            <param name="paramValue">参数值</param>
+            <param name="parameterDirection">参数方向(可选值，默认为输入参数)</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.AddParameters(System.Data.IDbCommand,System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IDictionary{System.String,System.Data.ParameterDirection})">
+            <summary>
+            向Command对象添加多个参数及相应的参数值
+            </summary>
+            <param name="cmd">Command对象</param>
+            <param name="paramNameValuePairs">命名参数的[参数名、参数值]对集合</param>
+            <param name="paramNameDirectionPairs">命名参数的[参数名、参数方向]对集合(可选参数，需要指定方向的参数请加入此集合中)</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreateLinqQuery(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}})">
+             <summary>
+            基于lambda表达式创建面向对象的LINQ查询对象
+             </summary>
+             <param name="predicate">lambda 表达式</param>
+             <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreateLinqQuery(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}})">
+             <summary>
+            基于lambda表达式创建面向对象的LINQ查询对象
+             </summary>
+             <param name="predicate">lambda 表达式</param>
+             <param name="order">排序方法</param>
+             <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.Copy(`1,`1)">
+            <summary>
+            复制实体对象
+            </summary>
+            <param name="source">源实体对象</param>
+            <param name="target">目标实体对象</param>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreateLinqQuery(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Int32,System.Int32)">
+             <summary>
+            基于lambda表达式创建面向对象的LINQ查询对象
+             </summary>
+             <param name="predicate">lambda 表达式</param>
+             <param name="skip">跳过的记录数</param>
+             <param name="count">返回的记录数</param>
+             <returns>实体对象的列表</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.CreateLinqQuery(System.Linq.Expressions.Expression{System.Func{`1,System.Boolean}},System.Action{PTXT.Orderable{`1}},System.Int32,System.Int32)">
+             <summary>
+            基于lambda表达式创建面向对象的LINQ查询对象
+             </summary>
+             <param name="predicate">lambda 表达式</param>
+             <param name="order">排序方法</param>
+             <param name="skip">跳过的记录数</param>
+             <param name="count">返回的记录数</param>
+             <returns>实体对象的列表</returns>
+        </member>
+        <member name="P:PTXT.BaseDAO`2.ConnectionString">
+            <summary>
+            当前DAO对应数据库的连接字符串
+            </summary>
+        </member>
+        <member name="P:PTXT.BaseDAO`2.IsNHibernateCacheable">
+            <summary>
+            是否启用NHibernate查询结果集缓存
+            </summary>
+        </member>
+        <member name="P:PTXT.BaseDAO`2.NSession">
+            <summary>
+            一个已经建立连接并已打开的NHibernate会话(Session)
+            </summary>
+        </member>
+        <member name="P:PTXT.BaseDAO`2.NStatelessSession">
+            <summary>
+            一个无状态的NHibernate会话(Session)
+            </summary>
+        </member>
+        <member name="P:PTXT.BaseDAO`2.Table">
+            <summary>
+            提供对对当前实体“LINQ”查询进行计算的功能。可用于“LINQ”查询的
+            </summary>
+        </member>
+        <member name="T:PTXT.BaseDAO`2.ADODataAdapter">
+            <summary>
+            自定义内部私有ADO.NET数据适配器类
+            </summary>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ADODataAdapter.FillDataSet(System.Data.IDbCommand)">
+            <summary>
+            使用给定的Command对象填充并返回DataSet对象
+            </summary>
+            <param name="cmd">Command对象</param>
+            <returns>DataSet对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ADODataAdapter.FillDataTable(System.Data.IDataReader)">
+            <summary>
+            使用给定的DataReader对象填充并返回DataTable对象
+            </summary>
+            <param name="dr">DataReader对象</param>
+            <returns>DataTable对象</returns>
+        </member>
+        <member name="M:PTXT.BaseDAO`2.ADODataAdapter.FillDataTable(System.Data.IDbCommand)">
+            <summary>
+            使用给定的Command对象填充并返回DataTable对象
+            </summary>
+            <param name="cmd">Command对象</param>
+            <returns>DataTable对象</returns>
+        </member>
+        <member name="T:PTXT.BaseEntity`1">
+            <summary>
+            实体类的基类
+            </summary>
+            <typeparam name="IdType">实体类主键Id的数据类型(目前不考虑多列组合主键)</typeparam>
+        </member>
+        <member name="T:PTXT.IEntity`1">
+            <summary>
+            实体类的基接口
+            </summary>
+            <typeparam name="IdType">实体类主键Id的数据类型(目前不考虑多列组合主键)</typeparam>
+        </member>
+        <member name="M:PTXT.IEntity`1.Equals(PTXT.BaseEntity{`0})">
+            <summary>
+            判断给定的实体对象与当前实体对象是否相等
+            </summary>
+            <param name="entity">给定的实体对象</param>
+            <returns>true相等，false不等</returns>
+        </member>
+        <member name="P:PTXT.IEntity`1.ID">
+            <summary>
+            实体类主键Id
+            </summary>
+        </member>
+        <member name="P:PTXT.IEntity`1.TableName">
+            <summary>
+            实体类对应的关系数据库表名
+            </summary>
+        </member>
+        <member name="M:PTXT.BaseEntity`1.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.BaseEntity`1.#ctor(System.String)">
+            <summary>
+            带参构造方法
+            </summary>
+            <param name="tableName">当前实体类对应的数据库表名</param>
+        </member>
+        <member name="M:PTXT.BaseEntity`1.Equals(PTXT.BaseEntity{`0})">
+            <summary>
+            判断给定的实体对象与当前实体对象是否相等（若主键ID及哈希值相等，则认为两个对象相等）
+            </summary>
+            <param name="entity"></param>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.BaseEntity`1.OnBeforeSave">
+            <summary>
+            保存之前事件
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.BaseEntity`1.CheckRepeat``1(PTXT.BaseEntity{System.String},System.String,System.String,System.Collections.Generic.IList{``0})">
+            <summary>
+            查询字段是否重复
+            </summary>
+        </member>
+        <member name="P:PTXT.BaseEntity`1.ID">
+            <summary>
+            实体类的主键Id
+            </summary>
+        </member>
+        <member name="P:PTXT.BaseEntity`1.TableName">
+            <summary>
+            实体类对应的关系数据库表名
+            </summary>
+        </member>
+        <member name="T:PTXT.Encryption">
+            <summary>
+            字符串加密类
+            </summary>
+        </member>
+        <member name="M:PTXT.Encryption.Md5Encrypt(System.String)">
+            <summary>
+            使用MD5哈希算法加密给定的字符串
+            </summary>
+            <param name="source">给定的待加密字符串</param>
+            <returns>加密后的字符串</returns>
+        </member>
+        <member name="M:PTXT.Encryption.EncryptWithSpecificHashAlgorithm(System.String,System.String)">
+            <summary>
+            使指定名称的哈希算法加密给定的字符串
+            </summary>
+            <param name="source">给定的待加密字符串</param>
+            <param name="hashAlgorithmName">用于加密的哈希算法名称</param>
+            <returns>加密后的字符串</returns>
+        </member>
+        <member name="T:PTXT.DaoExtensionFunctions">
+            <summary>
+            数据库访问对象扩展方法定义类
+            </summary>
+        </member>
+        <member name="M:PTXT.DaoExtensionFunctions.ListIDictionary(NHibernate.IQuery)">
+            <summary>
+            返回IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集
+            </summary>
+            <param name="query">NHibernate的IQuery对象</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集</returns>
+        </member>
+        <member name="M:PTXT.DaoExtensionFunctions.ListDynamic(NHibernate.IQuery)">
+            <summary>
+            返回IList&lt;dynamic&gt;型的结果集，列表中元素的实际类型为ExpandoObject。
+            </summary>
+            <param name="query">NHibernate的IQuery对象</param>
+            <returns>IList&lt;dynamic&gt;型的结果集</returns>
+        </member>
+        <member name="M:PTXT.DaoExtensionFunctions.ToIDictionaryList(System.Data.DataTable)">
+            <summary>
+            将DataTable转换为IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集
+            每个IDictionary&lt;string, object&gt;对象代表了DataTable中的一个数据行
+            </summary>
+            <param name="dataTable">DataTable对象</param>
+            <returns>IList&lt;IDictionary&lt;string, object&gt;&gt;型的结果集</returns>
+        </member>
+        <member name="M:PTXT.DaoExtensionFunctions.ToList``1(System.Data.DataTable)">
+            <summary>
+            将DataTable转换为IList&lt;TEntity&gt;型的结果集
+            </summary>
+            <typeparam name="TEntity">DataTable中的记录要转换成的类型</typeparam>
+            <param name="dt">要转换的DataTable</param>
+            <returns>IList&lt;TEntity&gt;型的结果集</returns>
+        </member>
+        <member name="T:PTXT.ObjectResultSetTransformer2">
+            <summary>
+            NHibernate查询返回的object类型结果(集)的转换类,转换为IList&lt;dynamic&gt;
+            </summary>
+        </member>
+        <member name="M:PTXT.ObjectResultSetTransformer2.TransformList(System.Collections.IList)">
+            <summary>
+            转换整个IList结果集
+            </summary>
+            <param name="collection">要转换的IList结果集</param>
+            <returns>转换后的IList结果集</returns>
+        </member>
+        <member name="M:PTXT.ObjectResultSetTransformer2.TransformTuple(System.Object[],System.String[])">
+            <summary>
+            转换单个object对象为dynamic类型(object对象转换成的实际类型为ExpandoObject)
+            </summary>
+            <param name="tuple">object对象属性成员值的数组</param>
+            <param name="aliases">object对象属性成员名的数组</param>
+            <returns>转换(组装)好的dynamic类型对象</returns>
+        </member>
+        <member name="T:PTXT.DomainException">
+            <summary>
+            领域层异常
+            </summary>
+        </member>
+        <member name="M:PTXT.DomainException.#ctor(System.String)">
+            <summary>
+            构造函数
+            </summary>
+        </member>
+        <member name="T:PTXT.OperatedResult">
+            <summary>
+            操用结果封装类(用于封装诸如新增、修改、删除之类的操作的结果)
+            </summary>
+        </member>
+        <member name="F:PTXT.OperatedResult.targetID">
+            <summary>
+            操作的主目标实体ID(默认为null)
+            </summary>
+        </member>
+        <member name="F:PTXT.OperatedResult.isSuccess">
+            <summary>
+            是否成功(默认为false)
+            </summary>
+        </member>
+        <member name="F:PTXT.OperatedResult.message">
+            <summary>
+            其他结果消息(默认为null)
+            </summary>
+        </member>
+        <member name="T:PTXT.Orderable`1">
+            <summary>
+             提供一组用于查询实现 Orderable&lt;T&gt; 数据排序的数据结构的查询方法
+            </summary>
+            <typeparam name="T"></typeparam>
+        </member>
+        <member name="M:PTXT.Orderable`1.#ctor(System.Linq.IQueryable{`0})">
+            <summary>
+            初始化用于查询实现 Orderable&lt;T&gt; 数据排序的数据结构的查询方法
+            </summary>
+            <param name="enumerable"></param>
+        </member>
+        <member name="M:PTXT.Orderable`1.Asc``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            根据键按升序对序列的元素排序
+            </summary>
+            <typeparam name="TKey">由 keySelector 表示的函数返回的键类型</typeparam>
+            <param name="keySelector">用于从元素中提取键的函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.Orderable`1.Asc``2(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}})">
+            <summary>
+            根据键按升序对序列的元素排序
+            </summary>
+            <typeparam name="TKey1">由 keySelector 表示的函数返回的键类型1</typeparam>
+            <typeparam name="TKey2">由 keySelector 表示的函数返回的键类型2</typeparam>
+            <param name="keySelector1">用于从元素中提取键的函数1</param>
+            <param name="keySelector2">用于从元素中提取键的函数2</param>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.Orderable`1.Asc``3(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{`0,``2}})">
+            <summary>
+            根据键按升序对序列的元素排序。
+            </summary>
+            <typeparam name="TKey1">由 keySelector 表示的函数返回的键类型1</typeparam>
+            <typeparam name="TKey2">由 keySelector 表示的函数返回的键类型2</typeparam>
+            <typeparam name="TKey3">由 keySelector 表示的函数返回的键类型3</typeparam>
+            <param name="keySelector1">用于从元素中提取键的函数1</param>
+            <param name="keySelector2">用于从元素中提取键的函数2</param>
+            <param name="keySelector3">用于从元素中提取键的函数3</param>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.Orderable`1.Desc``1(System.Linq.Expressions.Expression{System.Func{`0,``0}})">
+            <summary>
+            根据键按降序对序列的元素排序。
+            </summary>
+            <typeparam name="TKey">由 keySelector 表示的函数返回的键类型</typeparam>
+            <param name="keySelector">用于从元素中提取键的函数</param>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.Orderable`1.Desc``2(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}})">
+            <summary>
+            根据键按降序对序列的元素排序。
+            </summary>
+            <typeparam name="TKey1">由 keySelector 表示的函数返回的键类型1</typeparam>
+            <typeparam name="TKey2">由 keySelector 表示的函数返回的键类型2</typeparam>
+            <param name="keySelector1">用于从元素中提取键的函数1</param>
+            <param name="keySelector2">用于从元素中提取键的函数2</param>
+            <returns></returns>
+        </member>
+        <member name="M:PTXT.Orderable`1.Desc``3(System.Linq.Expressions.Expression{System.Func{`0,``0}},System.Linq.Expressions.Expression{System.Func{`0,``1}},System.Linq.Expressions.Expression{System.Func{`0,``2}})">
+            <summary>
+            根据键按降序对序列的元素排序。
+            </summary>
+            <typeparam name="TKey1">由 keySelector 表示的函数返回的键类型1</typeparam>
+            <typeparam name="TKey2">由 keySelector 表示的函数返回的键类型2</typeparam>
+            <typeparam name="TKey3">由 keySelector 表示的函数返回的键类型3</typeparam>
+            <param name="keySelector1">用于从元素中提取键的函数1</param>
+            <param name="keySelector2">用于从元素中提取键的函数2</param>
+            <param name="keySelector3">用于从元素中提取键的函数3</param>
+            <returns></returns>
+        </member>
+        <member name="P:PTXT.Orderable`1.Queryable">
+            <summary>
+            用于查询实现 Orderable&lt;T&gt; 数据排序的数据结构的查询方法
+            </summary>
+        </member>
+        <member name="T:PTXT.Database">
+            <summary>
+            数据库对象化类
+            </summary>
+        </member>
+        <member name="M:PTXT.Database.#ctor(PTXT.IDatabaseConfig)">
+            <summary>
+            根据数据库配置项(句柄)初始化数据库对象
+            </summary>
+            <param name="databaseConfig">数据库配置项(句柄)</param>
+        </member>
+        <member name="P:PTXT.Database.Name">
+            <summary>
+            数据库配置(句柄)的(唯一)标识名
+            </summary>
+        </member>
+        <member name="P:PTXT.Database.NHibernateConfig">
+            <summary>
+            数据库的详细配置对象(对应NHibernate的配置文件)
+            </summary>
+        </member>
+        <member name="P:PTXT.Database.ConnectionString">
+            <summary>
+            当前数据库的连接字符串
+            </summary>
+        </member>
+        <member name="P:PTXT.Database.Session">
+            <summary>
+            返回当前数据库的NHibernate会话
+            </summary>
+        </member>
+        <member name="P:PTXT.Database.StatelessSession">
+            <summary>
+            返回当前数据库的无状态NHibernate会话（主要用于批量新增、修改、删除等）
+            </summary>
+        </member>
+        <member name="T:PTXT.DatabaseManager">
+            <summary>
+            数据库对象管理类
+            </summary>
+        </member>
+        <member name="M:PTXT.DatabaseManager.#cctor">
+            <summary>
+            在静态构造函数中初始化DatabaseManager
+            </summary>
+        </member>
+        <member name="M:PTXT.DatabaseManager.InitializeDatabaseConfig">
+            <summary>
+            将数据库配置中所有配置项依次转化为Database对象存入databaseList中！
+            </summary>
+        </member>
+        <member name="M:PTXT.DatabaseManager.GetDatabaseByAssemblyName(System.String)">
+            <summary>
+            通过实体所在的程序集名称获取用于持久化的数据库实体对象
+            </summary>
+            <param name="assemblyName">实体所在的程序集名</param>
+            <returns>用于持久化的数据库实体对象</returns>
+        </member>
+        <member name="T:PTXT.HttpContextSessionStorage">
+            <summary>
+            会话存储仓库(以HttpContext或HttpRuntime.Cache为存储宿主)，不局限于存储NHibernate会话！(提供类似自定义缓存功能)
+            </summary>
+        </member>
+        <member name="T:PTXT.ISessionStorage">
+            <summary>
+            会话存储仓库接口契约，不局限于存储NHibernate会话！(提供类似自定义缓存功能)
+            </summary>
+        </member>
+        <member name="M:PTXT.ISessionStorage.AddSession(System.String,NHibernate.ISession)">
+            <summary>
+            存入一个NHibernate会话
+            </summary>
+            <param name="key">NHibernate会话标识名(键)</param>
+            <param name="nSession">NHibernate会话</param>
+        </member>
+        <member name="M:PTXT.ISessionStorage.GetSession(System.String)">
+            <summary>
+            从缓存中取出指定的NHibernate会话(若有)
+            </summary>
+            <param name="key">NHibernate会话标识名(键)</param>
+            <returns>NHibernate会话</returns>
+        </member>
+        <member name="M:PTXT.ISessionStorage.AddStatelessSession(System.String,NHibernate.IStatelessSession)">
+            <summary>
+            存入一个无状态的NHibernate会话
+            </summary>
+            <param name="key">无状态的NHibernate会话标识名(键)</param>
+            <param name="nStatelessSession">无状态的NHibernate会话</param>
+        </member>
+        <member name="M:PTXT.ISessionStorage.GetStatelessSession(System.String)">
+            <summary>
+            从缓存中取出指定的无状态的NHibernate会话(若有)
+            </summary>
+            <param name="key">无状态的NHibernate会话标识名(键)</param>
+            <returns>无状态的NHibernate会话</returns>
+        </member>
+        <member name="M:PTXT.ISessionStorage.Add(System.String,System.Object)">
+            <summary>
+            预留给其他会话或对象的存入接口(未实现)
+            </summary>
+            <param name="key">缓存标识名(键)</param>
+            <param name="value">缓存值</param>
+        </member>
+        <member name="M:PTXT.ISessionStorage.Get``1(System.String)">
+            <summary>
+            预留给其他会话或对象的取出接口(未实现)
+            </summary>
+            <typeparam name="T">缓存值的类型</typeparam>
+            <param name="key">缓存标识名(键)</param>
+            <returns>缓存值</returns>
+        </member>
+        <member name="M:PTXT.HttpContextSessionStorage.AddSession(System.String,NHibernate.ISession)">
+            <summary>
+            将NHibernate会话存入当前HttpContext中
+            </summary>
+            <param name="key">NHibernate会话标识名(键)</param>
+            <param name="nSession">NHibernate会话</param>
+        </member>
+        <member name="M:PTXT.HttpContextSessionStorage.GetSession(System.String)">
+            <summary>
+            从当前HttpContext中取出指定的NHibernate会话（若有）
+            </summary>
+            <param name="key">NHibernate会话标识名(键)</param>
+            <returns>NHibernate会话</returns>
+        </member>
+        <member name="M:PTXT.HttpContextSessionStorage.AddStatelessSession(System.String,NHibernate.IStatelessSession)">
+            <summary>
+            将一个无状态的NHibernate会话存入当前HttpContext中
+            </summary>
+            <param name="key">无状态的NHibernate会话标识名(键)</param>
+            <param name="nStatelessSession">无状态的NHibernate会话</param>
+        </member>
+        <member name="M:PTXT.HttpContextSessionStorage.GetStatelessSession(System.String)">
+            <summary>
+            从当前HttpContext中取出指定的无状态的NHibernate会话(若有)
+            </summary>
+            <param name="key">无状态的NHibernate会话标识名(键)</param>
+            <returns>无状态的NHibernate会话</returns>
+        </member>
+        <member name="M:PTXT.HttpContextSessionStorage.Add(System.String,System.Object)">
+            <summary>
+            将对象存入HttpRuntime.Cache中
+            </summary>
+            <param name="key">对象标识名(键)</param>
+            <param name="value">对象</param>
+        </member>
+        <member name="M:PTXT.HttpContextSessionStorage.Get``1(System.String)">
+            <summary>
+            从HttpRuntime.Cache中取出对象(若有)
+            </summary>
+            <typeparam name="T">类型参数</typeparam>
+            <param name="key">对象标识名(键)</param>
+            <returns>T类型的对象</returns>
+        </member>
+        <member name="T:PTXT.IDatabaseConfig">
+            <summary>
+            数据库配置项对象化的接口契约
+            </summary>
+        </member>
+        <member name="P:PTXT.IDatabaseConfig.Name">
+            <summary>
+            (配置项的唯一)标识名
+            </summary>
+        </member>
+        <member name="P:PTXT.IDatabaseConfig.FilePath">
+            <summary>
+            (配置项指明的)配置文件相对路径
+            </summary>
+        </member>
+        <member name="T:PTXT.IMultiDatabaseConfig">
+            <summary>
+            多数据库配置节对象化的接口契约
+            </summary>
+        </member>
+        <member name="P:PTXT.IMultiDatabaseConfig.DefaultDatabaseConfig">
+            <summary>
+            默认数据库配置项(的唯一标识名)
+            </summary>
+        </member>
+        <member name="P:PTXT.IMultiDatabaseConfig.DatabaseConfigs">
+            <summary>
+            数据库配置项集合
+            </summary>
+        </member>
+        <member name="T:PTXT.ObjectResultSetTransformer">
+            <summary>
+            NHibernate查询返回的object类型结果(集)的转换类,转换为IList&lt;IDictionary&lt;string, object&gt;&gt;
+            </summary>
+        </member>
+        <member name="M:PTXT.ObjectResultSetTransformer.TransformList(System.Collections.IList)">
+            <summary>
+            转换整个IList结果集
+            </summary>
+            <param name="collection">要转换的IList结果集</param>
+            <returns>转换后的IList结果集</returns>
+        </member>
+        <member name="M:PTXT.ObjectResultSetTransformer.TransformTuple(System.Object[],System.String[])">
+            <summary>
+            转换单个object对象为IDictionary&lt;string, object&gt;类型对象
+            </summary>
+            <param name="tuple">object对象属性成员值的数组</param>
+            <param name="aliases">object对象属性成员名的数组</param>
+            <returns>转换(组装)好的IDictionary&lt;string, object&gt;类型对象</returns>
+        </member>
+        <member name="T:PTXT.OrderType">
+            <summary>
+            查询结果集排序方式枚举
+            </summary>
+        </member>
+        <member name="F:PTXT.OrderType.ASC">
+            <summary>
+            升序
+            </summary>
+        </member>
+        <member name="F:PTXT.OrderType.DESC">
+            <summary>
+            降序
+            </summary>
+        </member>
+        <member name="T:PTXT.PaginationInfo">
+            <summary>
+            封装分页查询信息的分页信息类(不使用泛型，防止限死结果集的类型)
+            </summary>
+        </member>
+        <member name="M:PTXT.PaginationInfo.#ctor(System.Int32,System.Int32)">
+            <summary>
+            构造方法
+            </summary>
+            <param name="pageIndex">页码(可选参数，默认值为1)</param>
+            <param name="pageSize">每页记录数(可选参数，默认值为10)</param>
+        </member>
+        <member name="P:PTXT.PaginationInfo.pagesize">
+            <summary>
+            每页的记录数
+            </summary>
+        </member>
+        <member name="P:PTXT.PaginationInfo.pageindex">
+            <summary>
+            当前页码
+            </summary>
+        </member>
+        <member name="P:PTXT.PaginationInfo.total">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:PTXT.PaginationInfo.rows">
+            <summary>
+            返回去的记录集(注意这里使用IEnumerable接口)
+            </summary>
+        </member>
+        <member name="T:PTXT.PaginationInfoExtention">
+            <summary>
+            封装分页查询信息的分页信息类扩展方法
+            </summary>
+        </member>
+        <member name="M:PTXT.PaginationInfoExtention.ToPaging(System.Linq.IQueryable{System.Object},System.Int32,System.Int32)">
+            <summary>
+            提供可查询类型的分页方法扩展
+            </summary>
+            <param name="query">查询方法</param>
+            <param name="pageIndex">当前页码</param>
+            <param name="pageSize">每页的记录数</param>
+            <returns>分页信息类</returns>
+        </member>
+        <member name="T:PTXT.SessionStorageFactory">
+            <summary>
+            会话存储仓库工厂
+            </summary>
+        </member>
+        <member name="M:PTXT.SessionStorageFactory.GetSessionStorage">
+            <summary>
+            根据当前应用程序的类型，返回相应的会话存储仓库(类似自定义缓存)    
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="P:PTXT.SessionStorageFactory.isHttpApplication">
+            <summary>
+            是否为Http应用程序
+            </summary>
+        </member>
+        <member name="T:PTXT.ThreadStaticFieldSessionStorage">
+            <summary>
+            会话存储仓库(以线程静态字段为存储宿主)，不局限于存储NHibernate会话！(提供类似自定义缓存功能)
+            </summary>
+        </member>
+        <member name="M:PTXT.ThreadStaticFieldSessionStorage.AddSession(System.String,NHibernate.ISession)">
+            <summary>
+            将NHibernate会话存入当前线程的指定静态字段中
+            </summary>
+            <param name="key">NHibernate会话标识名(键)</param>
+            <param name="nSession">NHibernate会话</param>
+        </member>
+        <member name="M:PTXT.ThreadStaticFieldSessionStorage.GetSession(System.String)">
+            <summary>
+            从当前线程的指定静态字段中取出指定NHibernate会话(若有)
+            </summary>
+            <param name="key">NHibernate会话标识名(键)</param>
+            <returns>NHibernate会话</returns>
+        </member>
+        <member name="M:PTXT.ThreadStaticFieldSessionStorage.AddStatelessSession(System.String,NHibernate.IStatelessSession)">
+            <summary>
+            将一个无状态的NHibernate会话存入当前线程的指定静态字段中
+            </summary>
+            <param name="key">无状态的NHibernate会话标识名(键)</param>
+            <param name="nStatelessSession">无状态的NHibernate会话</param>
+        </member>
+        <member name="M:PTXT.ThreadStaticFieldSessionStorage.GetStatelessSession(System.String)">
+            <summary>
+            从当前线程的指定静态字段中取出指定的无状态的NHibernate会话(若有)
+            </summary>
+            <param name="key">无状态的NHibernate会话标识名(键)</param>
+            <returns>无状态的NHibernate会话</returns>
+        </member>
+        <member name="M:PTXT.ThreadStaticFieldSessionStorage.Add(System.String,System.Object)">
+            <summary>
+            将对象存入当前线程的指定静态字段中
+            </summary>
+            <param name="key">对象标识名(键)</param>
+            <param name="value">对象</param>
+        </member>
+        <member name="M:PTXT.ThreadStaticFieldSessionStorage.Get``1(System.String)">
+            <summary>
+            从当前线程的指定静态字段中取出指定的对象(若有)
+            </summary>
+            <typeparam name="T">类型参数</typeparam>
+            <param name="key">对象标识名(键)</param>
+            <returns>T类型的对象</returns>
+        </member>
+        <member name="P:PTXT.ThreadStaticFieldSessionStorage.StaticThreadFieldSessionStorage">
+            <summary>
+            线程静态字段型的会话存储仓库
+            </summary>
+        </member>
+        <member name="T:PTXT.Logger">
+            <summary>
+            日志对象类，重新封装了log4net的下列方法：Debug、Error、Fatal、Info、Warm，考虑多方面原因，未定义成静态类；
+            </summary>
+        </member>
+        <member name="M:PTXT.Logger.#ctor(System.String)">
+            <summary>
+            new一个日志对象实例时，若未提供日志名称(loggerName)或提供的日志名称在log4net.cfg.xml配置文件中没有相应的
+            配置项，则创建的日志对象将使用自身实例化时所在类的完整名称或"root"作为日志对象名称，并使用根日志(root)的
+            配置信息构建日志对象！
+            </summary>
+            <param name="loggerName">日志名称(可选参数)</param>
+        </member>
+        <member name="M:PTXT.Logger.Debug(System.String)">
+            <summary>
+            只受理日志级别大于(含)Debug的日志对象的日志请求,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:PTXT.Logger.Debug(System.String,System.Exception)">
+            <summary>
+            只受理日志级别大于(含)Debug的日志对象的日志请求,包括异常的堆栈跟踪信息,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="M:PTXT.Logger.Error(System.String)">
+            <summary>
+            只受理日志级别大于(含)Error的日志对象的日志请求,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:PTXT.Logger.Error(System.String,System.Exception)">
+            <summary>
+            只受理日志级别大于(含)Error的日志对象的日志请求,包括异常的堆栈跟踪信息,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="M:PTXT.Logger.Fatal(System.String)">
+            <summary>
+            只受理日志级别大于(含)Fatal的日志对象的日志请求,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:PTXT.Logger.Fatal(System.String,System.Exception)">
+            <summary>
+            只受理日志级别大于(含)Fatal的日志对象的日志请求,包括异常的堆栈跟踪信息,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="M:PTXT.Logger.Info(System.String)">
+            <summary>
+            只受理日志级别大于(含)Info的日志对象的日志请求,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:PTXT.Logger.Info(System.String,System.Exception)">
+            <summary>
+            只受理日志级别大于(含)Info的日志对象的日志请求,包括异常的堆栈跟踪信息,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="M:PTXT.Logger.Warm(System.String)">
+            <summary>
+            只受理日志级别大于(含)Warm的日志对象的日志请求,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+        </member>
+        <member name="M:PTXT.Logger.Warm(System.String,System.Exception)">
+            <summary>
+            只受理日志级别大于(含)Warm的日志对象的日志请求,包括异常的堆栈跟踪信息,
+            日志级别从高到低依次为：OFF、FATAL、ERROR、WARN、INFO、DEBUG、ALL
+            </summary>
+            <param name="message"></param>
+            <param name="exception"></param>
+        </member>
+        <member name="T:PTXT.DatabaseConfigElement">
+            <summary>
+            多数据库配置中，数据库配置项的对象化类
+            </summary>
+        </member>
+        <member name="P:PTXT.DatabaseConfigElement.Name">
+            <summary>
+            (配置项的唯一)标识名
+            </summary>
+        </member>
+        <member name="P:PTXT.DatabaseConfigElement.FilePath">
+            <summary>
+            (配置项指明的)配置文件相对路径
+            </summary>
+        </member>
+        <member name="P:PTXT.DatabaseConfigElement.IsTransactional">
+            <summary>
+            是否启用事务
+            </summary>
+        </member>
+        <member name="T:PTXT.DatabaseConfigsCollection">
+            <summary>
+            多数据库配置中，数据库配置项集合的对象化类
+            </summary>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.CreateNewElement">
+            <summary>
+            创建新的数据库配置项
+            </summary>
+            <returns>数据库配置项</returns>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.GetElementKey(System.Configuration.ConfigurationElement)">
+            <summary>
+            取得数据库配置项的(唯一)标识名
+            </summary>
+            <param name="element">数据库配置项</param>
+            <returns>数据库配置项的(唯一)标识名</returns>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.IndexOf(PTXT.DatabaseConfigElement)">
+            <summary>
+            返回给定数据库配置项的索引(下标)
+            </summary>
+            <param name="databaseConfig">数据库配置项</param>
+            <returns>数据库配置项的索引(下标)</returns>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.Add(PTXT.DatabaseConfigElement)">
+            <summary>
+            向数据库配置项的集合中新增一个数据库配置项
+            </summary>
+            <param name="databaseConfig">数据库配置项</param>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.BaseAdd(System.Configuration.ConfigurationElement)">
+            <summary>
+            重写基类的元素添加方法，添加已存在的元素时不抛出异常
+            </summary>
+            <param name="element">待添加的元素</param>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.Remove(PTXT.DatabaseConfigElement)">
+            <summary>
+            从数据库配置项集合中移除一个数据库配置项
+            </summary>
+            <param name="databaseConfig">数据库配置项</param>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.RemoveAt(System.Int32)">
+            <summary>
+            移除数据库配置项集合中指定位置(下标)的数据库配置项
+            </summary>
+            <param name="index">索引位置(下标)</param>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.Remove(System.String)">
+            <summary>
+            移除数据库配置项集合中指定(唯一)标识名的数据库配置项
+            </summary>
+            <param name="name">(唯一)标识名</param>
+        </member>
+        <member name="M:PTXT.DatabaseConfigsCollection.Clear">
+            <summary>
+            移除数据库配置项集合中的所有元素
+            </summary>
+        </member>
+        <member name="P:PTXT.DatabaseConfigsCollection.CollectionType">
+            <summary>
+            数据库配置项集合的类型(可新增、移除和清空型)
+            </summary>
+        </member>
+        <member name="P:PTXT.DatabaseConfigsCollection.Item(System.Int32)">
+            <summary>
+            数据库配置项索引(下标从0开始)
+            </summary>
+            <param name="index">下标</param>
+            <returns>数据库配置项</returns>
+        </member>
+        <member name="P:PTXT.DatabaseConfigsCollection.Item(System.String)">
+            <summary>
+            数据库配置项索引(按唯一标识名索引)
+            </summary>
+            <param name="name">(唯一)标识名</param>
+            <returns>数据库配置项</returns>
+        </member>
+        <member name="T:PTXT.MultiDatabaseConfigSection">
+            <summary>
+            多数据库配置节点
+            </summary>
+        </member>
+        <member name="M:PTXT.MultiDatabaseConfigSection.#ctor">
+            <summary>
+            将实例构造函数私有化，使在本类之外不能使用实例构造函数创建MultiDatabaseConfigSection实例，只能由静态的CreateInstance方法获得MultiDatabaseConfigSection实例。
+            </summary>
+        </member>
+        <member name="P:PTXT.MultiDatabaseConfigSection.DefaultDatabaseConfig">
+            <summary>
+            默认数据库配置项(的唯一标识名)
+            </summary>
+        </member>
+        <member name="P:PTXT.MultiDatabaseConfigSection.DatabaseConfigs">
+            <summary>
+            数据库配置项集合
+            </summary>
+        </member>
+        <member name="T:PTXT.Filter">
+            <summary>
+            过滤条件类
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.property">
+            <summary>
+            属性名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.dataType">
+            <summary>
+            属性类型
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.relation">
+            <summary>
+            运行符号，如=、like、not like
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.value">
+            <summary>
+            属性值
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.left">
+            <summary>
+            左则符号，如(、((等
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.right">
+            <summary>
+            右侧符号，如),))等
+            </summary>
+        </member>
+        <member name="P:PTXT.Filter.connect">
+            <summary>
+            连接符,如 and 、or
+            </summary>
+        </member>
+        <member name="T:PTXT.QueryService">
+            <summary>
+            查询服务
+            </summary>
+        </member>
+        <member name="M:PTXT.QueryService.CreatePagedSQLQuery(NHibernate.ISession,System.String,System.Int32,System.Int32,System.Collections.Generic.List{PTXT.Filter},System.String,System.Boolean)">
+            <summary>
+            根据SQL查询命令获取分页列表
+            </summary>
+            <param name="session">当前数据库会话</param>
+            <param name="sql">SQL查询命令</param>
+            <param name="page">目标页码</param>
+            <param name="rows">每页的记录数</param>
+            <param name="filters">过滤器，默认为null</param>
+            <param name="orders">排序字段组合字符串，例如："NAME asc"、"NAME asc,AGE desc"</param>
+            <param name="isUpper">是否将结果列表的所有字段名转换为大写字母，默认为false</param>
+            <returns>承载着SQL命令查询结果的特定页的分页对象</returns>
+        </member>
+        <member name="M:PTXT.QueryService.GetData(NHibernate.ISession,System.String,System.Collections.Generic.List{PTXT.Filter},System.String,System.Boolean)">
+            <summary>
+            根据SQL查询命令获取数据列表
+            </summary>
+            <param name="session">当前数据库会话</param>
+            <param name="sql">SQL查询命令</param>
+            <param name="filters">过滤器，默认为null</param>
+            <param name="orders">排序字段组合字符串，例如："NAME asc"、"NAME asc,AGE desc"</param>
+            <param name="isUpper">是否将结果列表的所有字段名转换为大写字母，默认为false</param>
+            <returns>SQL命令查询结果列表</returns>
+        </member>
+        <member name="M:PTXT.QueryService.GetDataByProcedure(System.String,System.String,System.Collections.Generic.List{PTXT.Filter},System.String)">
+            <summary>
+            使用指定名称的存储过程获取数据列表
+            </summary>
+            <param name="connStr">数据库连接字符串</param>
+            <param name="procedureName">存储过程名</param>
+            <param name="filters">过滤器，默认为null</param>
+            <param name="outParamName">存储过程输出参数名称</param>
+            <returns>由存储过程获取的数据列表</returns>
+        </member>
+        <member name="M:PTXT.QueryService.CreateSql(System.String,System.Collections.Generic.List{PTXT.Filter})">
+            <summary>
+            根据过滤条件创建新的sql语句
+            </summary>
+        </member>
+        <member name="M:PTXT.QueryService.DeserializeFilter(System.String)">
+            <summary>
+            反序列化过滤条件
+            </summary>
+            <param name="filterStr">处于序列化状态的过滤条件</param>
+            <returns>已反序列化的过滤条件</returns>
+        </member>
+        <member name="M:PTXT.QueryService.DeserializeFilterAddCurrentUser(System.String,System.String)">
+            <summary>
+            反序列化过滤条件的同时加上过滤当前用户
+            </summary>
+            <param name="filterStr">处于序列化状态的过滤条件</param>
+            <param name="UserName">当前用户名</param>
+            <returns>已反序列化并加上了当前和户名的过滤条件</returns>
+        </member>
+        <member name="T:PTXT.RequestHelper">
+            <summary>
+            主要用于获取URL查询参数和POST参数的值
+            </summary>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetQueryString(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对string型的参数值)，若未找至则返回null。
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetQueryString(System.String,System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对string型的参数值)，若未找至则返回默认值。
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetQueryInt(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对int型的参数值)，若未找到则返回-1。
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetQueryInt(System.String,System.Int32)">
+            <summary>
+            获取指定名称的URL查询参数，若未找到则返回指定的默认值(针对int型的参数值)
+            </summary>
+            <param name="parameterName">查询参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormString(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对string型的参数值)，若未找至则返回null。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormInt(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对int型的参数值)，若未找到则返回-1。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormInt(System.String,System.Int32)">
+            <summary>
+            获取指定名称的POST参数，若未找到则返回指定的默认值(针对int型的参数值)
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormDouble(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对double型的参数值)，若未找到则返回0。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormDouble(System.String,System.Double)">
+            <summary>
+            获取指定名称的POST参数，若未找到则返回指定的默认值(针对double型的参数值)
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormDecimal(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对decimal型的参数值)，若未找到则返回0。
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:PTXT.RequestHelper.GetFormDecimal(System.String,System.Decimal)">
+            <summary>
+            获取指定名称的POST参数，若未找到则返回指定的默认值(针对decimal型的参数值)
+            </summary>
+            <param name="parameterName">POST参数名</param>
+            <param name="defaultValue">默认值</param>
+            <returns>POST参数值</returns>
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,25 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.BH, HR.WorkflowService" table="HRFLOW.BIZ_INFO_BH" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="BHMC" column="BHMC" not-null="false" />
+    <property name="CZFS" column="CZFS" not-null="false" />
+    <property name="BHBDS" column="BHBDS" not-null="false" />
+    <property name="LSH" column="LSH" not-null="false" />
+    <property name="BC" column="BC" not-null="false" />
+    <property name="CD" column="CD" not-null="false" />
+    <property name="BHSM" column="BHSM" not-null="false" />
+    <property name="ISDELETE" column="ISDELETE" not-null="false" />
+    <property name="ISSHARE" column="ISSHARE" not-null="true" />
+    <property name="ISVALID" column="ISVALID" not-null="true" />
+    <property name="ISCONFIG" column="ISCONFIG" not-null="true" />
+    <property name="SORTORDER" column="SORTORDER" not-null="false" />
+    <property name="CREATEPERSONID" column="CREATEPERSONID" not-null="false" />
+    <property name="CREATEDATE" column="CREATEDATE" not-null="false" />
+    <property name="MODIFYPERSONID" column="MODIFYPERSONID" not-null="false" />
+    <property name="MODIFYDATE" column="MODIFYDATE" not-null="false" />
+    <property name="DATAORIGIN" column="DATAORIGIN" not-null="false" />
+  </class>
+</hibernate-mapping>

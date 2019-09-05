@@ -1,0 +1,115 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HR.BasicFramework.Web</name>
+    </assembly>
+    <members>
+        <member name="T:HR.BasicFramework.Web.EasyuiPagination">
+            <summary>
+            专为JQuery EasyUI封装分页信息的类
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.Web.EasyuiPagination.pagesize">
+            <summary>
+            每页的记录数
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.Web.EasyuiPagination.pageindex">
+            <summary>
+            当前页码
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.Web.EasyuiPagination.total">
+            <summary>
+            总记录数
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.Web.EasyuiPagination.rows">
+            <summary>
+            返回去的记录集(注意这里使用IEnumerable接口)
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.Web.EasyuiPagination.#ctor(System.Int32,System.Int32)">
+            <summary>
+            初始化分页信息
+            </summary>
+            <param name="pageIndex">页码(可选参数，默认值为1)</param>
+            <param name="pageSize">每页记录数(可选参数，默认值为10)</param>
+        </member>
+        <member name="T:HR.BasicFramework.Web.RequestParams">
+            <summary>
+            获取URL查询参数和POST参数的方法的封装类
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetQueryString(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对string型的参数值)，若未找到则返回null。
+            </summary>
+            <param name="paramName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetQueryInt(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对int型的参数值)，若未找到或值无法转换为int型则返回null。
+            </summary>
+            <param name="paramName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetQueryFloat(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对float型的参数值)，若未找到或值无法转换为float型则返回null。
+            </summary>
+            <param name="paramName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetQueryDouble(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对double型的参数值)，若未找到或值无法转换为double型则返回null。
+            </summary>
+            <param name="paramName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetQueryDecimal(System.String)">
+            <summary>
+            获取指定名称的URL查询参数(针对decimal型的参数值)，若未找到或值无法转换为decimal型则返回null。
+            </summary>
+            <param name="paramName">查询参数名</param>
+            <returns>查询参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetFormString(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对string型的参数值)，若未找至则返回null。
+            </summary>
+            <param name="paramName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetFormInt(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对int型的参数值)，若未找到或值无法转换为int型则返回null。
+            </summary>
+            <param name="paramName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetFormFloat(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对float型的参数值)，若未找到或值无法转换为float型则返回null。
+            </summary>
+            <param name="paramName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetFormDouble(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对double型的参数值)，若未找到或值无法转换为double型则返回null。
+            </summary>
+            <param name="paramName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.Web.RequestParams.GetFormDecimal(System.String)">
+            <summary>
+            获取指定名称的POST参数(针对decimal型的参数值)，若未找到或值无法转换为decimal型则返回null。
+            </summary>
+            <param name="paramName">POST参数名</param>
+            <returns>POST参数值</returns>
+        </member>
+    </members>
+</doc>

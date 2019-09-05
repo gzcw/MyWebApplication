@@ -1,0 +1,1015 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HR.Authorize</name>
+    </assembly>
+    <members>
+        <member name="T:HR.Authorize.Models.InnerPage">
+            <summary>
+            内部页面，继承自Resource类。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.InnerPage.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.InnerPage.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.String,System.Int16)">
+            <summary>
+            带参构造方法
+            </summary>
+            <param name="id">内页ID</param>
+            <param name="name">内页名称</param>
+            <param name="icon">内页图标：可以存放图标的CSS类名、图标名或图标Url地址</param>
+            <param name="url">内页的Url地址</param>
+            <param name="urlSign">Url入口标识</param>
+            <param name="parentID">上级资源ID</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="systemID">所属系统ID</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.InnerPage.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.InnerPage.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.InnerPage.Url">
+            <summary>
+            内部页面的Url地址
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.InnerPage.UrlSign">
+            <summary>
+            Url入口标识
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.Navigation">
+            <summary>
+            导航菜单，继承自Resource类。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Navigation.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Navigation.#ctor(System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.String,System.Int16)">
+            <summary>
+            带参构造方法
+            </summary>
+            <param name="id">导航菜单ID</param>
+            <param name="name">导航菜单名称</param>
+            <param name="icon">导航菜单图标：可以存放图标的CSS类名、图标名或图标Url地址</param>
+            <param name="url">导航菜单的目标Url地址</param>
+            <param name="parentID">上级资源ID</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="systemID">所属系统ID</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.Navigation.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.Navigation.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.Navigation.Url">
+            <summary>
+            导航菜单的目标Url地址
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.Operation">
+            <summary>
+            操作/按钮，继承自Resource类。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Operation.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Operation.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.String,System.Int16,System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+             <param name="id">操作ID</param>
+            <param name="name">操作名称</param>
+            <param name="function">方法/函数名称</param>
+            <param name="icon">操作图标：可以存放图标的CSS类名、图标名或图标Url地址等等</param>
+            <param name="groupSign">分组标识</param>
+            <param name="parentID">上级资源ID</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="systemID">所属系统ID</param>
+            <param name="suppressible">可否隐藏：0否、1是，默认值是0</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.Operation.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.Operation.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.Operation.Function">
+            <summary>
+            方法/函数名称
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.Operation.Suppressible">
+            <summary>
+            可否隐藏：0否、1是，默认值是0
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.Operation.GroupSign">
+            <summary>
+            分组标识
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.OperateLog">
+            <summary>
+            【操作日志】实体类：用于记录界面中各类按钮的操作日志，包括按钮影响到的所有实体对象的新增、修改和删除，以及系统用户的登录操作等等都可以记录下来。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.OperateLog.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.OperateLog.#ctor(System.String,System.String,System.String,System.Nullable{System.Int16},System.Nullable{System.Int16},System.String,System.Nullable{System.DateTime},System.String,System.String,System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="id">操作日志ID</param>
+            <param name="userName">用户名</param>
+            <param name="iPAddress">IP地址</param>
+            <param name="operateType">操作类型</param>
+            <param name="operateResult">操作结果</param>
+            <param name="logMessage">日志消息</param>
+            <param name="logTime">日志记录时间</param>
+            <param name="entityTableName">实体表名：被操作对象实体对应的表名。</param>
+            <param name="entityID">实体ID：被操作实体的ID</param>
+            <param name="entityXML">实体XML：实体的XML格式表示，记录一个实体从产生、修改到最后删除的实体状态。</param>
+            <param name="organizationID">操作日志归属部门编码</param>
+            <param name="systemID">所属系统编码</param>
+        </member>
+        <member name="M:HR.Authorize.Models.OperateLog.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.OperateLog.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.ID">
+            <summary>
+            操作日志ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.IPAddress">
+            <summary>
+            IP地址
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.OperateType">
+            <summary>
+            操作类型
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.OperateResult">
+            <summary>
+            操作结果
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.LogMessage">
+            <summary>
+            日志消息
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.LogTime">
+            <summary>
+            日志记录时间
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.EntityTableName">
+            <summary>
+            实体表名：被操作对象实体对应的表名。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.EntityID">
+            <summary>
+            实体ID：被操作实体的ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.EntityXML">
+            <summary>
+            实体XML：实体的XML格式表示，记录一个实体从产生、修改到最后删除的实体状态。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.OrganizationID">
+            <summary>
+            操作日志归属部门编码
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.OperateLog.SystemID">
+            <summary>
+            所属系统编码
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.Organization">
+            <summary>
+            【组织机构/部门】实体类：存放内设机构、部门和办公室等。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Organization.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Organization.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="id">主键ID</param>
+            <param name="code">组织机构/部门代码</param>
+            <param name="name">组织机构/部门名称</param>
+            <param name="regionCode">所属行政区划代码</param>
+            <param name="contactPerson">组织机构/部门联系人</param>
+            <param name="contactPhone">联系电话</param>
+            <param name="faxNumber">组织机构/部门传真号码</param>
+            <param name="parentID">上级组织机构/部门ID</param>
+            <param name="sortValue">排序值：获取行政区划时用来影响排序的字段。</param>
+            <param name="description">描述、说明</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.Organization.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+组织机构ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.Organization.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且组织机构ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.ID">
+            <summary>
+            主键ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Code">
+            <summary>
+            组织机构/部门编码
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Name">
+            <summary>
+            组织机构/部门名称
+            </summary>    
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.RegionCode">
+            <summary>
+            所属行政区划代码
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.ContactPerson">
+            <summary>
+            组织机构/部门联系人
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.ContactPhone">
+            <summary>
+            联系电话
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.FaxNumber">
+            <summary>
+            组织机构/部门传真号码
+            </summary>       
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.ParentID">
+            <summary>
+            上级组织机构/部门ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.SortValue">
+            <summary>
+            排序值：获取行政区划时用来影响排序的字段。
+            </summary>       
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Description">
+            <summary>
+            描述、说明
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>       
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Region">
+            <summary>
+            获取当前组织机构/部门所属的行政区划
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Parent">
+            <summary>
+            获取当前组织机构/部门的上级组织机构/部门
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Children">
+            <summary>
+            获取当前组织机构/部门的下级组织机构/部门
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization.Users">
+            <summary>
+            获取当前组织机构/部门的用户
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Organization._parentId">
+            <summary>
+            针对JQuery EasyUI的ParentID属性别名
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.ShortcutMenu">
+            <summary>
+            【个人快捷菜单】实体类：存放大图标形式显示的个人快捷菜单信息，方便直达个人的相关业务页面。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.ShortcutMenu.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.ShortcutMenu.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="id">快捷菜单ID</param>
+            <param name="name">快捷菜单名称</param>
+            <param name="resourceID">资源ID</param>
+            <param name="userName">用户名：用户登录系统时使用的账号</param>
+            <param name="sortValue">排序值</param>
+            <param name="SystemID">所属系统ID</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.ShortcutMenu.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.ShortcutMenu.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.ID">
+            <summary>
+            快捷菜单ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.Name">
+            <summary>
+            快捷菜单名称
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.ResourceID">
+            <summary>
+            资源ID
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.UserName">
+            <summary>
+            用户名：用户登录系统时使用的账号
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.SortValue">
+            <summary>
+            排序值
+            </summary>       
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.ShortcutMenu.SystemID">
+            <summary>
+            所属系统ID
+            </summary>        
+        </member>
+        <member name="T:HR.Authorize.Models.Region">
+            <summary>
+            【行政区(管辖区)】实体类：数据参照中华人民共和国国家统计局_中国行政区划代码
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Region.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Region.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Int16},System.Nullable{System.Decimal},System.String,System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="id">主键ID</param>
+            <param name="code">行政区划代码</param>
+            <param name="name">行政区划名称</param>
+            <param name="parentCode">上级行政区代码</param>
+            <param name="rLevel">行政区划级别：由父级行政区划的级别推导而来，0【省级】、1【地级】、2【县级】、3【乡级】、4【村级】、5【组级】；默认值为0，即省级。</param>
+            <param name="sortValue">排序值：字典条目将按所有排序值升序取出。</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.Region.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+行政区划Code相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.Region.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且行政区划Code的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.ID">
+            <summary>
+            主键ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.Code">
+            <summary>
+            行政区划代码
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.Name">
+            <summary>
+            行政区划名称
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.ParentCode">
+            <summary>
+            上级行政区划代码
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.RLevel">
+            <summary>
+            行政区划级别：由父级行政区划的级别推导而来，0【省级】、1【地级】、2【县级】、3【乡级】、4【村级】、5【组级】；默认值为0，即省级。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.SortValue">
+            <summary>
+            排序值：字典条目将按所有排序值升序取出。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.Parent">
+            <summary>
+            获取当前行政区划的上级行政区划
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.Children">
+            <summary>
+            获取当前行政区划的下级行政区划
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Region.Organizations">
+            <summary>
+            获取当前行政区划下的组织机构/部门
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.Resource">
+            <summary>
+            资源类
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.ID">
+            <summary>
+            资源ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.RType">
+            <summary>
+            资源类型：0为导航菜单项，1为内部页面，2为操作/按钮。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.Name">
+            <summary>
+            资源名称
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.Icon">
+            <summary>
+            资源图标：可以存放图标的CSS类名、图标名或图标Url地址。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.ParentID">
+            <summary>
+            上级资源ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.SortValue">
+            <summary>
+            排序值：影响资源在当前父资源下的加载顺序和位置。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.SystemID">
+            <summary>
+            所属系统ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.Parent">
+            <summary>
+            获取当前资源的上级资源
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.Children">
+            <summary>
+            获取当前资源的下级资源
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource.iconCls">
+            <summary>
+            针对JQuery EasyUI的Icon属性别名
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Resource._parentId">
+            <summary>
+            针对JQuery EasyUI的ParentID属性别名
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.Role">
+            <summary>
+            角色实体类
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Role.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.Role.#ctor(System.String,System.String,System.Nullable{System.Decimal},System.String,System.String,System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="id">角色ID</param>
+            <param name="name">角色名称</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="systemID">所属系统ID</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.Role.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.Role.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.ID">
+            <summary>
+            主键ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.SortValue">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.SystemID">
+            <summary>
+            所属系统ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.Users">
+            <summary>
+            获取当前角色下的用户
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.Role.Resources">
+            <summary>
+            获取或设置当前角色下的资源权限点
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.User">
+            <summary>
+            【用户】实体类：保存用户基本信息
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.User.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.User.#ctor(System.String,System.String,System.String,System.String,System.Int16,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.DateTime},System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="id">主键ID</param>
+            <param name="userName">用户名：用户登录系统时使用的账号</param>
+            <param name="password">登录密码</param>
+            <param name="realName">姓名：记录用户的真实姓名</param>
+            <param name="sex">性别：0女、1男</param>
+            <param name="organizationID">所属组织机构ID</param>
+            <param name="officePhone">办公电话</param>
+            <param name="email">电子邮箱</param>
+            <param name="systemSkin">系统皮肤：用户个人的系统皮肤设置</param>
+            <param name="description">描述说明</param>
+            <param name="createDate">创建日期</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.User.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+UserName相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.User.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且UserName的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.User.ID">
+            <summary>
+            主键ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.User.UserName">
+            <summary>
+            用户名：用户登录系统时使用的账号
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.Password">
+            <summary>
+            (初始)登录密码
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.RealName">
+            <summary>
+            姓名：记录用户的真实姓名
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.Sex">
+            <summary>
+            性别：0女、1男
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.OrganizationID">
+            <summary>
+            所属组织机构/部门ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.User.OfficePhone">
+            <summary>
+            办公电话
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.Email">
+            <summary>
+            电子邮箱
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.SystemSkin">
+            <summary>
+            系统皮肤：用户个人的系统皮肤设置
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.Description">
+            <summary>
+            备注说明
+            </summary>       
+        </member>
+        <member name="P:HR.Authorize.Models.User.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.CreateDate">
+            <summary>
+            创建日期
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.User.Systems">
+            <summary>
+            获取当前用户已注册登记的系统
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.User.Organization">
+            <summary>
+            获取当前用户所属的组织机构
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.User.Region">
+            <summary>
+            获取当前用户所属的行政区划
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.User.Roles">
+            <summary>
+            获取或设置当前用户的角色列表(注意：获取的角色可能来自多个系统)
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.UserRole">
+            <summary>
+            [用户、角色]关系实体
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.UserRole.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.UserRole.#ctor(System.String,System.String)">
+            <summary>
+            带参构造方法
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="roleID">角色ID</param>
+        </member>
+        <member name="M:HR.Authorize.Models.UserRole.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+复合主键的用户名+复合主键的角色ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.UserRole.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且复合主键也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.UserRole.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.UserRole.RoleID">
+            <summary>
+            角色ID
+            </summary>        
+        </member>
+        <member name="T:HR.Authorize.Models.USystem">
+            <summary>
+            【用户系统】实体类：存放在权限系统中注册了的用户系统信息。
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.USystem.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.USystem.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Decimal},System.String,System.Nullable{System.DateTime},System.Int16)">
+             <summary>
+             带参构造方法
+             </summary>
+             <param name="id">系统ID</param>
+            <param name="name">系统名称</param>
+            <param name="url">系统Url地址</param>
+            <param name="icon">系统图标：用于存放统一门户中系统快捷方式的图标CSS类名、图标名或图标Url地址等，看具体应用程序而定。</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述说明</param>
+            <param name="registerDate">注册日期(若为null则自动取当前日期时间)</param>
+            <param name="isValid">是否有效：0否、1是，默认值是1</param>
+        </member>
+        <member name="M:HR.Authorize.Models.USystem.GetHashCode">
+            <summary>
+             重写GetHashCode方法，获取对象类型全名+主键ID相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.USystem.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且主键ID的值也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.ID">
+            <summary>
+            系统ID
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Name">
+            <summary>
+            系统名称
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Url">
+            <summary>
+            系统Url地址
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Icon">
+            <summary>
+            系统图标：用于存放统一门户中系统快捷方式的图标CSS类名、图标名或图标Url地址。
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.SortValue">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Description">
+            <summary>
+            描述说明
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.IsValid">
+            <summary>
+            是否有效：0否、1是，默认值是1
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.RegisterDate">
+            <summary>
+            注册日期
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Users">
+            <summary>
+            获取或设置当前系统的用户
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Resources">
+            <summary>
+            获取当前系统的资源
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.USystem.Roles">
+            <summary>
+            获取当前系统的角色
+            </summary>
+        </member>
+        <member name="T:HR.Authorize.Models.SystemUserID">
+            <summary>
+            [系统ID、用户名]复合主键
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.SystemUserID.SystemID">
+            <summary>
+            系统ID
+            </summary>        
+        </member>
+        <member name="P:HR.Authorize.Models.SystemUserID.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUserID.#ctor">
+            <summary>
+            复合主键构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUserID.#ctor(System.String,System.String)">
+            <summary>
+            复合主键带参构造方法
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="userName">用户名</param>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUserID.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取复合主键的类型全名+系统ID+用户名相结合后的字符串哈希码作为当前复合主键的哈希码。
+            </summary>
+            <returns>当前复合主键的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUserID.Equals(System.Object)">
+            <summary>
+            重写Equals方法，如果给定的待比较对象类型为复合主键的类型，且其包含的系统ID和用户名均相等，则认为相比较的两个对象是相等的复合主键对象。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="T:HR.Authorize.Models.SystemUser">
+            <summary>
+            【系统_用户】关联实体类
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUser.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUser.#ctor(HR.Authorize.Models.SystemUserID,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+             <param name="id">[系统ID、用户名]复合主键</param>
+            <param name="specialPassword">用户在当前系统中的【专用密码】，若未指定则复制【用户】表中的密码作为专用密码</param>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUser.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="systemID">系统ID</param>
+            <param name="userName">用户名</param>
+            <param name="specialPassword">用户在当前系统中的【专用密码】，若未指定则复制【用户】表中的密码作为专用密码</param>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUser.GetHashCode">
+            <summary>
+            重写GetHashCode方法，获取对象类型全名+复合主键的系统ID+复合主键的用户名相结合后的字符串哈希码作为当前对象的哈希码。
+            </summary>
+            <returns>当前对象的哈希码</returns>
+        </member>
+        <member name="M:HR.Authorize.Models.SystemUser.Equals(System.Object)">
+            <summary>
+            重写Equals方法，若待比较对象与当前对象的类型相同，且复合主键也相同，则认为它们相等。
+            </summary>
+            <param name="obj">待比较对象</param>
+            <returns>比较结果：true(相等)，false(不相等)</returns>
+        </member>
+        <member name="P:HR.Authorize.Models.SystemUser.ID">
+            <summary>
+            [系统ID、用户名]复合主键
+            </summary>
+        </member>
+        <member name="P:HR.Authorize.Models.SystemUser.SpecialPassword">
+            <summary>
+            用户在当前系统中的【专用密码】，若未指定则复制【用户】表中的密码作为专用密码
+            </summary>        
+        </member>
+    </members>
+</doc>

@@ -1,0 +1,869 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HR.BasicFramework.DataAccess</name>
+    </assembly>
+    <members>
+        <member name="T:HR.BasicFramework.DataAccess.DataContextNH">
+            <summary>
+            由NHibernate框架做底层支持的数据上下文
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.IsVirtualDelete``1(``0@)">
+            <summary>
+            判断当前正在删除的持久态实例是否具有虚删除标识属性(IsDelete)，如果有则更新IsDelete属性值为1，并返回true
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <returns>true或false</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.IsVirtualDelete``1(System.Collections.Generic.IList{``0}@)">
+            <summary>
+            判断当前正在删除的持久态实例列表中的实例是否具有虚删除标识属性(IsDelete)，如果有则更新IsDelete属性值为1，并返回true
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">持久态实例列表</param>
+            <returns>true或false</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.CreateHQLQuery``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            基于HQL查询语句创建面向对象的NHibernate查询对象
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中的命名参数的[名,值]对集合(可选参数)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <returns>HQL查询对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.CreateSQLQuery``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            基于原生SQL查询语句创建NHibernate原生SQL查询对象
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中的命名参数的[名,值]对集合(可选参数)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <returns>原生SQL查询对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.CreateNamedQuery``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            基于定义在映射文件中的命名查询字符串创建一个NHibernate查询对象(留用)
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="queryName">命名查询名称</param>
+            <param name="paramNameValuePairs">命名查询中的命名参数的[名,值]对集合(可选参数)</param>
+            <returns>命名查询对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.SetParameters(NHibernate.IQuery,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            设置NHibernate查询对象(包括基于HQL和SQL创建的查询对象)中命名参数的值
+            </summary>
+            <param name="query">NHibernate查询对象</param>
+            <param name="paramNameValuePairs">命名参数的名值对集合</param>
+            <returns>设置好参数值后的NHibernate查询对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.Save``1(``0)">
+            <summary>
+            持久化给定的瞬态实例，并先为其分配一个标识符。
+            <para>如果标识符使用Assigned生成器，Save时将使用瞬态实例中标识符属性的当前值。</para>
+            <para>标识符为自定义类型时，只能使用Assigned生成器，即必须手动指定标识符的值。</para>
+            <para>标识符为自定义类型时不能自动分配值的原因是：很难预测多列复合型的标识符。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instance">瞬态实例</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchSave``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            批量持久化给定实例列表中的瞬态实例。
+            <para>如果标识符使用Assigned生成器，Save时将使用瞬态实例中标识符属性的当前值。</para>
+            <para>标识符为自定义类型时，只能使用Assigned生成器，即必须手动指定标识符的值。</para>
+            <para>标识符为自定义类型时不能自动分配值的原因是：很难预测多列复合型的标识符。</para>
+            <para>量大的情况下请配合NHibernate批量处理特性使用，量非常大的情况下请考虑无状态会话的相应方法。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">瞬态实例列表</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.Save``1(``0,System.Object)">
+            <summary>
+            使用给定的标识符持久化给定的瞬态实例
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instance">瞬态实例</param>
+            <param name="id">一个未使用的有效标识符</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchSave``1(System.Collections.Generic.IList{``0},System.Collections.Generic.HashSet{System.Object})">
+            <summary>
+            使用给定的标识符哈希集合批量持久化给定的瞬态实例列表(标识符与瞬态实例按顺序对应)。
+            <para>量大的情况下请配合NHibernate批量处理特性使用。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">瞬态实例列表</param>
+            <param name="ids">标识符集合</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.SaveOrUpdate``1(``0)">
+            <summary>
+            根据给定实例的标识符属性的值，来决定对其进行Save还是Update操作。
+            <para>如果标识符使用Assigned生成器，Save时将使用瞬态实例中标识符属性的当前值。</para>
+            <para>标识符为自定义类型时，只能使用Assigned生成器，即必须手动指定标识符的值。</para>
+            <para>标识符为自定义类型时不能自动分配值的原因是：很难预测多列复合型的标识符。</para>
+            </summary>
+            <remarks>
+            默认情况下给定的实例总会被保存。这一行为可以通过在标识符属性映射上指定一个<c>unsaved-value</c>特性来改变。
+            </remarks>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instance">一个处于new或updated状态的实例</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchSaveOrUpdate``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            批量Save或Update给定实例列表中的实例，各个实例执行哪个操作取决于其标识符属性的值。
+            <para>如果标识符使用Assigned生成器，Save时将使用瞬态实例中标识符属性的当前值。</para>
+            <para>标识符为自定义类型时，只能使用Assigned生成器，即必须手动指定标识符的值。</para>
+            <para>标识符为自定义类型时不能自动分配值的原因是：很难预测多列复合型的标识符。</para>
+            <para>量大的情况下请配合NHibernate批量处理特性使用。</para>
+            </summary>
+            <remarks>
+            默认情况下列表中的实例总会被保存。这一行为可以通过在标识符属性映射上指定一个<c>unsaved-value</c>特性来改变。
+            </remarks>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">实例列表</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.Delete``1(``0,System.Boolean)">
+            <summary>
+            从数据存储中删除一个持久态实例(支持虚删除)。
+            <para>当执行虚删除时，若给定的实例的标识符为null，会抛出一个异常。</para>
+            <para>当执行虚删除时，若给定的实例是瞬态或游离态，而当前会话中已经存在一个标识符相同的持久态实例，会抛出一个异常。</para>
+            </summary>
+            <typeparam name="TModel">持久态实例的类型</typeparam>
+            <param name="instance">持久态实例</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchDelete``1(System.Collections.Generic.IList{``0},System.Boolean)">
+            <summary>
+            从数据存储中批量删除给定持久态实例列表中的持久态实例(支持虚删除)。
+            <para>当执行虚删除时，若给定列表中有实例的标识符为null时，会抛出一个异常。</para>
+            <para>当执行虚删除时，若给定列表中有实例是瞬态或游离态，而当前会话中已经存在标识符相同的相应持久态实例，则会抛出一个异常。</para>
+            <para>量大的情况下请配合NHibernate批量处理特性使用，量非常大的情况下请考虑无状态会话的相应方法。</para>
+            </summary>
+            <typeparam name="TModel">列表中持久态实例的类型</typeparam>
+            <param name="instances">持久态实例列表</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.DeleteByID``1(System.Object,System.Boolean)">
+            <summary>
+            使用给定的标识符从数据存储中删除指定持久化类的一个持久态实例(支持虚删除)。
+            <para>当给定的标识符为null时，会抛出一个异常。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="id">标识符</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchDeleteByID``1(System.Collections.Generic.HashSet{System.Object},System.Boolean)">
+            <summary>
+            从数据存储中批量删除给定标识符列表相关联的持久态实例(支持虚删除)。
+            <para>量大的情况下请配合NHibernate批量处理特性使用，量非常大的情况下请考虑无状态会话的相应方法。</para>
+            </summary>
+            <typeparam name="TModel">持久态实例的类型</typeparam>
+            <param name="ids">标识符列表</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.DeleteByHQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            利用HQL删除命令删除满足条件的持久态实例。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="hqlDeleteString">HQL删除命令</param>
+            <param name="paramNameValuePairs">HQL删除命令中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>被删除的行数</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.DeleteBySQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            利用原生SQL删除命令删除满足条件的持久态实例。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="sqlDeleteString">原生SQL删除命令</param>
+            <param name="paramNameValuePairs">原生SQL删除命令中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>被删除的行数</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.DeleteByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Boolean)">
+            <summary>
+            基于LINQ条件表达式删除满足条件的持久态实例(支持虚删除)。
+            <para>注意：若未给定条件表达式则将删除持久化类的所有持久态实例。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试每个实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.Update``1(``0)">
+            <summary>
+            更新与给定实例的标识符相关联的持久态实例。
+            <para>当给定的实例的标识符为null时，会抛出一个异常。</para>
+            <para>当给定的实例是瞬态或游离态时，若当前会话中已经存在一个标识符相同的持久态实例，会抛出一个异常。</para>
+            </summary>
+            <typeparam name="TModel">持久态实例的类型</typeparam>
+            <param name="instance">一个处于updated状态的实例</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchUpdate``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            批量更新给定实例列表中的实例标识符相关联的持久态实例。 
+            <para>当给定列表中有实例的标识符为null时，会抛出一个异常。</para>
+            <para>当给定列表中有实例是瞬态或游离态时，若当前会话中已经存在一个标识符相同的相应持久态实例，会抛出一个异常。</para>
+            <para>量大的情况下请配合NHibernate批量处理特性使用，量非常大的情况下请考虑无状态会话的相应方法。</para>
+            </summary>
+            <typeparam name="TModel">持久态实例的类型</typeparam>
+            <param name="instances">实例列表</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.Update``1(``0,System.Object)">
+            <summary>
+            利用给定的实例更新与给定标识符相关联的持久态实例。
+            <para>当给定的标识符为null时，会抛出一个异常。</para>
+            <para>当给定的实例是持久态实例时，若持久态实例的标识符与给定的标识符不相同，会抛出一个异常</para>
+            <para>当给定的实例是瞬态或游离态时，若当前会话中已经存在一个标识符与给定标识符相同的持久态实例 或 使用给定的标识符无法从数据存储中获得一个持久态实例时，也会抛出一个异常。</para>
+            </summary>
+            <typeparam name="TModel">持久态实例的类型</typeparam>
+            <param name="instance">一个处于updated状态的实例</param>
+            <param name="id">标识符</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BatchUpdate``1(System.Collections.Generic.IList{``0},System.Collections.Generic.HashSet{System.Object})">
+            <summary>
+            利用给定的实例列表更新与给定标识符哈希集合中对应标识符相关联的持久态实例。(标识符与实例按顺序对应)
+            <para>当给定的标识符哈希集合中有标识符为null时，会抛出一个异常。</para>
+            <para>当给定的实例列表中有持久态实例时，若持久态实例的标识符与标识符哈希集合中相应标识符不相同，会抛出一个异常</para>
+            <para>当给定的实例列表中有瞬态或游离态实例时，若标识符哈希集合中的相应标识符与当前会话中某个持久态实例的标识符相同 或 使用标识符哈希集合中的相应标识符无法从数据存储中获得一个持久态实例时，也会抛出一个异常。</para>
+            </summary>
+            <typeparam name="TModel">列表中实列的类型</typeparam>
+            <param name="instances">实例列表</param>
+            <param name="ids">标识符哈希集合</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.UpdateByHQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            利用HQL更新命令更新满足条件的持久态实例。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="hqlUpdateString">HQL更新命令</param>
+            <param name="paramNameValuePairs">HQL更新命令中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>被更新的行数</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.UpdateBySQL``1(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            利用原生SQL更新命令更新满足条件的持久态实例。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="sqlUpdateString">原生SQL更新命令</param>
+            <param name="paramNameValuePairs">原生SQL更新命令中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>被更新的行数</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetByID``1(System.Object)">
+            <summary>
+            根据给定的标识符从数据存储中获取指定类型的持久态实例。
+            <para>标识符可以是简单的值，也可以是代表多列复合标识符的实体对象。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="id">标识符</param>
+            <returns>持久态实例</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetSingleByHQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询或统计语句获取唯一结果；如果没有则返回null；如果有多个结果存在，则会引发异常。
+            <para>结果类型可以是持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            <para>另类使用说明：该方法可以用来返回符合条件的记录总数！</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果类型</typeparam>
+            <param name="hqlQueryString">HQL查询或统计语句</param>
+            <param name="paramNameValuePairs">HQL查询或统计语句中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>唯一结果</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetSingleBySQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询或统计语句获取唯一结果；如果没有则返回null；如果有多个结果存在，则会引发异常。
+            <para>结果类型可以是持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            <para>另类使用说明：该方法可以用来返回符合条件的记录总数！</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果类型</typeparam>
+            <param name="sqlQueryString">SQL查询或统计语句</param>
+            <param name="paramNameValuePairs">SQL查询或统计语句中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>唯一结果</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetFirstByHQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句获取符合条件的第一个结果；如果没有则返回null；
+            <para>结果类型可以是持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>符合条件的第一个结果</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetFirstBySQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用原生SQL查询语句获取符合条件的第一个结果；如果没有则返回null；
+            <para>结果类型可以是持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果类型</typeparam>
+            <param name="sqlQueryString">原生SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>符合条件的第一个结果</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetLastByHQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用HQL查询语句获取符合条件的最后一个结果；如果没有则返回null；
+            <para>结果类型可以是持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询语句中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>符合条件的最后一个结果</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetLastBySQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object})">
+            <summary>
+            使用SQL查询语句获取符合条件的最后一个结果；如果没有则返回null；
+            <para>结果类型可以是持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果类型</typeparam>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询语句中命名参数的[名,值]对集合(可选参数)</param>
+            <returns>符合条件的最后一个结果</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetByHQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            根据HQL查询语句从数据存储中获取满足条件的强类型或弱类型结果列表(可以传参和分页)。
+            <para>结果集类型可以设定为持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            <para>特别注意：dynamic/object代表未知类型(并不是代表动态类型)，结果集实际类型将由.NET运行时自行判断，ExpandoObject为.NET内置的可实例化动态类型。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果集列表成员的类型</typeparam>
+            <param name="hqlQueryString">HQL查询语句</param>
+            <param name="paramNameValuePairs">HQL查询中命名参数的[名,值]对集合(可选参数)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <returns>强类型或弱类型结果列表</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetBySQL``2(System.String,System.Collections.Generic.IDictionary{System.String,System.Object},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            根据SQL查询语句从数据存储中获取满足条件的强类型或弱类型结果列表(可以传参和分页)。
+            <para>结果集类型可以设定为持久化类，可以是dynamic/object和ExpandoObject这样的特殊类型，也可以是其他基本类型。</para>
+            <para>特别注意：dynamic/object代表未知类型(并不是代表动态类型)，结果集实际类型将由.NET运行时自行判断，ExpandoObject为.NET内置的可实例化动态类型。</para>
+            <para>建议：在你选择使用原生SQL方法前，请优先考虑HQL和LINQ的相应方法，因为它们是数据库无关的。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TResult">结果集列表成员的类型</typeparam>
+            <param name="sqlQueryString">SQL查询语句</param>
+            <param name="paramNameValuePairs">SQL查询中命名参数的[名,值]对集合(可选参数)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <returns>强类型或弱类型结果列表</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetAll``1(NHibernate.Criterion.Order[])">
+            <summary>
+            获取指定持久化类的所有持久态实例，可指定排序规则。
+            <para>数据量非常大时可以考虑相应的无状态会话方法。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="orders">排序规则对象参数数组</param>
+            <returns>持久态实例列表</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetQueryObject``1">
+            <summary>
+            获取基于NHibernate的特定于某个持久化类的LINQ可查询对象
+            <para>基于此方法获得的可查询对象，你可以灵活使用LINQ的各项查询功能。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <returns>LINQ可查询对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetSingleByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            使用LINQ获取满足指定条件的唯一持久态实例；如果没有则返回null；如果有多个这样的实例存在，则会引发异常。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试实例是否满足条件的函数(lambda 表达式)</param>
+            <returns>满足条件的唯一持久态实例或null</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetFirstByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            使用LINQ获取满足指定条件的第一个持久态实例；若没有则返回null(支持一次升序排序和一次降序排序)。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector">用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector">用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <returns>满足条件的第一个持久态实例</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetFirstByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            使用LINQ获取满足指定条件的第一个持久态实例；若没有则返回null(支持两次升序排序和两次降序排序)。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector1">第1个用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector2">第2个用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector1">第1个用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector2">第2个用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <returns>满足条件的第一个持久态实例</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetLastLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            使用LINQ获取满足指定条件的最后一个持久态实例；若没有则返回null(支持一次升序排序和一次降序排序)。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector">用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector">用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <returns>满足条件的最后一个持久态实例</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetLastLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}})">
+            <summary>
+            使用LINQ获取满足指定条件的最后一个持久态实例；若没有则返回null(支持两次升序排序和两次降序排序)。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector1">第1个用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector2">第2个用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector1">第1个用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector2">第2个用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <returns>满足条件的最后一个持久态实例</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            使用LINQ获取满足指定条件的持久态实例列表(支持分页以及一次升序排序和一次降序排序)。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试每个实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector">用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector">用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <returns>持久态实例列表</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.GetByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Linq.Expressions.Expression{System.Func{``0,System.Object}},System.Nullable{System.Int32},System.Nullable{System.Int32})">
+            <summary>
+            使用LINQ获取满足指定条件的持久态实例列表(支持分页以及两次升序排序和两次降序排序)。
+            <para>注意：过多的排序会严重影响性能。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试每个实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector1">第1个用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="ascKeySelector2">第2个用于从实例中提取升序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector1">第1个用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="descKeySelector2">第2个用于从实例中提取降序排序键的函数(lambda 表达式，可选参数)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <returns>持久态实例列表</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.CountByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            使用LINQ获取满足指定条件的持久态实例的总数(System.Int32)
+            <para>注意：当统计条件表达式为空时，将统计所有。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试每个实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <returns>满足条件的持久态实例数量</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.LongCountByLINQ``1(System.Linq.Expressions.Expression{System.Func{``0,System.Boolean}})">
+            <summary>
+            使用LINQ获取满足指定条件的持久态实例的总数(System.Int64)
+            <para>注意：当统计条件表达式为空时，将统计所有。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="predicate">用于测试每个实例是否满足条件的函数(lambda 表达式，可选参数)</param>
+            <returns>满足条件的持久态实例数量</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BeginTransaction``1">
+            <summary>
+            开启一个标准会话相关操作专用的本地NHibernate事务。
+            <para>注意：本事务对无状态会话相关的操作是不起作用的。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <returns>本地NHibernate事务</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.BeginTransaction``1(System.Data.IsolationLevel)">
+            <summary>
+            使用指定的事务隔离级别开启一个标准会话相关操作专用的本地NHibernate事务。
+            <para>注意：本事务对无状态会话相关的操作是不起作用的。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="isolationLevel">事务隔离级别(枚举)</param>
+            <returns>本地NHibernate事务</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessBatchSave``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            无状态批量持久化给定瞬态实例列表中的瞬态实例。
+            <para>注意1：必须在无状态会话的本地NHibernate事务范围内调用。</para>
+            <para>注意2：若不了解NHibernate无状态会话，请慎用！</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">瞬态实例列表</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessGetAll``1(NHibernate.Criterion.Order[])">
+            <summary>
+            无状态获取指定持久化类的所有游离态实例，可指定排序规则。
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="orders">排序规则对象参数数组</param>
+            <returns>游离态实例列表</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessBatchUpdate``1(System.Collections.Generic.IList{``0})">
+            <summary>
+            无状态批量更新给定实例列表中的实例到数据存储。
+            <para>注意1：必须在无状态会话的本地NHibernate事务范围内调用</para>
+            <para>注意2：若不了解NHibernate无状态会话，请慎用！</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">待更新实例列表</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessBatchDeleteByID``2(System.Collections.Generic.IList{``1},System.Boolean)">
+            <summary>
+            无状态从数据存储中批量删除给定标识符列表相关联的实例(支持虚删除)。
+            <para>注意1：必须在无状态会话的本地NHibernate事务范围内调用。</para>
+            <para>注意2：若不了解NHibernate无状态会话，请慎用！</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <typeparam name="TID">标识符的类型</typeparam>
+            <param name="ids">标识符列表</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessBatchDelete``1(System.Collections.Generic.IList{``0},System.Boolean)">
+            <summary>
+            无状态从数据存储中批量删除给定实例列表中的实例(支持虚删除)。
+            <para>注意1：必须在无状态会话的本地NHibernate事务范围内调用。</para>
+            <para>注意2：若不了解NHibernate无状态会话，请慎用！</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="instances">待删除实例列表</param>
+            <param name="isCheckVirtualDelete">是否检查虚删除属性(可选参数，默认值为false，即直接进行物理删除)</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessBeginTransaction``1">
+            <summary>
+            开启一个无状态会话相关操作专用的本地NHibernate事务。
+            <para>注意：本事务对标准会话相关的操作是不起作用的。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <returns>本地NHibernate事务</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextNH.StatelessBeginTransaction``1(System.Data.IsolationLevel)">
+            <summary>
+            使用指定的事务隔离级别开启一个无状态会话相关操作专用的本地NHibernate事务。
+            <para>注意：本事务对标准会话相关的操作是不起作用的。</para>
+            </summary>
+            <typeparam name="TModel">持久化类</typeparam>
+            <param name="isolationLevel">事务隔离级别(枚举)</param>
+            <returns>本地NHibernate事务</returns>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.NHibernateConfigFileSettings">
+            <summary>
+            NHibernate配置文件设定元素处理类
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.DataAccess.NHibernateConfigFileSettings.FilePath">
+            <summary>
+            NHibernate配置文件相对路径设定属性（必要属性，且在集合中充当集合键，默认值为""）
+            </summary>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.NHibernateConfigFileSettingsCollection">
+            <summary>
+            NHibernate配置文件设定元素集合类
+            </summary>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.NHibernateConfigFilesSection">
+            <summary>
+            NHibernate配置文件设置节处理类
+            </summary>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.DataContextSQL">
+            <summary>
+            由System.Data.Common命名空间下的原生ADO.NET对象模型做底层支持的数据上下文。
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.#ctor">
+            <summary>
+            封存无参构造函数。
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.#ctor(System.String)">
+            <summary>
+            根据传入的App/Web.config中的数据库连接字符串配置名构造相应数据库的数据上下文实例。
+            </summary>
+            <param name="connectionStringName">数据库连接字符串配置名</param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.CreateConnection">
+            <summary>
+            新建一个针对当前数据上下文的ADO.NET连接对象。
+            </summary>
+            <returns>ADO.NET连接对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.CreateParameter(System.String,System.Object,System.Data.ParameterDirection)">
+            <summary>
+            新建一个针对当前数据上下文的ADO.NET参数对象。
+            </summary>
+            <param name="paramName">参数名</param>
+            <param name="paramValue">参数值</param>
+            <param name="paramDirection">参数方向(可选参数，默认值为ParameterDirection.Input)</param>
+            <returns>新的ADO.NET参数对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.CreateParameters(System.Collections.Generic.IDictionary{System.String,System.Object},System.Collections.Generic.IDictionary{System.String,System.Data.ParameterDirection})">
+            <summary>
+            新建一个针对当前数据上下文的ADO.NET参数对象哈希集合。
+            </summary>
+            <param name="paramNameValues">参数名与值的字典</param>
+            <param name="paramNameDirections">参数名与方向的字典</param>
+            <returns>一个新的ADO.NET参数对象哈希集合</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.CreateCommand(System.String,System.Collections.Generic.HashSet{System.Data.Common.DbParameter},System.Data.CommandType,System.Data.Common.DbTransaction,System.Data.Common.DbConnection)">
+            <summary>
+            根据给定的命令文本、命令类型、参数列表以及命令要关联的事务，新建一个基于给定连接对象的ADO.NET命令对象。
+            <para>备注：新建的ADO.NET命令对象所基于的连接对象会自动进入打开状态。</para>
+            </summary>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数(可选参数，默认值为null)</param>
+            <param name="cmdType">命令类型(可选参数，默认值为CommandType.Text)</param>
+            <param name="transaction">事务对象(可选参数，默认值为null)</param>
+            <param name="conn">连接对象(可选参数，默认值为null：表示使用默认连接)</param>
+            <returns>ADO.NET命令对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.CreateCommandBuilder">
+            <summary>
+            新建一个针对当前数据上下文的ADO.NET命令构建器对象。
+            </summary>
+            <returns></returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.CreateDataAdpater">
+            <summary>
+            新建一个针对当前数据上下文的ADO.NET数据适配器对象。
+            </summary>
+            <returns>一个新的数据适配器对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.ExcuteNonQuery(System.String,System.Collections.Generic.HashSet{System.Data.Common.DbParameter},System.Data.CommandType,System.Data.Common.DbTransaction,System.Data.Common.DbConnection)">
+            <summary>
+            执行增、删、改操作(可带0个或多个参数，并且可将操作关联到指定的事务中)；
+            <para>若未明确指明conn参数，则将使用当前数据上下文的默认连接——DefaultConnection。</para>
+            </summary>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数集合(可选参数，默认值为null)</param>
+            <param name="cmdType">命令类型(可选参数，默认值为CommandType.Text)</param>
+            <param name="transaction">事务对象(可选参数，默认值为null)</param>
+            <param name="conn">连接对象(可选参数，默认值为null：表示使用默认连接)</param>
+            <returns>操作影响的记录数</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.ExcuteScalar(System.String,System.Collections.Generic.HashSet{System.Data.Common.DbParameter},System.Data.CommandType,System.Data.Common.DbConnection)">
+            <summary>
+            执行查询，并返回结果集第一行第一列的值(可带0个或多个参数)；
+            <para>若未明确指明conn参数，则将使用当前数据上下文的默认连接——DefaultConnection。</para>
+            </summary>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数集合(数组形式,可以为null)</param>
+            <param name="cmdType">命令类型(可选参数，默认值为CommandType.Text)</param>
+            <param name="conn">连接对象(可选参数，默认值为null：表示使用默认连接)</param>
+            <returns>结果集第一行第一列的值</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.ExecuteReader(System.String,System.Collections.Generic.HashSet{System.Data.Common.DbParameter},System.Data.CommandType,System.Data.Common.DbConnection,System.Data.CommandBehavior)">
+            <summary>
+            执行查询，并返回一个DataReader对象(可带0个或多个参数)；
+            <para>若未明确指明conn参数，则将使用当前数据上下文的默认连接——DefaultConnection。</para>
+            </summary>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数集合(可选参数，默认值为null)</param>
+            <param name="cmdType">命令类型(可选参数，默认值为CommandType.Text)</param>
+            <param name="conn">连接对象(可选参数，默认值为null：表示使用默认连接)</param>
+            <param name="cmdBehavior">对查询结果和查询对数据库的影响的说明(可选参数，默认值为CommandBehavior.Default)</param>
+            <returns>DataReader对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.ExecuteDataTable(System.String,System.Collections.Generic.HashSet{System.Data.Common.DbParameter},System.Nullable{System.Int32},System.Nullable{System.Int32},System.Data.CommandType,System.Data.Common.DbConnection)">
+            <summary>
+            执行查询，并返回一个DataTable对象(可带0个或多个参数，并且支持分页)；
+            <para>若未明确指明conn参数，则将使用当前数据上下文的默认连接——DefaultConnection。</para>
+            </summary>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数集合(可选参数，默认值为null)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <param name="cmdType">命令类型(可选参数，默认值为CommandType.Text)</param>
+            <param name="conn">连接对象(可选参数，默认值为null：表示使用默认连接)</param>
+            <returns>DataTable对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.ExecuteDataSet(System.String,System.Collections.Generic.HashSet{System.Data.Common.DbParameter},System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Data.CommandType,System.Data.Common.DbConnection)">
+            <summary>
+            执行查询，并返回一个DataSet对象(可带0个或多个参数，并且支持对指定的目标源表进行分页查询)；
+            <para>若未明确指明conn参数，则将使用当前数据上下文的默认连接——DefaultConnection。</para>
+            </summary>
+            <param name="cmdText">命令文本</param>
+            <param name="cmdParameters">命令参数集合(可选参数，默认值为null)</param>
+            <param name="srcTable">待查询的目标源表(可选参数，默认值为null)</param>
+            <param name="pageIndex">当前页码(最小值为1，可选参数)</param>
+            <param name="pageSize">每页最大记录数(最小值为1，可选参数)</param>
+            <param name="cmdType">命令类型(可选参数，默认值为CommandType.Text)</param>
+            <param name="conn">连接对象(可选参数，默认值为null：表示使用默认连接)</param>
+            <returns>DataSet对象</returns>
+        </member>
+        <member name="F:HR.BasicFramework.DataAccess.DataContextSQL.disposed">
+            <summary>
+            Dispose方法是否已经被调用的标志
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.Dispose">
+            <summary>
+            可供用户调用的Dispose实现。
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.Dispose(System.Boolean)">
+            <summary>
+            受保护的Dispose虚实现。
+            </summary>
+            <param name="disposing"></param>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataContextSQL.Finalize">
+            <summary>
+            由GC自动调用的析构函数。
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.DataAccess.DataContextSQL.ConnectionString">
+            <summary>
+            获取当前数据上下文的连接字符串。
+            </summary>
+        </member>
+        <member name="P:HR.BasicFramework.DataAccess.DataContextSQL.DefaultConnection">
+            <summary>
+            获取当前数据上下文的默认连接对象。
+            </summary>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.DataTableResultSetTransformer">
+            <summary>
+            DataTable结果集转换扩展方法定义类
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.DataTableResultSetTransformer.ToList``1(System.Data.DataTable)">
+            <summary>
+            将DataTable转换为IList&lt;TResult&gt;型的结果集
+            </summary>
+            <typeparam name="TResult">DataTable中的记录要转换成的类型</typeparam>
+            <param name="dataTable">要转换的DataTable</param>
+            <returns>IList&lt;TResult&gt;型的结果集</returns>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.ObjectToExpandoOjbectResultSetTransformer">
+            <summary>
+            Object类型结果向ExpandoOjbect动态类型转换定义类
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.ObjectToExpandoOjbectResultSetTransformer.TransformList(System.Collections.IList)">
+            <summary>
+            转换整个IList结果集
+            </summary>
+            <param name="collection">要转换的IList结果集</param>
+            <returns>转换后的IList结果集</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.ObjectToExpandoOjbectResultSetTransformer.TransformTuple(System.Object[],System.String[])">
+            <summary>
+            转换单个object对象为ExpandoObject类型对象(.NET内置动态类型)
+            </summary>
+            <param name="tuple">object对象属性成员值的数组</param>
+            <param name="aliases">object对象属性成员别名的数组</param>
+            <returns>转换(组装)好的ExpandoObject类型对象</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.ObjectToExpandoOjbectResultSetTransformer.InnerTransformTuple(System.Object[],System.String[])">
+            <summary>
+            转换单个object对象为ExpandoObject类型对象(.NET内置动态类型)
+            </summary>
+            <param name="tuple">object对象属性成员值的数组</param>
+            <param name="aliases">object对象属性成员别名的数组</param>
+            <returns>转换(组装)好的ExpandoObject类型对象</returns>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.SessionFactoryManager">
+            <summary>
+            NHibernate会话工厂管理类
+            </summary>
+        </member>
+        <member name="F:HR.BasicFramework.DataAccess.SessionFactoryManager.configObjectSessionFactoryPairs">
+            <summary>
+            NHibernate配置对象与会话工厂对应字典，将在构造函数中进行初始化。
+            </summary>
+        </member>
+        <member name="F:HR.BasicFramework.DataAccess.SessionFactoryManager.assemblySessionFactoryPairs">
+            <summary>
+            程序集名与会话工厂对应字典，用于提高会话工厂二次访问速度(重要字段)。
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.SessionFactoryManager.#cctor">
+            <summary>
+            根据应用程序配置文件(如App.config或Web.config)中的NHibernate配置文件设定项，
+            找到相应的NHibernate配置文件来配置并实例化相应的会话工厂(多数据库的情况下会有多个会话工厂被实例化)。
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.SessionFactoryManager.GetSessionFactory``1">
+            <summary>
+            根据显式指定的类型实参，找到持久化相应类型的实体对象所需的会话工厂。
+            </summary>
+            <typeparam name="TModel">类型参数</typeparam>
+            <returns>会话工厂</returns>
+        </member>
+        <member name="T:HR.BasicFramework.DataAccess.SessionManager">
+            <summary>
+            会话管理类，用于快速供应标准会话(Session)和无状态会话(StatelessSession)
+            </summary>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.SessionManager.GetSession``1(``0)">
+            <summary>
+            根据给定的持久类实例获得可用于持久化与给定实例的持久类定义在相同程序集中的所有持久类的标准会话。(另一个重载版本也许会更适合你！)
+            <para>注意：当开启了NHibernate当前会话上下文开关时，请勿手动关闭由此方法获取的ISession及相关联的IDbConnection，否则会影响框架性能。</para>
+            </summary>
+            <typeparam name="TModel">类型参数</typeparam>
+            <param name="entity">实体对象</param>
+            <returns>标准会话</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.SessionManager.GetSession``1">
+            <summary>
+            根据显式指定的持久类获得可用于持久化与给定持久类定义在相同程序集中的所有持久类的标准会话
+            <para>注意：当开启了NHibernate当前会话上下文开关时，请勿手动关闭由此方法获取的ISession及相关联的IDbConnection，否则会影响框架性能。</para>
+            </summary>
+            <typeparam name="TModel">类型参数</typeparam>
+            <returns>标准会话</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.SessionManager.GetStatelessSession``1(``0)">
+            <summary>
+            根据显式指定的持久类实例获得可用于持久化与给定实例的持久类定义在相同程序集中的所有持久类的无状态会话。(另一个重载版本也许会更适合你！)
+            <para>无状态会话(stateless session)本质上是一个标准NHibernate会话(session)的简化版。</para>
+            <para>它不实现一级缓存也不与任何二级缓存互动，它也没有实现事务的write-behind或者自动</para>
+            <para>化的脏检查，也不做关联实例的级联操作。无状态会话会忽略集合(指实体的关联集合)。</para>
+            <para>通过无状态会话，操作的执行会绕过NHibernate的事件模型和众多的拦截器。由于缺少一</para>
+            <para>级缓存，无状态会话很易容受到数据混叠效应的影响。在某些处理之中，无状态会话可能</para>
+            <para>会比有状态会话(标准会话)执行快一些。无状态会话相当于未添加上述那些功能的高性能</para>
+            <para>底层API，所以在决定使用stateless session之前，请确认你真的不需要上述那些功能。</para>
+            </summary>
+            <remarks>
+            由于无状态会话没有实现事务的write-behind，所以由其发起的数据操作的SQL语句会立即发往数据库执行,
+            除非开启了NHibernate批量处理开关，并且NHibernate支持相应数据库的SQL命令批量处理。通过无状态会
+            话从数据库获取的所有实体对象都是处于未与任何session关联的游离态(Detached)。由于没有实现自动化
+            的脏检查，所以若修改过通过无状态会话获取的实体对象，则需要手动调用Update来保存修改。无状态会话
+            对于处理由大批量实体对象封装(承载)的数据是非常高效的，若要大批量处理的数据为未加工的原生数据(
+            例如行集)，则有比无状态会话更好的办法，比如原生的SQL、HQL批量操作(HQL bulk actions)、SqlBulkCopy等。
+            </remarks>
+            <typeparam name="TModel">类型参数</typeparam>
+            <returns>无状态会话</returns>
+        </member>
+        <member name="M:HR.BasicFramework.DataAccess.SessionManager.GetStatelessSession``1">
+            <summary>
+            根据显式指定的持久类得可用于持久化与给定持久类定义在相同程序集中的所有持久类的无状态会话。
+            <para>无状态会话(stateless session)本质上是一个标准NHibernate会话(session)的简化版。</para>
+            <para>它不实现一级缓存也不与任何二级缓存互动，它也没有实现事务的write-behind或者自动</para>
+            <para>化的脏检查，也不做关联实例的级联操作。无状态会话会忽略集合(指实体的关联集合)。</para>
+            <para>通过无状态会话，操作的执行会绕过NHibernate的事件模型和众多的拦截器。由于缺少一</para>
+            <para>级缓存，无状态会话很易容受到数据混叠效应的影响。在某些处理之中，无状态会话可能</para>
+            <para>会比有状态会话(标准会话)执行快一些。无状态会话相当于未添加上述那些功能的高性能</para>
+            <para>底层API，所以在决定使用stateless session之前，请确认你真的不需要上述那些功能。</para>
+            </summary>
+            <remarks>
+            由于无状态会话没有实现事务的write-behind，所以由其发起的数据操作的SQL语句会立即发往数据库执行,
+            除非开启了NHibernate批量处理开关，并且NHibernate支持相应数据库的SQL命令批量处理。通过无状态会
+            话从数据库获取的所有实体对象都是处于未与任何session关联的游离态(Detached)。由于没有实现自动化
+            的脏检查，所以若修改过通过无状态会话获取的实体对象，则需要手动调用Update来保存修改。无状态会话
+            对于处理由大批量实体对象封装(承载)的数据是非常高效的，若要大批量处理的数据为未加工的原生数据(
+            例如行集)，则有比无状态会话更好的办法，比如原生的SQL、HQL批量操作(HQL bulk actions)、SqlBulkCopy等。
+            </remarks>
+            <typeparam name="TModel">类型参数</typeparam>
+            <returns>无状态会话</returns>
+        </member>
+    </members>
+</doc>

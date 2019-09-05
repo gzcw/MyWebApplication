@@ -1,0 +1,28 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.DLR, HR.WorkflowService" table="HRFLOW.BIZ_INFO_DLR" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="DLRMC" column="DLRMC" not-null="true" />
+    <property name="DLRZJLX" column="DLRZJLX" not-null="false" />
+    <property name="DLRZJH" column="DLRZJH" not-null="false" />
+    <property name="DLRTXDZ" column="DLRTXDZ" not-null="false" />
+    <property name="DLRYZBM" column="DLRYZBM" not-null="false" />
+    <property name="DLRDHHM" column="DLRDHHM" not-null="false" />
+    <property name="ZGZSHM" column="ZGZSHM" not-null="false" />
+    <property name="SSJG" column="SSJG" not-null="false" />
+    <property name="JGDM" column="JGDM" not-null="false" />
+    <property name="EMAIL" column="EMAIL" not-null="false" />
+    <property name="ISDELETE" column="ISDELETE" not-null="false" />
+    <property name="ISSHARE" column="ISSHARE" not-null="true" />
+    <property name="ISVALID" column="ISVALID" not-null="true" />
+    <property name="ISCONFIG" column="ISCONFIG" not-null="true" />
+    <property name="SORTORDER" column="SORTORDER" not-null="false" />
+    <property name="CREATEPERSONID" column="CREATEPERSONID" not-null="false" />
+    <property name="CREATEDATE" column="CREATEDATE" not-null="false" />
+    <property name="MODIFYPERSONID" column="MODIFYPERSONID" not-null="false" />
+    <property name="MODIFYDATE" column="MODIFYDATE" not-null="false" />
+    <property name="DATAORIGIN" column="DATAORIGIN" not-null="false" />
+  </class>
+</hibernate-mapping>

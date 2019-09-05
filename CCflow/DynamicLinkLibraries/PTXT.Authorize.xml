@@ -1,0 +1,2003 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PTXT.Authorize</name>
+    </assembly>
+    <members>
+        <member name="T:PTXT.Authorize.DAOs.ExcludeOperationDAO">
+            <summary>
+            ExcludeOperation实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IExcludeOperationDAO">
+            <summary>
+            ExcludeOperation实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IExcludeOperationDAO.GetExcludeOperations(System.String,System.String@)">
+            <summary>
+            通过给定的角色ID获取当前角色的【资源、排除操作】对集（结果记录中含resourceID、operationID两列）
+            </summary>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定角色的【资源、排除操作】对集</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ExcludeOperationDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ExcludeOperationDAO.GetExcludeOperations(System.String,System.String@)">
+            <summary>
+            通过给定的角色ID获取当前角色的【资源、排除操作】对集（结果记录中含resourceID、operationID两列）
+            </summary>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定角色的【资源、排除操作】对集</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.OperationDAO">
+            <summary>
+            Operation实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IOperationDAO">
+            <summary>
+            Operation实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IOperationDAO.GetPageOperations(System.String,System.String,System.String,System.String@)">
+            <summary>
+            通过给定的系统ID编码、用户名以及资源ID编码取得用户在对应系统资源下有权限的操作集
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="resourceID">资源ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>用户在对应系统资源下有权限的操作集</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IOperationDAO.GetOperations(System.String,System.String,System.String,System.Nullable{System.SByte},PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件查找指定系统ID编码下的操作（查找结果存放在引用参数pageInfo中）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">操作名称</param>
+            <param name="functionName">操作函数(方法)名称</param>
+            <param name="isValid">是否有效</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回操作查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IOperationDAO.GetAllOperations(System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下的所有操作
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下的所有操作</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IOperationDAO.GetResourceUnConfigOperations(System.String,System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下未配置到指定资源ID的所有操作
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="resourceID">资源ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下未配置到指定资源ID的所有操作</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IOperationDAO.GetResourceConfigedOperations(System.String,System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下已配置到指定资源ID的所有操作
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="resourceID">资源ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下已配置到指定资源ID的所有操作</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationDAO.GetPageOperations(System.String,System.String,System.String,System.String@)">
+            <summary>
+            通过给定的系统ID编码、用户名以及资源ID编码取得用户在对应系统资源下有权限的操作集
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="resourceID">资源ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>用户在对应系统资源下有权限的操作集</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationDAO.GetOperations(System.String,System.String,System.String,System.Nullable{System.SByte},PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件查找指定系统ID编码下的操作（查找结果存放在引用参数pageInfo中）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">操作名称</param>
+            <param name="functionName">操作函数(方法)名称</param>
+            <param name="isValid">是否有效</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回操作查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationDAO.GetAllOperations(System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下的所有操作
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下的所有操作</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationDAO.GetResourceUnConfigOperations(System.String,System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下未配置到指定资源ID的所有操作
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="resourceID">资源ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下未配置到指定资源ID的所有操作</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationDAO.GetResourceConfigedOperations(System.String,System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下已配置到指定资源ID的所有操作
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="resourceID">资源ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下已配置到指定资源ID的所有操作</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.OperationLogDAO">
+            <summary>
+            OperationLog实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IOperationLogDAO">
+            <summary>
+            OperationLog实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OperationLogDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.OrganizationDAO">
+            <summary>
+            Organization实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IOrganizationDAO">
+            <summary>
+            Organization实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IOrganizationDAO.GetOrganizationList(System.String,System.String,System.String@)">
+            <summary>
+            获得所有符合条件的组织机构，若条件为空都取所有
+            </summary>
+            <param name="regionCode">所属行政区划代码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>所有符合条件组织机构</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OrganizationDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.OrganizationDAO.GetOrganizationList(System.String,System.String,System.String@)">
+            <summary>
+            获得所有符合条件的组织机构
+            </summary>
+            <param name="regionCode">所属行政区划代码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>所有符合条件组织机构</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.PersonalShortcutMenuDAO">
+            <summary>
+            PersonalShortcutMenu实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IPersonalShortcutMenuDAO">
+            <summary>
+            PersonalShortcutMenu实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.PersonalShortcutMenuDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.RegionDAO">
+            <summary>
+            Region实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IRegionDAO">
+            <summary>
+            Region实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetAllRegions(System.String@)">
+            <summary>
+            获得所有的行政区划（结果按SORTVALUE,CODE升序排序）
+            </summary>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有的行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetSpecialLevelRegions(System.SByte,System.String@)">
+            <summary>
+            获取指定级别的行政区划（结果按SORTVALUE,CODE升序排序）
+            </summary>
+            <param name="regionLevel">要获取的行政区划级别</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定级别行政区划的列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetRegionByCode(System.String,System.String@)">
+            <summary>
+            获取指定行政区划代码的行政区划
+            </summary>
+            <param name="regionCode">行政区划代码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定行政区划代码的行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetSubRegions(System.String,System.String@)">
+            <summary>
+            获取给定行政区划ID的第一级下属行政区划
+            </summary>
+            <param name="currentRegionID">当前行政区划ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划ID的第一级下属行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetSubRegionsByCode(System.String,System.String@)">
+            <summary>
+            获取给定行政区划代码的第一级下属行政区划
+            </summary>
+            <param name="currentRegionCode">当前行政区划代码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划代码的第一级下属行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetRegionWithSubRegions(System.String,System.Nullable{System.SByte},System.String@)">
+            <summary>
+            获取给定行政区划ID的行政区划及其所有的下属行政区划（若指定了regionLevel参数，则只返回给定行政区划ID下指定级别的下属行政区划）
+            </summary>
+            <param name="currentRegionID">当前行政区划ID</param>
+            <param name="regionLevel">要获取的行政区划的级别(为空或小于等于0都将获取定行政区划ID的所有下属行政区划)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划ID的行政区划及其所有的下属行政区划(或给定行政区划ID下指定级别的下属行政区划)</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRegionDAO.GetRegionWithSubRegionsByCode(System.String,System.Nullable{System.SByte},System.String@)">
+            <summary>
+            获取给定行政区划代码的行政区划及其所有的下属行政区划（若指定了regionLevel参数，则只返回给定行政区划代码下指定级别的下属行政区划）
+            </summary>
+            <param name="currentRegionCode">当前行政区划代码</param>
+            <param name="regionLevel">要获取的行政区划的级别(为空或小于等于0都将获取定行政区划代码的所有下属行政区划)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划代码的行政区划及其所有的下属行政区划(或给定行政区划代码下指定级别的下属行政区划)</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetAllRegions(System.String@)">
+            <summary>
+            获得所有的行政区划（结果按SORTVALUE,CODE升序排序）
+            </summary>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有的行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetSpecialLevelRegions(System.SByte,System.String@)">
+            <summary>
+            获取指定级别的行政区划（结果按SORTVALUE,CODE升序排序）
+            </summary>
+            <param name="regionLevel">要获取的行政区划级别</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定级别行政区划的列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetRegionByCode(System.String,System.String@)">
+            <summary>
+            获取指定行政区划代码的行政区划
+            </summary>
+            <param name="regionCode">行政区划代码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定行政区划代码的行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetSubRegions(System.String,System.String@)">
+            <summary>
+            获取给定行政区划ID的第一级下属行政区划
+            </summary>
+            <param name="currentRegionID">当前行政区划ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划的第一级下属行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetSubRegionsByCode(System.String,System.String@)">
+            <summary>
+            获取给定行政区划代码的第一级下属行政区划
+            </summary>
+            <param name="currentRegionCode">当前行政区划代码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划代码的第一级下属行政区划</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetRegionWithSubRegions(System.String,System.Nullable{System.SByte},System.String@)">
+            <summary>
+            获取给定行政区划ID的行政区划及其所有的下属行政区划（若指定了regionLevel参数，则只返回给定行政区划ID下指定级别的下属行政区划）
+            </summary>
+            <param name="currentRegionID">当前行政区划ID</param>
+            <param name="regionLevel">要获取的行政区划的级别(为空或小于等于0都将获取定行政区划ID的所有下属行政区划)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划ID的行政区划及其所有的下属行政区划(或给定行政区划ID下指定级别的下属行政区划)</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RegionDAO.GetRegionWithSubRegionsByCode(System.String,System.Nullable{System.SByte},System.String@)">
+            <summary>
+            获取给定行政区划代码的行政区划及其所有的下属行政区划（若指定了regionLevel参数，则只返回给定行政区划代码下指定级别的下属行政区划）
+            </summary>
+            <param name="currentRegionCode">当前行政区划代码</param>
+            <param name="regionLevel">要获取的行政区划的级别(为空或小于等于0都将获取定行政区划代码的所有下属行政区划)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>给定行政区划代码的行政区划及其所有的下属行政区划(或给定行政区划代码下指定级别的下属行政区划)</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.ResourceDAO">
+            <summary>
+            Resource实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IResourceDAO">
+            <summary>
+            Resource实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceDAO.GetUserSystemMenus(System.String,System.String,System.String@)">
+            <summary>
+            通过给定的系统ID编码及用户名取得用户的系统导航菜单(不包括页面资源)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>当前用户的系统菜单</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceDAO.GetResources(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件分页查找指定系统ID编码下的系统资源（查找结果冗余存放了一份在引用参数pageInfo中）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">资源名称</param>
+            <param name="rType">资源类型</param>
+            <param name="resourceLevel">资源级别</param>
+            <param name="description">备注说明</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回资源查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下符合条件的系统资源</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceDAO.GetResourceID(System.String,System.String,System.String,System.String@)">
+            <summary>
+            获取指定系统ID编码下符合条件的系统资源ID
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="linkURL">资源链接URL</param>
+            <param name="entranceSign">URL入口标识</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>符合条件的系统资源ID</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceDAO.GetResource(System.String,System.String,System.String,System.String@)">
+            <summary>
+            获取指定系统ID编码下符合条件的系统资源实体
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="linkURL">资源链接URL</param>
+            <param name="entranceSign">URL入口标识</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>符合条件的系统资源实体</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceDAO.GetAllResources(System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下的所有资源(包括导航菜单和页面)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下的所有资源</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceDAO.GetUserSystemMenus(System.String,System.String,System.String@)">
+            <summary>
+            通过给定的系统ID编码及用户名取得用户的系统导航菜单(不包括页面资源)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>当前用户的系统菜单</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceDAO.GetResources(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件分页查找指定系统ID编码下的系统资源（查找结果冗余存放了一份在引用参数pageInfo中）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">资源名称</param>
+            <param name="rType">资源类型</param>
+            <param name="resourceLevel">资源级别</param>
+            <param name="description">备注说明</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回资源查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceDAO.GetResourceID(System.String,System.String,System.String,System.String@)">
+            <summary>
+            获取指定系统ID编码下符合条件的系统资源ID（一般用于页面资源ID的查找）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="linkURL">资源链接URL</param>
+            <param name="entranceSign">URL入口标识</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>符合条件的系统资源ID</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceDAO.GetResource(System.String,System.String,System.String,System.String@)">
+            <summary>
+            获取指定系统ID编码下符合条件的系统资源实体
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="linkURL">资源链接URL</param>
+            <param name="entranceSign">URL入口标识</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>符合条件的系统资源实体</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceDAO.GetAllResources(System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下的所有资源(包括导航菜单和页面)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定系统ID编码下的所有资源</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.ResourceOperationDAO">
+            <summary>
+            ResourceOperation实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IResourceOperationDAO">
+            <summary>
+            ResourceOperation实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceOperationDAO.DeleteResourceOperations(System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除资源操作关联(返回删除的行数)
+            </summary>
+            <param name="resourceID">资源ID</param>
+            <param name="operationID">操作ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IResourceOperationDAO.GetOperationGroupSigns(System.String,System.String@)">
+            <summary>
+            获取指定资源ID下已有的操作分组标识列表
+            </summary>
+            <param name="resourceID">资源ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定资源ID下已有的操作分组标识列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceOperationDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceOperationDAO.DeleteResourceOperations(System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除资源操作关联(返回删除的行数)
+            </summary>
+            <param name="resourceID">资源ID</param>
+            <param name="operationID">操作ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.ResourceOperationDAO.GetOperationGroupSigns(System.String,System.String@)">
+            <summary>
+            获取指定资源ID下已有的操作分组标识列表
+            </summary>
+            <param name="resourceID">资源ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定资源ID下已有的操作分组标识列表</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.RoleDAO">
+            <summary>
+            Role实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IRoleDAO">
+            <summary>
+            Role实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRoleDAO.GetRoles(System.String,System.String,System.String,System.Nullable{System.SByte},PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件查找指定系统ID编码下的角色（查找结果冗余存放了一份在引用参数pageInfo中）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色(岗位)编码</param>
+            <param name="isValid">是否有效</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回角色查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>符合条件的角色实体列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRoleDAO.GetSimpleRoleList(System.String,System.String,System.String,System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            获取所有符合条件的角色的简易数据列表(列表中的每个对象是只包含用户ID、NAME、CODE三个字段的IDictionary&lt;string, object&gt;)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色(岗位)编码</param>
+            <param name="userName">用户名，将会用于优先显示该用户名已配置了的角色</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回角色查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有符合条件的角色的简易数据列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRoleDAO.GetSimpleRoleList(System.String,System.String,System.String,System.String@)">
+            <summary>
+            获取所有符合条件的角色的简易数据列表，不分页(列表中的每个对象是只包含用户ID、NAME、CODE三个字段的IDictionary&lt;string, object&gt;)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色(岗位)编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有符合条件的角色的简易数据列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleDAO.GetRoles(System.String,System.String,System.String,System.Nullable{System.SByte},PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件查找指定系统ID编码下的角色（查找结果存放在引用参数pageInfo中）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色编码</param>
+            <param name="isValid">是否有效</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回角色查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>符合条件的角色实体列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleDAO.GetSimpleRoleList(System.String,System.String,System.String,System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            获取所有符合条件的角色的简易数据列表(列表中的每个对象是只包含用户ID、NAME、CODE三个字段的IDictionary&lt;string, object&gt;)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色(岗位)编码</param>
+            <param name="userName">用户名，将会用于优先显示该用户名已配置了的角色</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回角色查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有符合条件的角色的简易数据列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleDAO.GetSimpleRoleList(System.String,System.String,System.String,System.String@)">
+            <summary>
+            获取所有符合条件的角色的简易数据列表,不分页(列表中的每个对象是只包含用户ID、NAME、CODE三个字段的IDictionary&lt;string, object&gt;)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色(岗位)编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有符合条件的角色的简易数据列表</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.RoleResourceDAO">
+            <summary>
+            RoleResource实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IRoleResourceDAO">
+            <summary>
+            RoleResource实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRoleResourceDAO.GetRoleResources(System.String,System.String@)">
+            <summary>
+            获得指定角色的所有【角色资源】配置
+            </summary>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定角色的所有【角色资源】配置</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IRoleResourceDAO.DeleteRoleResources(System.String,System.String@)">
+            <summary>
+            删除指定角色的所有【角色资源】配置
+            </summary>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的记录数</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleResourceDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleResourceDAO.GetRoleResources(System.String,System.String@)">
+            <summary>
+            获得下指定角色的所有【角色资源】配置
+            </summary>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定角色的所有【角色资源】配置</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.RoleResourceDAO.DeleteRoleResources(System.String,System.String@)">
+            <summary>
+            删除指定角色的所有【角色资源】配置
+            </summary>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的记录数</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.UserDAO">
+            <summary>
+            User实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IUserDAO">
+            <summary>
+            User实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserDAO.GetSimpleUserList(System.String,System.String,System.String,System.String,System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            获得所有符合条件的用户的简易数据列表(列表中的每个对象是只包含用户ID、USERNAME、REALNAME三个字段的IDictionary&lt;string, object&gt;)
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="realName">真实姓名</param>
+            <param name="roleID">所属角色ID</param>
+            <param name="organizationID">所属组织机构(部门)ID</param>
+            <param name="targetSystemID">目标系统ID，用于优先显示已配置到目标系统的用户</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回资源查找结果)</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>所有符合条件的用户的简易数据列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserDAO.GetUserList(System.String,System.String,System.Nullable{System.SByte},System.String,System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            获得所有符合条件的用户（结果冗余存放了一份在引用参数pageInfo中）
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="realName">真实姓名</param>
+            <param name="sex">性别(0女、1男)</param>
+            <param name="roleID">所属角色ID</param>
+            <param name="organizationID">所属组织机构(部门)ID</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回资源查找结果)</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>所有符合条件的用户</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserDAO.GetUserListAtSameOrganization(System.String,System.String,System.String@)">
+            <summary>
+            获取指定系统中与某个用户在相同部门的所有用户
+            </summary>
+            <param name="uSystemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>与某个用户在相同部门的所有用户</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserDAO.GetSimpleUserList(System.String,System.String,System.String,System.String,System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            获得所有符合条件的用户的简易数据列表，不分页(列表中的每个对象是只包含用户ID、USERNAME、REALNAME三个字段的IDictionary&lt;string, object&gt;)
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="realName">用户真实姓名</param>
+            <param name="roleID">所属角色ID</param>
+            <param name="organizationID">所属组织机构(部门)ID</param>
+            <param name="targetSystemID">目标系统ID，用于优先显示已配置到目标系统的用户</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回资源查找结果)</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>所有符合条件的用户的简易数据列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserDAO.GetUserList(System.String,System.String,System.Nullable{System.SByte},System.String,System.String,PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            获得所有符合条件的用户（结果冗余存放了一份在引用参数pageInfo中）
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="realName">真实姓名</param>
+            <param name="sex">性别(0女、1男)</param>
+            <param name="roleID">所属角色ID</param>
+            <param name="organizationID">所属组织机构(部门)ID</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回资源查找结果)</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>所有符合条件的用户</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserDAO.GetUserListAtSameOrganization(System.String,System.String,System.String@)">
+            <summary>
+            获取指定系统中与某个用户在相同部门的所有用户
+            </summary>
+            <param name="uSystemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>与某个用户在相同部门的所有用户</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.UserOrganizationDAO">
+            <summary>
+            UserOrganization实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IUserOrganizationDAO">
+            <summary>
+            UserOrganization实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserOrganizationDAO.GetConfigedOrganizationIDs(System.String,System.String,System.String@)">
+            <summary>
+            获取指定用指定系统ID下指定户名已经配置了的组织机构(部门)ID
+            </summary>
+            <param name="uSystemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定用户名已经配置了的组织机构(部门)ID的集合</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserOrganizationDAO.DeleteUserOrganization(System.String,System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除指定系统ID下的用户与组织机构(部门)的配置信息
+            </summary>
+            <param name="uSystemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="organizationID">组织机构(部门)ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserOrganizationDAO.#ctor">
+            <summary>
+            用户组织机构数据访问对象默认构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserOrganizationDAO.GetConfigedOrganizationIDs(System.String,System.String,System.String@)">
+            <summary>
+            获取指定用指定系统ID下指定户名已经配置了的组织机构(部门)ID
+            </summary>
+            <param name="uSystemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定用户名已经配置了的组织机构(部门)ID的集合</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserOrganizationDAO.DeleteUserOrganization(System.String,System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除指定系统ID下的用户与组织机构(部门)的配置信息
+            </summary>
+            <param name="uSystemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="organizationID">组织机构(部门)ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.UserRoleDAO">
+            <summary>
+            UserRole实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IUserRoleDAO">
+            <summary>
+            UserRole实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserRoleDAO.GetConfigedRoleIDs(System.String,System.String@)">
+            <summary>
+            获取指定用户名已经配置了的角色ID
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定用户名已经配置了的角色ID的集合</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUserRoleDAO.DeleteUserRole(System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除用户与角色的配置信息
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserRoleDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserRoleDAO.GetConfigedRoleIDs(System.String,System.String@)">
+            <summary>
+            获取指定用户名已经配置了的角色ID
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>指定用户名已经配置了的角色ID的集合</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.UserRoleDAO.DeleteUserRole(System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除用户与角色的配置信息
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="roleID">角色ID</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.USystemDAO">
+            <summary>
+            USystem实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IUSystemDAO">
+            <summary>
+            USystem实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUSystemDAO.GetSystems(System.String,System.String,System.String,System.Nullable{System.SByte},PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件查找用户系统（查找结果存放在引用参数pageInfo中）
+            </summary>
+            <param name="name">用户系统名称</param>
+            <param name="startDate">开始日期(格式必须为'yyyy-mm-dd')</param>
+            <param name="endDate">结束日期(格式必须为'yyyy-mm-dd')</param>
+            <param name="isValid">是否有效</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回用户系统查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUSystemDAO.GetAllSystemIDList(System.String@)">
+            <summary>
+            取得所有已注册系统的ID列表
+            </summary>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有已注册系统的ID列表</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemDAO.GetSystems(System.String,System.String,System.String,System.Nullable{System.SByte},PTXT.PaginationInfo@,System.String@)">
+            <summary>
+            根据条件查找用户系统（查找结果存放在引用参数pageInfo中）
+            </summary>
+            <param name="name">用户系统名称</param>
+            <param name="startDate">开始日期(格式必须为'yyyy-mm-dd')</param>
+            <param name="endDate">结束日期(格式必须为'yyyy-mm-dd')</param>
+            <param name="isValid">是否有效</param>
+            <param name="pageInfo">分页信息(用于传递分页信息及返回用户系统查找结果)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemDAO.GetAllSystemIDList(System.String@)">
+            <summary>
+            取得所有已注册系统的ID列表
+            </summary>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>所有已注册系统的ID列表</returns>
+        </member>
+        <member name="T:PTXT.Authorize.DAOs.USystemUserDAO">
+            <summary>
+            USystemUser实体类自定义的数据访问类(继承BaseDAO),自定义的数据访问方法请在此实现。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.IDAOs.IUSystemUserDAO">
+            <summary>
+            USystemUser实体类自定义的数据访问接口(继承IDAO),自定义的数据访问契约请在此定义。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUSystemUserDAO.GetUser(System.String,System.String,System.String@)">
+            <summary>
+            通过给定的系统ID编码及用户名取得用户对象
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>用户实体对象</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUSystemUserDAO.DoLogin(System.String,System.String,System.String,System.String@)">
+            <summary>
+            通过用户名及密码针对指定系统ID编码的系统进行登录(返回true表示登录成功)
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="password">密码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功(但并不一定登录成功)！)</param>
+            <returns>true:登录成功；false：登录失败</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUSystemUserDAO.GetConfigedUserNames(System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下所有配置了的用户名
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功(但并不一定登录成功)！)</param>
+            <returns>指定系统ID编码下所有配置了的用户名</returns>
+        </member>
+        <member name="M:PTXT.Authorize.IDAOs.IUSystemUserDAO.DeleteUSystemUser(System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除系统与用户的配置信息
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名(可为空)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="F:PTXT.Authorize.DAOs.USystemUserDAO.cacheUserList">
+            <summary>
+            缓存的用户对象列表（实际为【用户名：用户对象】字典）
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.GetUser(System.String,System.String,System.String@)">
+            <summary>
+            通过系统ID编码和用户名取得用户对象
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>用户实体对象</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.GetPassword(System.String,System.String,System.String@)">
+            <summary>
+            通过给定的系统ID编码及用户名取得用户密码（会先查找用户在相应系统中的特定密码，若用户未设置相应系统的特定密码，则查找用户的初始密码(前提是相应用户已配置到相应系统中)）
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>当前用户密码</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.DoLogin(System.String,System.String,System.String,System.String@)">
+            <summary>
+            执行登录验证
+            </summary>
+            <param name="systemID">用户系统ID编码</param>
+            <param name="userName">用户名</param>
+            <param name="password">密码</param>
+            <param name="message">方法执行消息(若未空，一般表示执行成功！)</param>
+            <returns>验证结果：true成功，false失败</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.GetConfigedUserNames(System.String,System.String@)">
+            <summary>
+            获得指定系统ID编码下所有配置了的用户名
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功(但并不一定登录成功)！)</param>
+            <returns>指定系统ID编码下所有配置了的用户名</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.DeleteUSystemUser(System.String,System.String,System.String@)">
+            <summary>
+            根据条件删除系统与用户的配置信息
+            </summary>
+            <param name="systemID">系统ID编码</param>
+            <param name="userName">用户名(可为空)</param>
+            <param name="message">方法执行消息(若为空，一般表示执行成功！)</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="M:PTXT.Authorize.DAOs.USystemUserDAO.InitializeCacheUserList">
+            <summary>
+            初始化缓存用户列表，若已初始化过，则直接跳过。
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.ExcludeOperation">
+            <summary>
+            【操作_角色资源】关联实体类：用于记录当前【角色资源】配置中不需要授权的操作。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.ExcludeOperation.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.ExcludeOperation.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="operationID">要排除的操作ID</param>
+            <param name="roleResourceID">【角色】【资源】关联ID</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.ExcludeOperation.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ExcludeOperation.OperationID">
+            <summary>
+            要排除的操作ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ExcludeOperation.RoleResourceID">
+            <summary>
+            【角色_资源】关联ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ExcludeOperation.Operation">
+            <summary>
+            当前(排除)操作与角色资源关联中的【操作】实体对象
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.Operation">
+            <summary>
+            【操作】实体类：存放操作按钮定义信息
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Operation.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Operation.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.SByte},System.String,System.Nullable{System.Int32},System.String,System.Nullable{System.SByte},System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">操作名称：在界面中显示的按扭名称。</param>
+            <param name="functionName">操作函数(方法)名称</param>
+            <param name="icon">操作图标：可以存放图标的CSS类名、图标名或图标URL地址等，看具体应用程序而定。</param>
+            <param name="isSuppressible">是否可隐藏：1为是、0为否，默认为0</param>
+            <param name="shortcut">快捷键(基本用在WinForm程序中)</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="isValid">是否有效，0:无效；1：有效。默认值为1</param>
+            <param name="uSystemID">所属系统ID编码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Operation.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.Name">
+            <summary>
+            操作名称：在界面中显示的按扭名称。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.FunctionName">
+            <summary>
+            操作函数(方法)名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.Icon">
+            <summary>
+            操作图标：可以存放图标的CSS类名、图标名或图标URL地址等，看具体应用程序而定。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.IsSuppressible">
+            <summary>
+            是否可隐藏：1为是、0为否，默认为0
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.Shortcut">
+            <summary>
+            快捷键(基本用在WinForm程序中)
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.SortValue">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.IsValid">
+            <summary>
+            是否有效，0:无效；1：有效。默认值为1
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Operation.USystemID">
+            <summary>
+            所属系统ID编码
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.OperationLog">
+            <summary>
+            【操作日志】实体类：用于记录界面中各类按钮的操作日志，包括按钮影响到的所有实体对象的新增、修改和删除，以及系统用户的登录操作等等都可以记录下来。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.OperationLog.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.OperationLog.#ctor(System.String,System.String,System.String,System.Nullable{System.Int16},System.Nullable{System.SByte},System.String,System.Nullable{System.DateTime},System.String,System.String,System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="userName">用户名</param>
+            <param name="iPAddress">IP地址</param>
+            <param name="operationType">操作类型</param>
+            <param name="operationResult">操作结果</param>
+            <param name="logMessage">日志消息</param>
+            <param name="logTime">日志记录时间</param>
+            <param name="entityTableName">实体表名：被操作对象实体对应的表名。</param>
+            <param name="entityID">实体ID：被操作实体的ID</param>
+            <param name="entityXML">实体XML：实体的XML格式表示，记录一个实体从产生、修改到最后删除的实体状态。</param>
+            <param name="organizationID">操作日志归属部门编码</param>
+            <param name="uSystemID">所属系统编码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.OperationLog.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.IPAddress">
+            <summary>
+            IP地址
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.OperationType">
+            <summary>
+            操作类型
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.OperationResult">
+            <summary>
+            操作结果
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.LogMessage">
+            <summary>
+            日志消息
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.LogTime">
+            <summary>
+            日志记录时间
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.EntityTableName">
+            <summary>
+            实体表名：被操作对象实体对应的表名。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.EntityID">
+            <summary>
+            实体ID：被操作实体的ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.EntityXML">
+            <summary>
+            实体XML：实体的XML格式表示，记录一个实体从产生、修改到最后删除的实体状态。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.OrganizationID">
+            <summary>
+            操作日志归属部门编码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.OperationLog.USystemID">
+            <summary>
+            所属系统编码
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.Organization">
+            <summary>
+            【组织机构(部门)】实体类：存放内设机构、部门和办公室等。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Organization.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Organization.#ctor(System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.Nullable{System.SByte})">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">组织机构或部门名称</param>
+            <param name="code">组织机构代码</param>
+            <param name="parentID">上级组织机构ID</param>
+            <param name="regionCode">行政区划代码</param>
+            <param name="contactPerson">组织机构或部门联系人</param>
+            <param name="mobilePhone">联系人手机号</param>
+            <param name="officePhone">联系人办公电话</param>
+            <param name="faxNumber">组织机构或部门传真号码</param>
+            <param name="sortValue">排序值：获取行政区划时用来影响排序的字段。</param>
+            <param name="description">描述、说明</param>
+            <param name="isValid">是否有效：0否，1是。默认值为1</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Organization.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.Name">
+            <summary>
+            组织机构或部门名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.Code">
+            <summary>
+            组织机构代码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.ParentID">
+            <summary>
+            上级组织机构ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.RegionCode">
+            <summary>
+            行政区划代码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.ContactPerson">
+            <summary>
+            组织机构或部门联系人
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.MobilePhone">
+            <summary>
+            联系人手机号
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.OfficePhone">
+            <summary>
+            联系人办公电话
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.FaxNumber">
+            <summary>
+            组织机构或部门传真号码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.SortValue">
+            <summary>
+            排序值：获取行政区划时用来影响排序的字段。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.Description">
+            <summary>
+            描述、说明
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.IsValid">
+            <summary>
+            是否有效：0否，1是。默认值为1
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.SubOrganizations">
+            <summary>
+            当前组织机构的下级组织机构或部门
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization.Region">
+            <summary>
+            当前组织机构所属的行政区划
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization._parentId">
+            <summary>
+            针对JQuery EasyUI的ParentID属性别名（重要）
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Organization._regionName">
+            <summary>
+            当前组机构所属生行政区划名称
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.PersonalShortcutMenu">
+            <summary>
+            【个人快捷菜单】实体类：存放大图标形式显示的个人快捷菜单信息，方便直达个人的相关业务页面。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.PersonalShortcutMenu.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.PersonalShortcutMenu.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.SByte},System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">快捷菜单名称</param>
+            <param name="resourceID">资源ID</param>
+            <param name="userName">用户名：用户登录系统时使用的账号</param>
+            <param name="sortValue">排序值</param>
+            <param name="isValid">是否有效：0否，1是，默认值为1。</param>
+            <param name="uSystemID">所属系统ID编码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.PersonalShortcutMenu.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.Name">
+            <summary>
+            快捷菜单名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.ResourceID">
+            <summary>
+            资源ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.UserName">
+            <summary>
+            用户名：用户登录系统时使用的账号
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.SortValue">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.IsValid">
+            <summary>
+            是否有效：0否，1是，默认值为1。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.USystemID">
+            <summary>
+            所属系统ID编码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.PersonalShortcutMenu.Resource">
+            <summary>
+            当前个人快捷方式菜单对应的【资源】实体对象
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.Region">
+            <summary>
+            【行政区(管辖区)】实体类：数据参照中华人民共和国国家统计局_中国行政区划代码
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Region.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Region.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.SByte},System.Nullable{System.Int32},System.String,System.Nullable{System.SByte},System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">行政区划名称</param>
+            <param name="code">行政区划代码</param>
+            <param name="parentID">上级行政区ID</param>
+            <param name="regionLevel">行政区划级别：由父级行政区划的级别推导而来，0【省级】、1【地级】、2【县级】、3【乡级】、4【村级】、5【组级】；默认值为0，即省级。</param>
+            <param name="sortValue">排序值：字典条目将按所有排序值升序取出。</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="isValid">是否有效：0否，1是。默认值为1</param>
+            <param name="parentCode">上级行政区划代码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Region.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.Name">
+            <summary>
+            行政区划名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.Code">
+            <summary>
+            行政区划代码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.ParentCode">
+            <summary>
+            上级行政区划代码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.RegionLevel">
+            <summary>
+            行政区划级别：由父级行政区划的级别推导而来，0【省级】、1【地级】、2【县级】、3【乡级】、4【村级】、5【组级】；默认值为0，即省级。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.SortValue">
+            <summary>
+            排序值：字典条目将按所有排序值升序取出。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.IsValid">
+            <summary>
+            是否有效：0否，1是。默认值为1
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Region.SubRegions">
+            <summary>
+            当前行政区划的下级行政区划(零个或多个)
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.Resource">
+            <summary>
+            【资源】实体类：存放资源权限点（包括导航菜单和页面）
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Resource.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Resource.#ctor(System.String,System.String,System.Nullable{System.SByte},System.String,System.String,System.String,System.String,System.Nullable{System.SByte},System.Nullable{System.Int32},System.String,System.Nullable{System.SByte},System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">资源名称</param>
+            <param name="rType">资源类型：0为导航菜单项，1为页面。</param>
+            <param name="icon">资源图标：可以存放图标的CSS类名、图标名或图标URL地址等，看具体应用程序而定。</param>
+            <param name="linkURL">页面链接URL</param>
+            <param name="entranceSign">URL入口标识：主要用于内页权限的控制。</param>
+            <param name="parentID">父资源ID</param>
+            <param name="resourceLevel">资源级别：必须由父资源的级别自动推导出来，否则默认为1。</param>
+            <param name="sortValue">排序值：影响资源在当前父资源下的加载顺序和位置。</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="isValid">是否有效：0否、1是。</param>
+            <param name="uSystemID">所属系统ID编码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Resource.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.Name">
+            <summary>
+            资源名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.RType">
+            <summary>
+            资源类型：0为导航菜单项，1为页面。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.Icon">
+            <summary>
+            资源图标：可以存放图标的CSS类名、图标名或图标URL地址等，看具体应用程序而定。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.LinkURL">
+            <summary>
+            页面链接URL
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.EntranceSign">
+            <summary>
+            URL入口标识：主要用于内页权限的控制。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.ParentID">
+            <summary>
+            父资源ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.ResourceLevel">
+            <summary>
+            资源级别：必须由父资源的级别自动推导出来(支持127级的深度)，否则默认为1。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.SortValue">
+            <summary>
+            排序值：影响资源在当前父资源下的加载顺序和位置。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.IsValid">
+            <summary>
+            是否有效：0否、1是。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.USystemID">
+            <summary>
+            所属系统ID编码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.ResourceOperations">
+            <summary>
+            当前资源参与的【资源、操作】关联
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.SubResources">
+            <summary>
+            当前资源的子资源
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource.iconCls">
+            <summary>
+            针对JQuery EasyUI的Icon属性别名（重要）
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Resource._parentId">
+            <summary>
+            针对JQuery EasyUI的ParentID属性别名（重要）
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.ResourceOperation">
+            <summary>
+            【资源_操作】关联实体类
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.ResourceOperation.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.ResourceOperation.#ctor(System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="resourceID">资源ID</param>
+            <param name="operationID">操作ID</param>
+            <param name="sortValue">操作配置到资源上的排序值</param>
+            <param name="targetResourceID">操作目标资源ID</param>
+            <param name="groupSign">配置分组标识</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.ResourceOperation.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ResourceOperation.ResourceID">
+            <summary>
+            资源ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ResourceOperation.OperationID">
+            <summary>
+            操作ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ResourceOperation.SortValue">
+            <summary>
+            操作配置到资源上的排序值
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ResourceOperation.TargetResourceID">
+            <summary>
+            操作目标资源ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ResourceOperation.GroupSign">
+            <summary>
+            配置分组标识
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.ResourceOperation.Operation">
+            <summary>
+            当前资源操作关联中的【操作】实体对象
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.Role">
+            <summary>
+            【角色】实体类(实际上是【角色】、【权限】和【岗位/职位】的合体类)
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Role.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Role.#ctor(System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.Nullable{System.SByte},System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">角色名称</param>
+            <param name="code">角色编码（更多的时候用作“岗位/职位编码”）</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述、说明、备注</param>
+            <param name="isValid">是否有效：0否、1是。默认值是1</param>
+            <param name="uSystemID">所属系统ID编码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.Role.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.Name">
+            <summary>
+            角色名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.Code">
+            <summary>
+            角色编码（更多的时候用作“岗位/职位编码”）
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.SortValue">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.Description">
+            <summary>
+            描述、说明、备注
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.IsValid">
+            <summary>
+            是否有效：0否、1是。默认值是1
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.USystemID">
+            <summary>
+            所属系统ID编码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.Role.RoleResources">
+            <summary>
+            角色与资源的关联（表明当前角色配置了哪些资源）
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.RoleResource">
+            <summary>
+            【角色_资源】关联实体类
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.RoleResource.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.RoleResource.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="roleID">角色ID</param>
+            <param name="resourceID">资源ID</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.RoleResource.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.RoleResource.RoleID">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.RoleResource.ResourceID">
+            <summary>
+            资源ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.RoleResource.Resource">
+            <summary>
+            当前角色资源关联中的【资源】实体对象
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.RoleResource.ExcludeOperations">
+            <summary>
+            当前角色资源参与的【操作排除】关联（表示当前角色资源中要排除的操作）
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.User">
+            <summary>
+            【用户】实体类：保存用户基本信息
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.User.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.User.#ctor(System.String,System.String,System.String,System.String,System.SByte,System.String,System.String,System.String,System.String,System.Nullable{System.SByte},System.Nullable{System.DateTime})">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="userName">用户名：用户登录系统时使用的账号</param>
+            <param name="password">登录密码</param>
+            <param name="realName">姓名：记录用户的真实姓名</param>
+            <param name="sex">性别：0女、1男</param>
+            <param name="officePhone">办公电话</param>
+            <param name="email">电子邮箱</param>
+            <param name="systemSkin">系统皮肤：用户个人的系统皮肤设置</param>
+            <param name="description">描述说明</param>
+            <param name="isValid">是否有效：0为无效，1为有效。默认值为1</param>
+            <param name="createDate">创建日期</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.User.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.UserName">
+            <summary>
+            用户名：用户登录系统时使用的账号
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.Password">
+            <summary>
+            (初始)登录密码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.RealName">
+            <summary>
+            姓名：记录用户的真实姓名
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.Sex">
+            <summary>
+            性别：0女、1男
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.OfficePhone">
+            <summary>
+            办公电话
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.Email">
+            <summary>
+            电子邮箱
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.SystemSkin">
+            <summary>
+            系统皮肤：用户个人的系统皮肤设置
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.Description">
+            <summary>
+            备注说明
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.IsValid">
+            <summary>
+            是否有效：0为无效，1为有效。默认值为1
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.CreateDate">
+            <summary>
+            创建日期
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.RegionCode">
+            <summary>
+            行政区划代码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.Region">
+            <summary>
+            当前用户所属的行政区划
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.OperationLogs">
+            <summary>
+            当前用户的操作日志
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.UserRoles">
+            <summary>
+            当前用户参与的【用户、角色】关联
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.PersonalShortcutMenus">
+            <summary>
+            当前用户配置的个人快捷菜单
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.User.UserOrganizations">
+            <summary>
+            当前用户与组织机构(部门)的关联
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.UserOrganization">
+            <summary>
+            用户与组织机构关系实体
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.UserOrganization.#ctor">
+            <summary>
+            无参构造函数
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.UserOrganization.#ctor(System.String,System.String,System.String,System.String)">
+             <summary>
+             带参构造函数
+             </summary>
+            <param name="id">主键：GUID主键</param>
+            <param name="userName">用户名：用户登录系统时使用的账号</param>
+            <param name="organizationID">组织机构(部门)ID</param>
+            <param name="uSystemID">当前配置所属系统ID编码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.UserOrganization.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserOrganization.UserName">
+            <summary>
+            用户名：用户登录系统时使用的账号
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserOrganization.OrganizationID">
+            <summary>
+            组织机构(部门)ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserOrganization.USystemID">
+            <summary>
+            当前配置所属系统ID编码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserOrganization.Organization">
+            <summary>
+            当前用户——组织机构(部门)关联中的【组织机构】实体对象
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.UserRole">
+            <summary>
+            【用户_角色】关联实体类
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.UserRole.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.UserRole.#ctor(System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="userName">用户名：用户登录系统时使用的账号</param>
+            <param name="roleID">角色ID</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.UserRole.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserRole.UserName">
+            <summary>
+            用户名：用户登录系统时使用的账号
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserRole.RoleID">
+            <summary>
+            角色ID
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.UserRole.Role">
+            <summary>
+            当前用户角色关联中的【角色】实体对象
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.USystem">
+            <summary>
+            【用户系统】实体类：存放在权限系统中注册了的用户系统信息。
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.USystem.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.USystem.#ctor(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.String,System.Nullable{System.SByte},System.Nullable{System.DateTime})">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="name">系统名称</param>
+            <param name="uRL">系统链接URL地址</param>
+            <param name="icon">系统图标：用于存放统一门户中系统快捷方式的图标CSS类名、图标名或图标URL地址等，看具体应用程序而定。</param>
+            <param name="sortValue">排序值</param>
+            <param name="description">描述说明</param>
+            <param name="isValid">是否生效：0否，1是，默认值为1。</param>
+            <param name="registerDate">注册日期</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.USystem.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.Name">
+            <summary>
+            系统名称
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.URL">
+            <summary>
+            系统链接URL地址
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.Icon">
+            <summary>
+            系统图标：用于存放统一门户中系统快捷方式的图标CSS类名、图标名或图标URL地址等，看具体应用程序而定。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.SortValue">
+            <summary>
+            排序值
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.Description">
+            <summary>
+            描述说明
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.IsValid">
+            <summary>
+            是否生效：0否，1是，默认值为1。
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystem.RegisterDate">
+            <summary>
+            注册日期
+            </summary>
+        </member>
+        <member name="T:PTXT.Authorize.Models.USystemUser">
+            <summary>
+            【用户系统_用户】关联实体类
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.USystemUser.#ctor">
+            <summary>
+            构造方法
+            </summary>
+        </member>
+        <member name="M:PTXT.Authorize.Models.USystemUser.#ctor(System.String,System.String,System.String,System.String)">
+             <summary>
+             带参构造方法
+             </summary>
+            <param name="iD">主键ID：GUID</param>
+            <param name="uSystemID">系统ID（编码）</param>
+            <param name="userName">用户名</param>
+            <param name="specialPassword">用户在当前系统中的【专用密码】，若未指定则复制【用户】表中的密码作为专用密码</param>
+        </member>
+        <member name="M:PTXT.Authorize.Models.USystemUser.GetHashCode">
+            <summary>
+            重写实体对象哈希值的获取方法
+            </summary>
+            <returns>实体对象的哈希值</returns>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystemUser.USystemID">
+            <summary>
+            系统ID（编码）
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystemUser.UserName">
+            <summary>
+            用户名
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystemUser.SpecialPassword">
+            <summary>
+            用户在当前系统中的【专用密码】，若未指定则复制【用户】表中的密码作为专用密码
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystemUser.User">
+            <summary>
+            当前【系统、用户】关联中的【用户】实体对象
+            </summary>
+        </member>
+        <member name="P:PTXT.Authorize.Models.USystemUser.USystem">
+            <summary>
+            当前【系统、用户】关联中的【系统】实体对象
+            </summary>
+        </member>
+    </members>
+</doc>

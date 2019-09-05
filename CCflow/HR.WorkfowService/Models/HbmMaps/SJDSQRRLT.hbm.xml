@@ -1,0 +1,13 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.SJDSQRRLT, HR.WorkflowService" table="HRFLOW.BIZ_INFO_SJDSQRRLT" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="SQRID" column="SQRID" not-null="false" />
+    <property name="SJDID" column="SJDID" not-null="true" />
+    <property name="SQRJS" column="SQRJS" not-null="false" />
+    <property name="DLRID" column="DLRID" not-null="false" />
+    <many-to-one name="SQR" class="HR.WorkflowService.Models.SQR,HR.WorkflowService" column="SQRID" insert="false" update="false"  />
+  </class>
+</hibernate-mapping>

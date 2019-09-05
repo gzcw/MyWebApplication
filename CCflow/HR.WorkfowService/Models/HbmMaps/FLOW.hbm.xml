@@ -1,0 +1,53 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="FLOW" table="WF_FLOW" schema="HRFLOW" lazy="true">
+    <id name="NO" column="NO">
+      <generator class="assigned" />
+    </id>
+    <property name="NO" column="NO" not-null="true" />
+    <property name="NAME" column="NAME"  />
+    <property name="FK_FLOWSORT" column="FK_FLOWSORT"  />
+    <property name="FLOWRUNWAY" column="FLOWRUNWAY"  />
+    <property name="RUNOBJ" column="RUNOBJ"  />
+    <property name="NOTE" column="NOTE"  />
+    <property name="RUNSQL" column="RUNSQL"  />
+    <property name="NUMOFBILL" column="NUMOFBILL"  />
+    <property name="NUMOFDTL" column="NUMOFDTL"  />
+    <property name="FLOWAPPTYPE" column="FLOWAPPTYPE"  />
+    <property name="ISCANSTART" column="ISCANSTART"  />
+    <property name="AVGDAY" column="AVGDAY"  />
+    <property name="ISFULLSA" column="ISFULLSA"  />
+    <property name="ISMD5" column="ISMD5"  />
+    <property name="IDX" column="IDX"  />
+    <property name="TIMELINEROLE" column="TIMELINEROLE"  />
+    <property name="PARAS" column="PARAS"  />
+    <property name="PTABLE" column="PTABLE"  />
+    <property name="DATASTOREMODEL" column="DATASTOREMODEL"  />
+    <property name="TITLEROLE" column="TITLEROLE"  />
+    <property name="FLOWMARK" column="FLOWMARK"  />
+    <property name="FLOWEVENTENTITY" column="FLOWEVENTENTITY"  />
+    <property name="HISTORYFIELDS" column="HISTORYFIELDS"  />
+    <property name="ISGUESTFLOW" column="ISGUESTFLOW"  />
+    <property name="BILLNOFORMAT" column="BILLNOFORMAT"  />
+    <property name="FLOWNOTEEXP" column="FLOWNOTEEXP"  />
+    <property name="DRCTRLTYPE" column="DRCTRLTYPE"  />
+    <property name="STARTLIMITROLE" column="STARTLIMITROLE"  />
+    <property name="STARTLIMITPARA" column="STARTLIMITPARA"  />
+    <property name="STARTLIMITALERT" column="STARTLIMITALERT"  />
+    <property name="STARTLIMITWHEN" column="STARTLIMITWHEN"  />
+    <property name="STARTGUIDEWAY" column="STARTGUIDEWAY"  />
+    <property name="STARTGUIDEPARA1" column="STARTGUIDEPARA1"  />
+    <property name="STARTGUIDEPARA2" column="STARTGUIDEPARA2"  />
+    <property name="STARTGUIDEPARA3" column="STARTGUIDEPARA3"  />
+    <property name="ISRESETDATA" column="ISRESETDATA"  />
+    <property name="ISLOADPRIDATA" column="ISLOADPRIDATA"  />
+    <property name="CFLOWWAY" column="CFLOWWAY"  />
+    <property name="CFLOWPARA" column="CFLOWPARA"  />
+    <property name="ISBATCHSTART" column="ISBATCHSTART"  />
+    <property name="BATCHSTARTFIELDS" column="BATCHSTARTFIELDS"  />
+    <property name="ISAUTOSENDSUBFLOWOVER" column="ISAUTOSENDSUBFLOWOVER"  />
+    <property name="VER" column="VER"  />
+    <property name="DESIGNERNO" column="DESIGNERNO"  />
+    <property name="DESIGNERNAME" column="DESIGNERNAME"  />
+  </class>
+</hibernate-mapping>

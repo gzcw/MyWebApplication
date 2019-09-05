@@ -1,0 +1,321 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>HR.Authorize.Service</name>
+    </assembly>
+    <members>
+        <member name="T:HR.Authorize.Service.LoginService">
+            <summary>
+            登录服务类
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.LoginService.DoLogin(System.String,System.String,System.String)">
+            <summary>
+            执行登录验证，并返回验证结果。
+            <para>返回false的原因可能有：密码错误或用户名未配置到当前系统中，或该用户已失效！</para>
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="userName">用户名</param>
+            <param name="password">密码</param>
+            <returns>验证结果：true成功，false失败</returns>
+        </member>
+        <member name="T:HR.Authorize.Service.OrganizationService">
+            <summary>
+            组织机构服务类(主要提供特殊的组织机构数据访问方法)
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.OrganizationService.GetOrganizations">
+            <summary>
+            获取所有有效的组织机构(按排序值升序排)
+            </summary>
+            <returns>所有有效的组织机构(按排序值升序排)</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.OrganizationService.GetAllOrganizations">
+            <summary>
+            获取所有的组织机构(按排序值升序排)
+            </summary>
+            <returns>所有的组织机构(按排序值升序排)</returns>
+        </member>
+        <member name="T:HR.Authorize.Service.RegionService">
+            <summary>
+            行政区划服务类(主要提供特殊的行政区划数据访问方法)
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.GetRegion(System.String)">
+            <summary>
+            获取给定区划代码的有效行政区划
+            </summary>
+            <param name="code">区划代码</param>
+            <returns>指定区划代码的有效行政区划</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.GetRegions">
+            <summary>
+            获取所有有效的行政区划(按排序值及区划代码升序排)
+            </summary>
+            <returns>所有有效的行政区划</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.GetAllRegions">
+            <summary>
+            获取所有行政区划(按排序值及区划代码升序排)
+            </summary>
+            <returns>所有行政区划</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.GetRegions(System.Int16)">
+            <summary>
+            获取指定级别的有效行政区划（按排序值及区划代码升序排）
+            </summary>
+            <param name="rlevel">区划级别</param>
+            <returns>指定级别的有效行政区划</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.GetSubRegions(System.String,System.Nullable{System.Int16})">
+            <summary>
+            获取给定区划代码下指定级别的有效下级行政区划(若没有指定级别，则获取直接下级行政区划)
+            </summary>
+            <param name="code">区划代码</param>
+            <param name="rlevel">区划级别</param>
+            <returns>给定区划代码的有效下级行政区划</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.GetRegionWithSubRegions(System.String,System.Nullable{System.Int16})">
+            <summary>
+            获取给定区划代码的有效行政区划及其下级有效行政区划直到指定的级别(若没有指定级别，则将递归获取所有的下级行政区划)
+            </summary>
+            <param name="code">区划代码</param>
+            <param name="rlevel">区划级别</param>
+            <returns>给定区划代码的有效行政区划及其下级有效行政区划</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RegionService.IsRegionExist(System.String,System.String)">
+            <summary>
+            检查给定的行政区划代码对应的行政区划是否存在
+            </summary>
+            <param name="code">行政区划代码</param>
+            <param name="currentRegionID">当前行政区划ID(若为新增则其值为空或空白字符串)</param>
+            <returns>检查结果:true存在，false不存在</returns>
+        </member>
+        <member name="T:HR.Authorize.Service.ResourceService">
+            <summary>
+            资源服务类(主要提供特殊的资源数据访问方法)
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetUserSystemNavigations(System.String,System.String)">
+            <summary>
+            获取用户在指定系统中有效的导航菜单
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="systemID">系统ID</param>
+            <returns>用户在指定系统中有效的导航菜单</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetUserPageOperations(System.String,System.String)">
+            <summary>
+            获取用户在特定页面资源上有效的操作按钮
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="pageID">页面资源ID</param>
+            <returns>用户在特定页面资源上有效的操作按钮</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetPageOperations(System.String)">
+            <summary>
+            获取特定页面资源上的操作按钮
+            </summary>
+            <param name="pageID">页面资源ID</param>
+            <returns>特定页面资源上的操作按钮</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetSystemPageID(System.String,System.String,System.String)">
+            <summary>
+            获取指定系统中特定url的页面资源ID
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="url">以".."开头的相对url</param>
+            <param name="urlSign">url标识</param>
+            <returns>特定url的页面资源ID</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetSystemResources(System.String)">
+            <summary>
+            获取指定系统的所有有效资源(包括导航、页面和操作/按钮，但不包括无效资源)
+            </summary>
+            <param name="systemID">系统ID</param>
+            <returns>指定系统的所有有效资源</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetSystemAllResources(System.String)">
+            <summary>
+            获取指定系统的所有资源(包括导航、页面和操作/按钮)
+            </summary>
+            <param name="systemID">系统ID</param>
+            <returns>指定系统的所有资源</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetSystemOperations(System.String)">
+            <summary>
+            获取指定系统已定义过的操作(操作方法重复的只取其中一个)
+            </summary>
+            <param name="systemID">系统ID</param>
+            <returns>指定系统已定义过的操作</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.GetPageUnconfiguredOperations(System.String,System.String,System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Decimal@)">
+            <summary>
+            分页获取页面未配置的操作(操作方法重复的只取其中一个)
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="pageID">页面资源ID</param>
+            <param name="name">操作名称(用于模糊查询)</param>
+            <param name="function">方法名称(用于模糊查询)</param>
+            <param name="pageIndex">从1开始的页码</param>
+            <param name="pageSize">每页记录数</param>
+            <param name="total">满足条件的总记录数</param>
+            <returns>页面未配置的操作</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.IsOperationExist(System.String,System.String,System.String)">
+            <summary>
+            检查给定的方法名称在指定ID的页面资源上是否存在
+            </summary>
+            <param name="pageID">页面资源ID</param>
+            <param name="function">方法名称</param>
+            <param name="currentOperationID">当前操作ID(若为新增则其值为空或空白字符串)</param>
+            <returns>检查结果:true存在，false不存在</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.IsInnerPageExist(System.String,System.String,System.String,System.String)">
+            <summary>
+            检查给定的Url地址和Url入口标识对应的内页在指定系统中是否存在
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="url">Url地址</param>
+            <param name="urlSign">Url标识</param>
+            <param name="currentInnerPageID">当前内页资源ID(若为新增则其值为空或空白字符串)</param>
+            <returns>检查结果:true存在，false不存在</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.ResourceService.IsNavigationExist(System.String,System.String,System.String)">
+            <summary>
+            检查给定的Url地址对应的导航菜单在指定系统中是否存在
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="url">Url地址</param>
+            <param name="currentNavigationID">当前导航菜单ID(若为新增则其值为空或空白字符串)</param>
+            <returns>检查结果:true存在，false不存在</returns>
+        </member>
+        <member name="T:HR.Authorize.Service.RoleService">
+            <summary>
+            角色服务类(主要提供特殊的角色数据访问方法)
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.RoleService.GetUserRoles(System.String,System.String)">
+            <summary>
+            获取用户在指定系统中有效的角色
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="userName">用户名</param>
+            <returns>用户在指定系统中有效的角色</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RoleService.GetSystemRoles(System.String,System.String,System.Nullable{System.Int32},System.Nullable{System.Int32},System.Decimal@,System.String)">
+            <summary>
+            获取系统角色(若给出了用户名，则只获取有效的角色)
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="name">角色名称(用于模糊查找)</param>
+            <param name="pageIndex">页码(从1开始)</param>
+            <param name="pageSize">每页最大记录数(最小值为1)</param>
+            <param name="total">总记录数</param>
+            <param name="userName">用户名(用于优先显示该用户名已配置的角色)</param>
+            <returns>系统角色列表</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RoleService.GetSimpleSystemRoles(System.String)">
+            <summary>
+            获取有效的简易系统角色(由每个角色由ExpandoObject类型的对象承载,仅包含ID和NAME两个字段)
+            </summary>
+            <param name="systemID">系统ID</param>
+            <returns>有效的简易系统角色</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RoleService.IsRoleExist(System.String,System.String,System.String)">
+            <summary>
+            检查给定的角色名称对应的角色在指定的系统中是否存在
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="name">角色名称</param>
+            <param name="currentRoleID">当前角色ID(若为新增则其值为空或空白字符串)</param>
+            <returns>检查结果:true存在，false不存在</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.RoleService.DeleteUserRoles(System.String,System.String)">
+            <summary>
+            删除指定用户在指定系统中的角色关联
+            </summary>
+            <param name="systemID">系统ID</param>
+            <param name="userName">用户名</param>
+            <returns>删除的行数</returns>
+        </member>
+        <member name="T:HR.Authorize.Service.SystemService">
+            <summary>
+            系统注册服务类(主要提供特殊的系统数据访问方法)
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.SystemService.GetUserSystems(System.String)">
+            <summary>
+            获取指定用户已注册的有效系统
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>用户已注册的有效系统</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.SystemService.GetSimpleSystems(System.String)">
+            <summary>
+            获取指定用户注册过的有效简易系统列表(由ExpandoObject对象承载，只包含ID、Name和Icon字段)
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>指定用户的有效简易系统列表</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.SystemService.GetSystems(System.String,System.String,System.String,System.Int32,System.Int32,System.Decimal@)">
+            <summary>
+            分页获取注册过的系统
+            </summary>
+            <param name="name">系统名称(用于模糊查找)</param>
+            <param name="startDate">注册起始日期</param>
+            <param name="endDate">注册结束日期</param>
+            <param name="pageIndex">页码(从1开始)</param>
+            <param name="pageSize">每页最大记录数(最小值为1)</param>
+            <param name="total">符合条件的总记录数</param>
+            <returns>符合条件的系统列表</returns>
+        </member>
+        <member name="T:HR.Authorize.Service.UserService">
+            <summary>
+            用户服务类(主要提供特殊的用户数据访问方法)
+            </summary>
+        </member>
+        <member name="M:HR.Authorize.Service.UserService.GetUser(System.String)">
+            <summary>
+            获取指定用户名的有效用户
+            </summary>
+            <param name="userName">用户名</param>
+            <returns>指定用户名的有效用户</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.UserService.GetUsers(System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Decimal@)">
+            <summary>
+            获取符合条件的用户列表
+            </summary>
+            <param name="userName">用户名(模糊查询)</param>
+            <param name="realName">真实姓名(模糊查询)</param>
+            <param name="roleID">角色ID</param>
+            <param name="organizationID">组织机构ID</param>
+            <param name="pageIndex">页码(从1开始)</param>
+            <param name="pageSize">每页最大记录数(最小值为1)</param>
+            <param name="total">符合条件的总记录数</param>
+            <returns>符合条件的用户列表</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.UserService.GetSimpleUsers(System.String,System.String,System.String,System.String,System.String,System.Int32,System.Int32,System.Decimal@)">
+            <summary>
+            获取符合条件的有效的简易用户列表(每个简易用户由ExpandoObject承载，只包含ID,USERNAME,REALNAME三个字段)
+            </summary>
+            <param name="userName">用户名(用于模糊查找)</param>
+            <param name="realName">真实姓名(用于模糊查找)</param>
+            <param name="roleID">所属角色ID</param>
+            <param name="organizationID">所属组织机构ID</param>
+            <param name="systemID">系统ID(于优先显示当前系统的用户)</param>
+            <param name="pageIndex">页码(从1开始)</param>
+            <param name="pageSize">每页最大记录数(最小值为1)</param>
+            <param name="total">符合条件的总记录数</param>
+            <returns>符合条件的有效的简易用户列表</returns>
+        </member>
+        <member name="M:HR.Authorize.Service.UserService.IsUserExist(System.String,System.String)">
+            <summary>
+            检查给定的用户名是否已经存在
+            </summary>
+            <param name="userName">用户名</param>
+            <param name="currentUserID">当前用户ID(若为新增则其值为空或空白字符串)</param>
+            <returns>检查结果:true存在，false不存在</returns>
+        </member>
+    </members>
+</doc>

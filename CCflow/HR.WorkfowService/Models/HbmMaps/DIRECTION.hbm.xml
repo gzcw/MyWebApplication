@@ -1,0 +1,15 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="DIRECTION" table="WF_DIRECTION" schema="HRFLOW" lazy="true">
+    <id name="MYPK" column="MYPK">
+      <generator class="assigned" />
+    </id>
+    <property name="MYPK" column="MYPK" not-null="true" />
+    <property name="FK_FLOW" column="FK_FLOW"  />
+    <property name="NODE" column="NODE"  />
+    <property name="TONODE" column="TONODE"  />
+    <property name="DIRTYPE" column="DIRTYPE"  />
+    <property name="ISCANBACK" column="ISCANBACK"  />
+    <property name="DOTS" column="DOTS"  />
+  </class>
+</hibernate-mapping>

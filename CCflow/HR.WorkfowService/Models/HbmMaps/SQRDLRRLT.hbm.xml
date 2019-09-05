@@ -1,0 +1,10 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.Workflow.Models" assembly="HR.Workflow">
+  <class name="HR.Workflow.Models.SQRDLRRLT, HR.Workflow" table="ZSGTLC.BIZ_INFO_SQRDLRRLT" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="DLRID" column="DLRID" not-null="false" />
+    <property name="SQRID" column="SQRID" not-null="false" />
+  </class>
+</hibernate-mapping>

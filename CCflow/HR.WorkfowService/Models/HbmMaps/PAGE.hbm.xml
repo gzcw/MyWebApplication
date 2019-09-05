@@ -1,0 +1,12 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.PAGE, HR.WorkflowService" table="HRFLOW.WF_SYS_PAGE" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="FK_FLOW" column="FK_FLOW" not-null="true" />
+    <property name="Name" column="NAME" not-null="true" />
+    <property name="Url" column="URL" not-null="true" />
+    <property name="Sortnumber" column="SORTNUMBER" />
+  </class>
+</hibernate-mapping>

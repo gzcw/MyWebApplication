@@ -1,0 +1,23 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" namespace="HR.WorkflowService.Models" assembly="HR.WorkflowService">
+  <class name="HR.WorkflowService.Models.SJCLMX, HR.WorkflowService" table="HRFLOW.BIZ_INFO_SJCLMX" lazy="true">
+    <id name="ID" column="ID">
+      <generator class="assigned" />
+    </id>
+    <property name="BWCLID" column="BWCLID" not-null="false" />
+    <property name="SJDID" column="SJDID" not-null="false" />
+    <property name="WJDLID" column="WJDLID" not-null="false" />
+    <property name="SH" column="SH" not-null="false" />
+    <property name="CLMC" column="CLMC" not-null="true" />
+    <property name="CLBH" column="CLBH" not-null="false" />
+    <property name="CLYS" column="CLYS" not-null="false" />
+    <property name="YJBS" column="YJBS" not-null="false" />
+    <property name="FJLJ" column="FJLJ" not-null="false" />
+    <property name="SHBZ" column="SHBZ" not-null="false" />
+    <property name="DATAORIGIN" column="DATAORIGIN" not-null="false" />
+    <property name="CLLYBS" column="CLLYBS" not-null="false" />
+    <property name="SJLX" column="SJLX" not-null="false" />
+    <property name="SJSL" column="SJSL" not-null="false" />
+    <property name="SFLYZMWJ" column="SFLYZMWJ" not-null="false" />
+  </class>
+</hibernate-mapping>
